@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mothrbox Frontend
 
-## Getting Started
+> A secure, developer-friendly storage layer for Web3 and hybrid apps. Built with Next.js.
 
-First, run the development server:
+Mothrbox enables client-side encryption using ECC, fast API access, and seamless data storage—encrypted or plain. Perfect for confidential content, token-gated files, and AI models. This frontend connects developers to the power of privacy-first storage, without the headache of managing encryption.
+
+## 🚀 Tech Stack
+
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [bootstrap](https://getbootstrap.com/)
+- [Mothrbox API](https://github.com/georgegoldman/mothrbox)
+
+
+## 🧠 Features
+
+- 🔐 Client-side ECC encryption
+- ⚡ Fast API integration
+- 🧩 Token-gated access
+- 📁 Plain or Encrypted storage
+- 🤖 Support for encrypted AI model hosting
+
+## 🛠️ Getting Started
 
 ```bash
+# 1. Clone the repo
+git clone https://github.com/georgegoldman/mothrbox-frontend.git
+
+# 2. Navigate into the project
+cd mothrbox-frontend
+
+# 3. Install dependencies
+npm install
+# or
+yarn install
+
+# 4. Run the development server
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# App will be running at http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔧 Environment Variables
+Create a .env.local file in the root directory and add your variables:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+NEXT_PUBLIC_MOTHRBOX_API_URL=https://api.mothrbox.xyz
+```
+> Make sure not to commit sensitive keys!
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📂 Project Structure
 
-## Learn More
+```bash
+.
+├── app 
+│   ├── contexts # Auth and states
+├── components # Reusable UI components
+├── hooks # Custom hooks
+└── lib # API/utility helpers
+```
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Made with ❤️ by the Mothrbox Team
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
