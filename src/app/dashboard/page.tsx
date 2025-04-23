@@ -2,7 +2,7 @@ import CryptCard from "@/components/CryptCard";
 import TitleBar from "@/components/TitleBar";
 import { CryptCardData } from "@/components/CryptCard";
 import RateCard, { RateCardData } from "@/components/RateCard";
-import AnalyticBar from "@/components/AnalyticsBar";
+import CardLineChart from "@/components/Analytics";
 
 export default function DashboardHomePage() {
 
@@ -62,7 +62,7 @@ export default function DashboardHomePage() {
                 <RateCard data={rate} />
               </div>
               <div className="row">
-                <AnalyticBar />
+                <CardLineChart />
               </div>
             </div>
             <div className="col-5 p-3 ">
