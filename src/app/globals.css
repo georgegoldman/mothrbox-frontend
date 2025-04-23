@@ -53,3 +53,31 @@ a {
   'GRAD' 0,
   'opsz' 24
 }
+
+/* styles/globals.css */
+.sidebar {
+  width: 260px;
+  background-color: #000;
+  min-height: 100vh;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 12px;
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 5px;
+  font-size: 15px;
+  transition: background 0.3s;
+}
+
+.sidebar-link:hover {
+  background-color: #333;
+}
+
+.sidebar-link.active, .crypt-card-encrypt {
+  background: linear-gradient(90deg, #6a5af9, #b56eff);
+  color: #fff;
+}

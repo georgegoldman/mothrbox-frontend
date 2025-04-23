@@ -83,7 +83,7 @@ export default function Login() {
                           type="password"
                           className="form-control"
                           id="password"
-                          placeholder="********"
+                          placeholder="############"
                         />
                         {form.formState.errors.password && (
                           <small className="text-danger">{form.formState.errors.password.message}</small>

@@ -1,7 +1,7 @@
 "use client";
 
 
-import api from '@/app/api';
+import api from '@/api';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 

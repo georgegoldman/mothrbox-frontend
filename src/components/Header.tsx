@@ -5,9 +5,9 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { LogIn, Menu, UserPlus } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
-import { cn } from '@/app/lib/utils';
+import { cn } from '@/lib/util';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { useAuth } from '@/app/contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import UserMenu from './UserMenu';
 import Logo from './Logo';
 import Link from 'next/link';
@@ -132,7 +132,7 @@ const Header = () => {
                     <a className="nav-link text-black" target='blank' href="https://github.com/georgegoldman/mothrbox">Doc</a>
                   </li>
                   <li className="nav-item ">
-                    <a className="nav-link text-black">Dashboard</a>
+                    <Link className="nav-link text-black" href='/dashboard' >Dashboard</Link>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link text-black" href="#">Pricing</a>
