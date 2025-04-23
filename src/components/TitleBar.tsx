@@ -3,7 +3,7 @@ import React from "react";
 export default function TitleBar({title}:{title: string}) {
     return (
         <>
-        <div className="col-12 bg-black border-top boder-bottom border-light-emphasis border-end p-4 text-white d-flex justify-content-between align-items-center" style={{height: "100px"}}>
+        <div className="col-12 bg-black border-1 border-top border-bottom border-light-emphasis border-end p-4 text-white d-flex justify-content-between align-items-center" style={{height: "100px"}}>
               <div className="col-3">
                 <h3><strong>{title}</strong></h3>
               </div>

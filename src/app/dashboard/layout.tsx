@@ -24,10 +24,8 @@ export default function DashboardLayout({
             <div className=""><img src="/images/si_dashboard-vert-line.png" alt="" /></div>
           </div>
           <Sidebar />
-        </div>
-
-        {/* Main content */}
-        <main className="flex-grow-1 bg-light" style={{ minHeight: "100vh" }}>          
+        </div>      {/* Main content */}
+        <main className="flex-grow-1 bg-black border border-start" style={{ minHeight: "100vh" }}>          
           {children}
         </main>
       </div>

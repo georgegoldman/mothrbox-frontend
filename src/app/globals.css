@@ -77,7 +77,7 @@ a {
   background-color: #333;
 }
 
-.sidebar-link.active, .crypt-card-encrypt {
+.sidebar-link.active, .crypt-card-encrypt, .mothrbox-btn-color {
   background: linear-gradient(90deg, #6a5af9, #b56eff);
   color: #fff;
 }
