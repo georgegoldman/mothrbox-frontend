@@ -1,35 +1,47 @@
-"use client"
+"use client";
 
-import { Header } from "@/components/header"
-import { StatusBadge } from "@/components/status-badge"
-import { ChevronDown, Copy, File, Upload, X } from "lucide-react"
-import { useState } from "react"
+import { Header } from "@/components/header";
+import { StatusBadge } from "@/components/status-badge";
+import type { StatusType } from "@/lib/types";
+import { ChevronDown, Copy, File, Upload, X } from "lucide-react";
+import { useState } from "react";
 
 export default function EncryptPage() {
-  const [activeTab, setActiveTab] = useState<"upload" | "paste">("upload")
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [tempStore, setTempStore] = useState(true)
+  const [activeTab, setActiveTab] = useState<"upload" | "paste">("upload");
+  const [selectedFile, setSelectedFile] = useState<globalThis.File | null>(
+    null,
+  );
+  const [tempStore, setTempStore] = useState(true);
 
   return (
     <div>
-      <Header title="Dashboard" subtitle="Welcome back Michael, Ready to secure your data?" />
+      <Header
+        title="Dashboard"
+        subtitle="Welcome back Michael, Ready to secure your data?"
+      />
 
       <div className="p-6">
-        <h2 className="text-lg font-medium mb-4">Upload Or Paste Your Encrypted File</h2>
+        <h2 className="mb-4 text-lg font-medium">
+          Upload Or Paste Your Encrypted File
+        </h2>
 
         {/* Tabs */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="mb-6 grid grid-cols-2 gap-4">
           <button
-            className={`py-3 rounded-md text-center font-medium transition ${
-              activeTab === "upload" ? "bg-purple-600 text-white" : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+            className={`rounded-md py-3 text-center font-medium transition ${
+              activeTab === "upload"
+                ? "bg-purple-600 text-white"
+                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
             }`}
             onClick={() => setActiveTab("upload")}
           >
             Upload File
           </button>
           <button
-            className={`py-3 rounded-md text-center font-medium transition ${
-              activeTab === "paste" ? "bg-purple-600 text-white" : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+            className={`rounded-md py-3 text-center font-medium transition ${
+              activeTab === "paste"
+                ? "bg-purple-600 text-white"
+                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
             }`}
             onClick={() => setActiveTab("paste")}
           >
@@ -39,51 +51,69 @@ export default function EncryptPage() {
 
         {/* Upload File Section */}
         {activeTab === "upload" && (
-          <div>
-            <div className="bg-gray-800/50 border border-gray-700 border-dashed rounded-lg p-6 mb-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="mb-4 rounded-lg border border-dashed border-gray-700 bg-gray-800/50 p-6">
               <div className="text-center">
-                <div className="bg-purple-600 rounded-lg p-3 w-10 h-10 flex items-center justify-center mx-auto mb-4">
+                <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-600 p-3">
                   <Upload className="h-5 w-5" />
                 </div>
-                <p className="text-sm text-gray-400 mb-2">Drag & Drop your encrypted file here or click to upload</p>
+                <p className="mb-2 text-sm text-gray-400">
+                  Drag & Drop your encrypted file here or click to upload
+                </p>
                 <input
                   type="file"
                   className="hidden"
                   id="file-upload"
                   onChange={(e) => {
                     if (e.target.files && e.target.files[0]) {
-                      setSelectedFile(e.target.files[0])
+                      setSelectedFile(e.target.files[0]);
                     }
                   }}
                 />
                 <label
                   htmlFor="file-upload"
-                  className="inline-block bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded text-sm font-medium cursor-pointer"
+                  className="inline-block cursor-pointer rounded bg-purple-600 px-4 py-2 text-sm font-medium hover:bg-purple-700"
                 >
                   Select File
                 </label>
               </div>
             </div>
 
+            <div>
+              <label className="mb-2 block text-sm text-gray-400">
+                Select encryption method e.g., XOR, AES
+              </label>
+              <div className="relative">
+                <select className="w-full appearance-none rounded-lg border border-gray-700 bg-gray-800 p-3 focus:border-purple-500 focus:outline-none">
+                  <option value="">Select</option>
+                  <option value="xor">XOR</option>
+                  <option value="aes">AES</option>
+                </select>
+                <ChevronDown className="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
+              </div>
+            </div>
+
             {selectedFile && (
-              <div className="bg-gray-800/30 border border-gray-700 rounded-lg p-3 mb-6">
+              <div className="mb-6 rounded-lg border border-gray-700 bg-gray-800/30 p-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <File className="h-5 w-5 text-gray-400" />
                     <div>
                       <p className="text-sm font-medium">{selectedFile.name}</p>
-                      <p className="text-xs text-gray-400">({(selectedFile.size / 1024).toFixed(2)} KB)</p>
+                      <p className="text-xs text-gray-400">
+                        ({(selectedFile.size / 1024).toFixed(2)} KB)
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="text-xs text-gray-400">80%</div>
-                    <button className="p-1 rounded-full hover:bg-gray-700">
+                    <button className="rounded-full p-1 hover:bg-gray-700">
                       <X className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
-                <div className="h-1 bg-gray-700 rounded-full mt-2">
-                  <div className="h-1 bg-purple-600 rounded-full w-4/5"></div>
+                <div className="mt-2 h-1 rounded-full bg-gray-700">
+                  <div className="h-1 w-4/5 rounded-full bg-purple-600"></div>
                 </div>
               </div>
             )}
@@ -92,29 +122,31 @@ export default function EncryptPage() {
 
         {/* Paste Text Section */}
         {activeTab === "paste" && (
-          <div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <textarea
-              className="w-full h-32 bg-gray-800/50 border border-gray-700 border-dashed rounded-lg p-4 mb-4 focus:outline-none focus:border-purple-500"
+              className="mb-4 h-32 w-full rounded-lg border border-dashed border-gray-700 bg-gray-800/50 p-4 focus:border-purple-500 focus:outline-none"
               placeholder="Paste your text your encrypted text here..."
-            ></textarea>
+            />
+
+            <div>
+              <label className="mb-2 block text-sm text-gray-400">
+                Select encryption method e.g., XOR, AES
+              </label>
+              <div className="relative">
+                <select className="w-full appearance-none rounded-lg border border-gray-700 bg-gray-800 p-3 focus:border-purple-500 focus:outline-none">
+                  <option value="">Select</option>
+                  <option value="xor">XOR</option>
+                  <option value="aes">AES</option>
+                </select>
+                <ChevronDown className="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
+              </div>
+            </div>
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div>
-            <label className="block text-sm text-gray-400 mb-2">Select encryption method e.g., XOR, AES</label>
-            <div className="relative">
-              <select className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 appearance-none focus:outline-none focus:border-purple-500">
-                <option value="">Select</option>
-                <option value="xor">XOR</option>
-                <option value="aes">AES</option>
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
-            </div>
-          </div>
-        </div>
+        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2"></div>
 
-        <div className="flex items-center mb-6">
+        <div className="mb-6 flex items-center">
           <input
             type="checkbox"
             id="temp-store"
@@ -127,47 +159,75 @@ export default function EncryptPage() {
           </label>
         </div>
 
-        <button className="w-full bg-purple-600 hover:bg-purple-700 py-3 rounded-lg font-medium transition">
+        <button className="w-full rounded-lg bg-purple-600 py-3 font-medium transition hover:bg-purple-700">
           Encrypt Now
         </button>
 
         <div className="mt-8">
-          <h2 className="text-lg font-medium mb-4">Recent History</h2>
+          <h2 className="mb-4 text-lg font-medium">Recent History</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="text-left text-xs text-gray-400 border-b border-gray-700">
+                <tr className="border-b border-gray-700 text-left text-xs text-gray-400">
                   <th className="pb-2">File/Text</th>
-                  <th className="pb-2">Encryption type</th>
-                  <th className="pb-2">Date</th>
-                  <th className="pb-2">Status</th>
+                  <th className="pb-2 text-center">Encryption type</th>
+                  <th className="pb-2 text-center">Date</th>
+                  <th className="pb-2 text-center">Status</th>
                   <th className="pb-2 text-right">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { file: "File-Hfgvehbejfdy7567.pdf", type: "XOR", date: "29-02-2025", status: "successful" },
-                  { file: "File-Hfgvehbejfdy7567.pdf", type: "AES", date: "29-02-2025", status: "pending" },
-                  { file: "File-Hfgvehbejfdy7567.pdf", type: "XOR", date: "29-02-2025", status: "successful" },
-                  { file: "File-Hfgvehbejfdy7567.pdf", type: "XOR", date: "29-02-2025", status: "successful" },
-                  { file: "File-Hfgvehbejfdy7567.pdf", type: "AES", date: "29-02-2025", status: "cancelled" },
+                  {
+                    file: "File-Hfgvehbejfdy7567.pdf",
+                    type: "XOR",
+                    date: "29-02-2025",
+                    status: "successful" as StatusType,
+                  },
+                  {
+                    file: "File-Hfgvehbejfdy7567.pdf",
+                    type: "AES",
+                    date: "29-02-2025",
+                    status: "pending" as StatusType,
+                  },
+                  {
+                    file: "File-Hfgvehbejfdy7567.pdf",
+                    type: "XOR",
+                    date: "29-02-2025",
+                    status: "successful" as StatusType,
+                  },
+                  {
+                    file: "File-Hfgvehbejfdy7567.pdf",
+                    type: "XOR",
+                    date: "29-02-2025",
+                    status: "successful" as StatusType,
+                  },
+                  {
+                    file: "File-Hfgvehbejfdy7567.pdf",
+                    type: "AES",
+                    date: "29-02-2025",
+                    status: "cancelled" as StatusType,
+                  },
                 ].map((item, index) => (
-                  <tr key={index} className="border-b border-gray-700/50 text-sm">
-                    <td className="py-3 flex items-center gap-2">
+                  <tr
+                    key={index}
+                    className="border-b border-gray-700/50 text-sm"
+                  >
+                    <td className="flex items-center gap-2 py-3">
                       <File className="h-4 w-4 text-gray-400" />
                       {item.file}
                     </td>
-                    <td>{item.type}</td>
-                    <td>{item.date}</td>
-                    <td>
-                      <StatusBadge status={item.status as any} />
+                    <td className="text-center">{item.type}</td>
+                    <td className="text-center">{item.date}</td>
+                    <td className="text-center">
+                      <StatusBadge status={item.status} />
                     </td>
                     <td className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button className="p-1 rounded hover:bg-gray-700">
+                        <button className="rounded p-1 hover:bg-gray-700">
                           <Copy className="h-4 w-4" />
                         </button>
-                        <button className="p-1 rounded hover:bg-gray-700">
+                        <button className="rounded p-1 hover:bg-gray-700">
                           <Upload className="h-4 w-4" />
                         </button>
                       </div>
@@ -180,5 +240,5 @@ export default function EncryptPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,5 +1,6 @@
 import { Header } from "@/components/header";
 import { StatusBadge } from "@/components/status-badge";
+import type { StatusType } from "@/lib/types";
 import {
   ArrowRight,
   ChevronLeft,
@@ -160,31 +161,31 @@ export default function OverviewPage() {
                         file: "File-Hfgvehbejfdy7567.pdf",
                         type: "XOR",
                         date: "29-02-2025",
-                        status: "successful",
+                        status: "successful" as StatusType,
                       },
                       {
                         file: "File-Hfgvehbejfdy7567.pdf",
                         type: "AES",
                         date: "29-02-2025",
-                        status: "pending",
+                        status: "pending" as StatusType,
                       },
                       {
                         file: "File-Hfgvehbejfdy7567.pdf",
                         type: "XOR",
                         date: "29-02-2025",
-                        status: "successful",
+                        status: "successful" as StatusType,
                       },
                       {
                         file: "File-Hfgvehbejfdy7567.pdf",
                         type: "XOR",
                         date: "29-02-2025",
-                        status: "successful",
+                        status: "successful" as StatusType,
                       },
                       {
                         file: "File-Hfgvehbejfdy7567.pdf",
                         type: "AES",
                         date: "29-02-2025",
-                        status: "cancelled",
+                        status: "cancelled" as StatusType,
                       },
                     ].map((item, index) => (
                       <tr
