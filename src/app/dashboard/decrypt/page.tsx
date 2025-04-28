@@ -1,263 +1,221 @@
 "use client";
 
-import TitleBar from "@/components/TitleBar";
-import { useState, useRef } from "react";
-
-type HistoryItem = {
-  name: string;
-  type: string;
-  date: string;
-  status: "Successful" | "Pending" | "Cancelled";
-  action: string;
-};
+import { Header } from "@/components/header";
+import { StatusBadge } from "@/components/status-badge";
+import type { StatusType } from "@/lib/types";
+import { Copy, File, Upload, X } from "lucide-react";
+import { useState } from "react";
 
 export default function DecryptPage() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [encryptionMethod, setEncryptionMethod] = useState("");
   const [activeTab, setActiveTab] = useState<"upload" | "paste">("upload");
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const recentHistory: HistoryItem[] = [
-    {
-      name: "File-Hfgvehbejj4y7567.pdf",
-      type: "XOR",
-      date: "29-02-2025",
-      status: "Successful",
-      action: "View"
-    },
-    {
-      name: "File-Hfgvehbejj4y7567.pdf",
-      type: "AES",
-      date: "29-02-2025",
-      status: "Pending",
-      action: "View"
-    },
-    {
-      name: "File-Hfgvehbejj4y7567.pdf",
-      type: "XOR",
-      date: "29-02-2025",
-      status: "Successful",
-      action: "View"
-    },
-    {
-      name: "File-Hfgvehbejj4y7567.pdf",
-      type: "XOR",
-      date: "29-02-2025",
-      status: "Successful",
-      action: "View"
-    },
-    {
-      name: "File-Hfgvehbejj4y7567.pdf",
-      type: "AES",
-      date: "29-02-2025",
-      status: "Cancelled",
-      action: "View"
-    }
-  ];
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setSelectedFile(file);
-      // Simulate upload progress
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += Math.random() * 10;
-        if (progress >= 86) {
-          progress = 86;
-          clearInterval(interval);
-        }
-        setUploadProgress(progress);
-      }, 200);
-    }
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      setSelectedFile(file);
-      setUploadProgress(86); // Set progress directly for drag & drop
-    }
-  };
+  const [selectedFile, setSelectedFile] = useState<globalThis.File | null>(
+    null,
+  );
 
   return (
-    <>
-    <TitleBar title="Usage Statistics" />
-    <div className="container mt-4">
-      <h2 className="mb-4">Upload Or Paste Your Decrypted File</h2>
+    <div>
+      <Header
+        title="Dashboard"
+        subtitle="Welcome back Michael, Ready to secure your data?"
+      />
 
-      {/* Tabs */}
-<div className="d-flex mb-3 border-bottom">
-  <button 
-    className={`btn btn-primary btn-lg p-0 mr-3 ${activeTab === 'upload' ? 'text-primary font-weight-bold border-bottom border-primary border-2' : 'text-secondary'}`}
-    onClick={() => setActiveTab('upload')}
-    style={{
-      background: 'none',
-      border: 'none',
-      borderBottom: activeTab === 'upload' ? '2px solid #0d6efd' : 'none',
-      paddingBottom: '8px',
-      marginBottom: '-1px'
-    }}
-  >
-    Upload File
-  </button>
-  <button 
-    className={`btn btn-primary btn-lg p-0 ${activeTab === 'paste' ? 'text-primary font-weight-bold border-bottom border-primary border-2' : 'text-secondary'}`}
-    onClick={() => setActiveTab('paste')}
-    style={{
-      background: 'none',
-      border: 'none',
-      borderBottom: activeTab === 'paste' ? '2px solid #0d6efd' : 'none',
-      paddingBottom: '8px',
-      marginBottom: '-1px'
-    }}
-  >
-    Paste File
-  </button>
-</div>
+      <div className="p-6">
+        <h2 className="mb-4 text-lg font-medium">
+          Upload Or Paste Your Decrypted File
+        </h2>
 
-{activeTab === 'upload' ? (
-  <div className="card mb-4 border-0 shadow-sm">
-    <div className="card-body p-4">
-      <div className="row mb-4">
-        <div className="col-md-6">
-          <h6 className="font-weight-bold">Upload File</h6>
+        {/* Tabs */}
+        <div className="mb-6 grid grid-cols-2 gap-4">
+          <button
+            className={`rounded-md py-3 text-center font-medium transition ${
+              activeTab === "upload"
+                ? "bg-purple-600 text-white"
+                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+            }`}
+            onClick={() => setActiveTab("upload")}
+          >
+            Upload File
+          </button>
+          <button
+            className={`rounded-md py-3 text-center font-medium transition ${
+              activeTab === "paste"
+                ? "bg-purple-600 text-white"
+                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+            }`}
+            onClick={() => setActiveTab("paste")}
+          >
+            Paste File
+          </button>
         </div>
-        <div className="col-md-6">
-          <div className="form-group">
-            <select 
-              className="form-control"
-              value={encryptionMethod}
-              onChange={(e) => setEncryptionMethod(e.target.value)}
-            >
-              <option value="">Select encryption method e.g., XOR, AES</option>
-              <option value="XOR">XOR</option>
-              <option value="AES">AES</option>
-            </select>
-          </div>
-        </div>
-      </div>
 
-      <div 
-        className="border rounded p-5 text-center mb-3"
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-        style={{ borderStyle: 'dashed', cursor: 'pointer' }}
-        onClick={() => fileInputRef.current?.click()}
-      >
-        <input
-          ref={fileInputRef}
-          type="file"
-          className="d-none"
-          onChange={handleFileChange}
-        />
-        <p className="mb-1">Drag & Drop your encrypted file here or click to upload</p>
-        {selectedFile && (
-          <div className="mt-3">
-            <div className="d-flex justify-content-between align-items-center mb-1">
-              <span>{selectedFile.name.replace('=', '-')} ({(selectedFile.size / (1024 * 1024)).toFixed(1)}MB)</span>
-              <span>86%</span>
+        {/* Upload File Section */}
+        {activeTab === "upload" && (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div>
+              <div className="mb-4 rounded-lg border border-dashed border-gray-700 bg-gray-800/50 p-6">
+                <div className="text-center">
+                  <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-600 p-3">
+                    <Upload className="h-5 w-5" />
+                  </div>
+                  <p className="mb-2 text-sm text-gray-400">
+                    Drag & Drop your encrypted file here or click to upload
+                  </p>
+                  <input
+                    type="file"
+                    className="hidden"
+                    id="file-upload"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setSelectedFile(file);
+                      }
+                    }}
+                  />
+                  <label
+                    htmlFor="file-upload"
+                    className="inline-block cursor-pointer rounded bg-purple-600 px-4 py-2 text-sm font-medium hover:bg-purple-700"
+                  >
+                    Select File
+                  </label>
+                </div>
+              </div>
+
+              {selectedFile && (
+                <div className="mb-6 rounded-lg border border-gray-700 bg-gray-800/30 p-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <File className="h-5 w-5 text-gray-400" />
+                      <div>
+                        <p className="text-sm font-medium">
+                          {selectedFile.name}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          ({(selectedFile.size / 1024).toFixed(2)} KB)
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="text-xs text-gray-400">80%</div>
+                      <button className="rounded-full p-1 hover:bg-gray-700">
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="mt-2 h-1 rounded-full bg-gray-700">
+                    <div className="h-1 w-4/5 rounded-full bg-purple-600"></div>
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="progress">
-              <div 
-                className="progress-bar" 
-                role="progressbar" 
-                style={{ width: '86%' }}
-                aria-valuenow={86}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              ></div>
+
+            <div>
+              <label className="mb-2 block text-sm text-gray-400">
+                Enter your decryption or passphrase
+              </label>
+              <input
+                type="password"
+                className="mb-4 w-full rounded-lg border border-gray-700 bg-gray-800 p-3 focus:border-purple-500 focus:outline-none"
+                placeholder="e.g.4erfth76e5rgfgjkj"
+              />
             </div>
           </div>
         )}
-      </div>
 
-      <p className="text-muted small mb-4">
-        Temporarily store encrypted file (auto-deletes after 24 hours)
-      </p>
+        {/* Paste Text Section */}
+        {activeTab === "paste" && (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div>
+              <textarea
+                className="mb-4 h-32 w-full rounded-lg border border-dashed border-gray-700 bg-gray-800/50 p-4 focus:border-purple-500 focus:outline-none"
+                placeholder="Paste your text your encrypted text here..."
+              ></textarea>
+            </div>
 
-      <button className="btn btn-primary px-4">Encrypt Now</button>
-    </div>
-  </div>
-) : (
-  <div className="card mb-4 border-0 shadow-sm">
-    <div className="card-body p-4">
-      <h6 className="font-weight-bold mb-3">Paste your encrypted text here...</h6>
-      
-      <div className="form-group mb-4">
-        <select 
-          className="form-control"
-          value={encryptionMethod}
-          onChange={(e) => setEncryptionMethod(e.target.value)}
-        >
-          <option value="">Select encryption method e.g., XOR, AES</option>
-          <option value="XOR">XOR</option>
-          <option value="AES">AES</option>
-        </select>
-      </div>
+            <div>
+              <label className="mb-2 block text-sm text-gray-400">
+                Enter your decryption or passphrase
+              </label>
+              <input
+                type="password"
+                className="mb-4 w-full rounded-lg border border-gray-700 bg-gray-800 p-3 focus:border-purple-500 focus:outline-none"
+                placeholder="e.g.4erfth76e5rgfgjkj"
+              />
+            </div>
+          </div>
+        )}
 
-      <div className="form-group mb-4">
-        <textarea 
-          className="form-control" 
-          rows={5}
-          placeholder="Paste your encrypted content here..."
-        ></textarea>
-      </div>
+        <button className="mt-6 w-full rounded-lg bg-purple-600 py-3 font-medium transition hover:bg-purple-700">
+          Decrypt Now
+        </button>
 
-      <p className="text-muted small mb-4">
-        Temporarily store encrypted file (auto-deletes after 24 hours)
-      </p>
-
-      <button className="btn btn-primary px-4">Encrypt Now</button>
-    </div>
-  </div>
-)}
-
-      {/* Recent History */}
-      <div className="card">
-        <div className="card-body">
-          <h5 className="mb-3">Recent History</h5>
-          <div className="table-responsive">
-            <table className="table table-striped table-bordered">
+        <div className="mt-8">
+          <h2 className="mb-4 text-lg font-medium">Recent History</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full">
               <thead>
-                <tr>
-                  <th>File/Text</th>
-                  <th>Encryption type</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Action</th>
+                <tr className="border-b border-gray-700 text-left text-xs text-gray-400">
+                  <th className="pb-2">File/Text</th>
+                  <th className="pb-2 text-center">Encryption type</th>
+                  <th className="pb-2 text-center">Date</th>
+                  <th className="pb-2 text-center">Status</th>
+                  <th className="pb-2 text-right">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {recentHistory.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.name}</td>
-                    <td>{item.type}</td>
-                    <td>{item.date}</td>
-                    <td>
-                      <span className={`badge ${
-                        item.status === 'Successful' ? 'badge-success' :
-                        item.status === 'Pending' ? 'badge-warning' :
-                        'badge-secondary'
-                      }`}>
-                        {item.status}
-                      </span>
+                {[
+                  {
+                    file: "File-Hfgvehbejfdy7567.pdf",
+                    type: "XOR",
+                    date: "29-02-2025",
+                    status: "successful" as StatusType,
+                  },
+                  {
+                    file: "File-Hfgvehbejfdy7567.pdf",
+                    type: "AES",
+                    date: "29-02-2025",
+                    status: "pending" as StatusType,
+                  },
+                  {
+                    file: "File-Hfgvehbejfdy7567.pdf",
+                    type: "XOR",
+                    date: "29-02-2025",
+                    status: "successful" as StatusType,
+                  },
+                  {
+                    file: "File-Hfgvehbejfdy7567.pdf",
+                    type: "XOR",
+                    date: "29-02-2025",
+                    status: "successful" as StatusType,
+                  },
+                  {
+                    file: "File-Hfgvehbejfdy7567.pdf",
+                    type: "AES",
+                    date: "29-02-2025",
+                    status: "cancelled" as StatusType,
+                  },
+                ].map((item, index) => (
+                  <tr
+                    key={index}
+                    className="border-b border-gray-700/50 text-sm"
+                  >
+                    <td className="flex items-center gap-2 py-3">
+                      <File className="h-4 w-4 text-gray-400" />
+                      {item.file}
                     </td>
-                    <td>
-                      {item.status === 'Cancelled' ? (
-                        <div className="d-flex justify-content-between align-items-center">
-                          <span className="text-muted">You can only view and comment on this file.</span>
-                          <button className="btn btn-link p-0">Ask to edit</button>
-                        </div>
-                      ) : (
-                        <button className="btn btn-outline-primary btn-sm">View</button>
-                      )}
+                    <td className="text-center">{item.type}</td>
+                    <td className="text-center">{item.date}</td>
+                    <td className="text-center">
+                      <StatusBadge status={item.status} />
+                    </td>
+                    <td className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button className="rounded p-1 hover:bg-gray-700">
+                          <Copy className="h-4 w-4" />
+                        </button>
+                        <button className="rounded p-1 hover:bg-gray-700">
+                          <Upload className="h-4 w-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -266,6 +224,6 @@ export default function DecryptPage() {
           </div>
         </div>
       </div>
-    </div></>
+    </div>
   );
 }
