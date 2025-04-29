@@ -377,30 +377,22 @@ export default function HomePage() {
                 Tools for Complex Security Problems.
               </p>
               <div className="flex space-x-4">
-                <Link
-                  href="#"
-                  className="text-gray-600 transition hover:text-purple-600"
-                >
-                  <Instagram size={20} />
-                </Link>
-                <Link
-                  href="#"
+                <a
+                  href="https://x.com/mothrbox"
+                  referrerPolicy="no-referrer"
+                  target="_blank"
                   className="text-gray-600 transition hover:text-purple-600"
                 >
                   <Twitter size={20} />
-                </Link>
-                <Link
-                  href="#"
-                  className="text-gray-600 transition hover:text-purple-600"
-                >
-                  <Facebook size={20} />
-                </Link>
-                <Link
-                  href="#"
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/mothrbox/"
+                  referrerPolicy="no-referrer"
+                  target="_blank"
                   className="text-gray-600 transition hover:text-purple-600"
                 >
                   <Linkedin size={20} />
-                </Link>
+                </a>
               </div>
             </div>
 
@@ -416,20 +408,24 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="mailto:support@mothrbox.com"
+                  <a
+                    href="mailto:mothrbox.gold@gmail.com"
+                    referrerPolicy="no-referrer"
+                    target="_blank"
                     className="text-gray-600 transition hover:text-purple-600"
                   >
-                    support@mothrbox.com
-                  </Link>
+                    mothrbox.gold@gmail.com
+                  </a>
                 </li>
                 <li>
-                  <Link
+                  <a
                     href="https://github.com/georgegoldman/mothrbox-frontend"
+                    referrerPolicy="no-referrer"
+                    target="_blank"
                     className="text-gray-600 transition hover:text-purple-600"
                   >
                     Our GitHub
-                  </Link>
+                  </a>
                 </li>
                 <li>
                   <Link
