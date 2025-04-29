@@ -42,19 +42,21 @@ export default function HomePage() {
             or one line of code.
           </p>
 
-          <div className="flex flex-row justify-center gap-x-2 md:gap-x-5">
-            <Link
-              href="#docs"
-              className="rounded-xl bg-purple-400 px-10 py-3 text-sm font-bold text-white transition"
-            >
-              View Docs
-            </Link>
-            <Link
-              href="/dashboard"
-              className="rounded-xl border border-purple-300 bg-black px-10 py-3 text-sm font-bold text-white shadow-[inset_0_0_25px_#6366f1] transition"
-            >
-              Start Encryption
-            </Link>
+          <div className="px-4 md:px-0">
+            <div className="flex flex-row justify-center gap-x-2 md:gap-x-5">
+              <Link
+                href="#docs"
+                className="rounded-xl bg-purple-400 px-7 py-3 text-sm font-bold text-white transition"
+              >
+                View Docs
+              </Link>
+              <Link
+                href="/dashboard"
+                className="rounded-xl border border-purple-300 bg-black px-7 py-3 text-sm font-bold text-white shadow-[inset_0_0_25px_#6366f1] transition"
+              >
+                Start Encryption
+              </Link>
+            </div>
           </div>
         </div>
 
