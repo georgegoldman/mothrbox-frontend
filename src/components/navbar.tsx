@@ -1,10 +1,13 @@
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 export default function Navbar() {
   return (
     <nav className="flex items-center justify-between">
-      <div className="text-xl font-bold">Logo</div>
+      <Link href="/">
+        <Image src="/images/marine_logo.png" alt="logo" width={80} height={0} />
+      </Link>
 
       <div className="hidden items-center space-x-8 md:flex">
         <Link

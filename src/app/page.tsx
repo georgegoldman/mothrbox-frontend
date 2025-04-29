@@ -32,19 +32,19 @@ export default function HomePage() {
             </div>
           </div>
 
-          <h1 className="mx-auto mb-6 max-w-[941px] text-4xl font-bold lg:text-[40px]">
+          <h1 className="mx-auto mb-6 max-w-[941px] text-xl font-bold lg:text-[40px]">
             Encrypt anything. Anywhere.{" "}
             <span className="text-purple-600">Instantly.</span>
             <br />
             Your Stripe For Secure File & Data Encryption.
           </h1>
 
-          <p className="mx-auto mb-8 max-w-[941px] text-black">
+          <p className="mx-auto mb-8 max-w-[941px] px-4 text-black">
             A secure API and web platform to encrypt files & data with one click
             or one line of code.
           </p>
 
-          <div className="flex flex-col justify-center gap-4 sm:flex-row">
+          <div className="flex flex-row justify-center gap-x-2 md:gap-x-5">
             <Link
               href="#docs"
               className="rounded-xl bg-purple-400 px-10 py-3 text-sm font-bold text-white transition"
@@ -60,19 +60,20 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="relative h-[400px] overflow-hidden rounded-xl border border-gray-200 bg-gradient-to-br from-purple-100 to-blue-50 md:h-[500px] lg:h-[600px]">
+        <div className="overflow-hidden px-5 lg:px-0">
           <Image
             src="/images/Overview.png"
             alt="hero_image"
             width={1239}
             height={600}
+            className="rounded-xl"
           />
         </div>
       </section>
 
       {/* Features Section */}
       <section id="features" className="py-10 md:py-24">
-        <div className="container mx-auto px-4">
+        <div className="px-4">
           <SectionHeader
             title="Our Key Features"
             subtitle="Secure Your Data in Seconds — No Compromises."
@@ -152,7 +153,7 @@ export default function HomePage() {
             subtitle="The Smartest Way to Encrypt Files, Text, and Data Streams."
           />
 
-          <div className="flex items-center justify-center gap-8">
+          <div className="flex flex-col items-center justify-center gap-8 lg:flex-row">
             <div className="space-y-5 rounded-[20px] bg-[#f6f6f6] p-5 shadow-md">
               <Image
                 src="/images/step_one.png"
@@ -370,7 +371,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
             <div>
-              <h3 className="mb-4 text-xl font-bold">Cryptic</h3>
+              <h3 className="mb-4 text-xl font-bold">Mothrbox</h3>
               <p className="mb-6 text-gray-600">
                 The Easiest Way to Encrypt, Share, and Protect Your Data. Simple
                 Tools for Complex Security Problems.
@@ -416,18 +417,18 @@ export default function HomePage() {
                 </li>
                 <li>
                   <Link
-                    href="mailto:hello@cryptix.com"
+                    href="mailto:support@mothrbox.com"
                     className="text-gray-600 transition hover:text-purple-600"
                   >
-                    hello@cryptix.com
+                    support@mothrbox.com
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="https://github.com/cryptix"
+                    href="https://github.com/georgegoldman/mothrbox-frontend"
                     className="text-gray-600 transition hover:text-purple-600"
                   >
-                    https://github.com/cryptix
+                    Our GitHub
                   </Link>
                 </li>
                 <li>
@@ -452,7 +453,7 @@ export default function HomePage() {
             <div>
               <h3 className="mb-4 font-bold">Newsletter</h3>
               <p className="mb-4 text-gray-600">
-                Stay updated with everything related to Cryptix
+                Stay updated with everything related to Mothrbox
               </p>
               <form className="space-y-3">
                 <input
@@ -474,7 +475,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-12 border-t border-gray-200 pt-8 text-sm text-gray-600">
-            © 2025 Cryptix. All rights reserved.
+            © {new Date().getFullYear()} Mothrbox. All rights reserved.
           </div>
         </div>
       </footer>
