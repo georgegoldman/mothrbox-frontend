@@ -5,9 +5,7 @@ import {
   Zap,
   Lock,
   Layers,
-  Instagram,
   Twitter,
-  Facebook,
   Linkedin,
 } from "lucide-react";
 import Navbar from "@/components/navbar";
