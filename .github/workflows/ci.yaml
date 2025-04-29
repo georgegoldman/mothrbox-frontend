@@ -16,8 +16,8 @@ jobs:
       #   shell: bash
       #   run: find . -type f -name ".env.example" -exec sh -c 'cp "$1" "${:"' _ {} \;
 
-      - name: Prettier Format
-        run: pnpm format
+      # - name: Prettier Format
+      #   run: pnpm format:check
 
       - name: Typecheck
         run: pnpm typecheck
