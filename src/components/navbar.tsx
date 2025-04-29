@@ -53,21 +53,21 @@ export default function Navbar() {
         </a>
       </div>
 
-      <div className="hidden items-center space-x-4 lg:flex">
-        <Link
-          href="/login"
-          className="rounded-xl border border-purple-500 px-7 py-3 text-sm font-bold text-black transition hover:bg-gray-100"
-        >
-          Login
-        </Link>
-        <Link
-          href="/signup"
-          className="rounded-xl border border-purple-300 bg-black px-7 py-3 text-sm font-bold text-white shadow-[inset_0_0_25px_#6366f1] transition"
-        >
+      {/* <div className="hidden items-center space-x-4 lg:flex"> */}
+        {/* <Link */}
+          {/* href="/login" */}
+          {/* className="rounded-xl border border-purple-500 px-7 py-3 text-sm font-bold text-black transition hover:bg-gray-100" */}
+        {/* > */}
+          {/* Login */}
+        {/* </Link> */}
+        {/* <Link */}
+          {/* href="/signup" */}
+          {/* className="rounded-xl border border-purple-300 bg-black px-7 py-3 text-sm font-bold text-white shadow-[inset_0_0_25px_#6366f1] transition" */}
+        {/* > */}
           {/* hover:shadow-[inset_0_0_25px_#818cf8] - might use later */}
-          Sign In
-        </Link>
-      </div>
+          {/* Sign In */}
+        {/* </Link> */}
+      {/* </div> */}
 
       <div className="flex cursor-pointer lg:hidden" onClick={toggleMenu}>
         {isOpen ? <X size={30} /> : <Menu size={30} />}
