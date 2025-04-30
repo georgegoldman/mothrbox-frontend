@@ -26,7 +26,8 @@ export default function Navbar() {
           Features
         </Link>
         <Link
-          href="#docs"
+          href="https://mothrbox-docs.vercel.app/"
+          target="blank"
           className="text-sm text-black transition hover:text-purple-600"
         >
           Docs
