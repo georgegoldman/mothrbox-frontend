@@ -5,9 +5,7 @@ import {
   Zap,
   Lock,
   Layers,
-  Instagram,
   Twitter,
-  Facebook,
   Linkedin,
 } from "lucide-react";
 import Navbar from "@/components/navbar";
@@ -44,19 +42,21 @@ export default function HomePage() {
             or one line of code.
           </p>
 
-          <div className="flex flex-row justify-center gap-x-2 md:gap-x-5">
-            <Link
-              href="#docs"
-              className="rounded-xl bg-purple-400 px-10 py-3 text-sm font-bold text-white transition"
-            >
-              View Docs
-            </Link>
-            <Link
-              href="/dashboard"
-              className="rounded-xl border border-purple-300 bg-black px-10 py-3 text-sm font-bold text-white shadow-[inset_0_0_25px_#6366f1] transition"
-            >
-              Start Encryption
-            </Link>
+          <div className="px-4 md:px-0">
+            <div className="flex flex-row justify-center gap-x-2 md:gap-x-5">
+              <Link
+                href="#docs"
+                className="rounded-xl bg-purple-400 px-7 py-3 text-sm font-bold text-white transition"
+              >
+                View Docs
+              </Link>
+              <Link
+                href="/dashboard"
+                className="rounded-xl border border-purple-300 bg-black px-7 py-3 text-sm font-bold text-white shadow-[inset_0_0_25px_#6366f1] transition"
+              >
+                Start Encryption
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -377,30 +377,22 @@ export default function HomePage() {
                 Tools for Complex Security Problems.
               </p>
               <div className="flex space-x-4">
-                <Link
-                  href="#"
-                  className="text-gray-600 transition hover:text-purple-600"
-                >
-                  <Instagram size={20} />
-                </Link>
-                <Link
-                  href="#"
+                <a
+                  href="https://x.com/mothrbox"
+                  referrerPolicy="no-referrer"
+                  target="_blank"
                   className="text-gray-600 transition hover:text-purple-600"
                 >
                   <Twitter size={20} />
-                </Link>
-                <Link
-                  href="#"
-                  className="text-gray-600 transition hover:text-purple-600"
-                >
-                  <Facebook size={20} />
-                </Link>
-                <Link
-                  href="#"
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/mothrbox/"
+                  referrerPolicy="no-referrer"
+                  target="_blank"
                   className="text-gray-600 transition hover:text-purple-600"
                 >
                   <Linkedin size={20} />
-                </Link>
+                </a>
               </div>
             </div>
 
@@ -416,20 +408,24 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="mailto:support@mothrbox.com"
+                  <a
+                    href="mailto:mothrbox.gold@gmail.com"
+                    referrerPolicy="no-referrer"
+                    target="_blank"
                     className="text-gray-600 transition hover:text-purple-600"
                   >
-                    support@mothrbox.com
-                  </Link>
+                    mothrbox.gold@gmail.com
+                  </a>
                 </li>
                 <li>
-                  <Link
+                  <a
                     href="https://github.com/georgegoldman/mothrbox-frontend"
+                    referrerPolicy="no-referrer"
+                    target="_blank"
                     className="text-gray-600 transition hover:text-purple-600"
                   >
                     Our GitHub
-                  </Link>
+                  </a>
                 </li>
                 <li>
                   <Link
