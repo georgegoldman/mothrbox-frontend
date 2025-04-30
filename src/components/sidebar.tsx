@@ -1,5 +1,7 @@
 "use client";
 
+import type React from "react";
+
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
@@ -14,11 +16,15 @@ import {
   Unlock,
   ChevronDown,
   ChevronRight,
+  X,
+  User,
 } from "lucide-react";
+import { useSidebar } from "@/hooks/use-sidebar";
 
-export function Sidebar() {
+export function Sidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [apiDocsOpen, setApiDocsOpen] = useState(false);
+  const { isOpen, toggleSidebar, isMobile } = useSidebar();
 
   // Check if the current path is under API docs
   const isApiDocsPath = pathname.startsWith("/dashboard/api-docs");
@@ -64,188 +70,292 @@ export function Sidebar() {
   };
 
   return (
-    <div className="flex h-screen w-[250px] flex-col border-r border-gray-800 bg-black">
-      <div className="border-b border-gray-800 p-4">
-        <div className="flex items-center gap-2">
-          <Lock className="h-6 w-6" />
-          <span className="font-bold">Logo</span>
-        </div>
-      </div>
+    <div className="flex min-h-screen bg-black">
+      {/* Mobile overlay */}
+      {isMobile && isOpen && (
+        <div
+          className="fixed inset-0 z-20 bg-black/50 backdrop-blur-sm"
+          onClick={toggleSidebar}
+          aria-hidden="true"
+        />
+      )}
 
-      <div className="flex-1 overflow-auto py-4">
-        <div className="mb-2 px-4">
-          <p className="mb-2 text-xs font-medium text-gray-500">General</p>
-          <nav className="space-y-1">
-            <Link
-              href="/dashboard"
-              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                isActive("/dashboard", true)
-                  ? "bg-purple-600 text-white"
-                  : "text-gray-300 hover:bg-gray-800"
-              }`}
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 left-0 z-30 h-full overflow-y-auto border-r border-gray-800 bg-black transition-all duration-300 ease-in-out ${isOpen ? "w-[250px]" : isMobile ? "w-0 -translate-x-full" : "w-[70px]"} `}
+      >
+        <div className="flex h-16 items-center justify-between border-b border-gray-800 px-4">
+          <div className="flex items-center gap-2 overflow-hidden">
+            <Lock className="h-6 w-6 flex-shrink-0" />
+            {isOpen && (
+              <span className="font-bold whitespace-nowrap">Logo</span>
+            )}
+          </div>
+          {isMobile && isOpen && (
+            <button
+              onClick={toggleSidebar}
+              className="rounded-md p-1 hover:bg-gray-800"
+              aria-label="Close sidebar"
             >
-              <BarChart2 className="h-4 w-4" />
-              Overview
-            </Link>
-            <Link
-              href="/dashboard/encrypt"
-              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                isActive("/dashboard/encrypt")
-                  ? "bg-purple-600 text-white"
-                  : "text-gray-300 hover:bg-gray-800"
-              }`}
-            >
-              <Lock className="h-4 w-4" />
-              Encrypt File
-            </Link>
-            <Link
-              href="/dashboard/decrypt"
-              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                isActive("/dashboard/decrypt")
-                  ? "bg-purple-600 text-white"
-                  : "text-gray-300 hover:bg-gray-800"
-              }`}
-            >
-              <Unlock className="h-4 w-4" />
-              Decrypt File
-            </Link>
-          </nav>
+              <X className="h-5 w-5" />
+            </button>
+          )}
         </div>
 
-        <div className="mt-6 px-4">
-          <p className="mb-2 text-xs font-medium text-gray-500">Developer</p>
-          <nav className="space-y-1">
-            <Link
-              href="/dashboard/api-keys"
-              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                isActive("/dashboard/api-keys")
-                  ? "bg-purple-600 text-white"
-                  : "text-gray-300 hover:bg-gray-800"
-              }`}
-            >
-              <Key className="h-4 w-4" />
-              API Key Management
-            </Link>
-
-            {/* API Documentation with dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setApiDocsOpen(!apiDocsOpen)}
-                className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm ${
-                  isApiDocsPath
+        <div className="flex-1 overflow-auto py-4">
+          <div className="mb-2 px-4">
+            {isOpen && (
+              <p className="mb-2 text-xs font-medium text-gray-500">General</p>
+            )}
+            <nav className="space-y-1">
+              <Link
+                href="/dashboard"
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                  isActive("/dashboard", true)
                     ? "bg-purple-600 text-white"
                     : "text-gray-300 hover:bg-gray-800"
                 }`}
               >
-                <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  API Documentation
-                </div>
-                {apiDocsOpen ? (
-                  <ChevronDown className="h-4 w-4 transition-transform duration-200" />
-                ) : (
-                  <ChevronRight className="h-4 w-4 transition-transform duration-200" />
-                )}
-              </button>
-
-              {/* Dropdown menu */}
-              <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                  apiDocsOpen
-                    ? "max-h-[200px] opacity-100"
-                    : "max-h-0 opacity-0"
+                <BarChart2 className="h-4 w-4 flex-shrink-0" />
+                {isOpen && <span className="truncate">Overview</span>}
+              </Link>
+              <Link
+                href="/dashboard/encrypt"
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                  isActive("/dashboard/encrypt")
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
                 }`}
               >
-                <div className="ml-4 space-y-1 pb-3 pl-4">
-                  <Link
-                    href="/dashboard/api-docs/encrypt"
-                    className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                      isActive("/dashboard/api-docs/encrypt")
-                        ? "bg-gray-800 text-white"
-                        : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
+                <Lock className="h-4 w-4 flex-shrink-0" />
+                {isOpen && <span className="truncate">Encrypt File</span>}
+              </Link>
+              <Link
+                href="/dashboard/decrypt"
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                  isActive("/dashboard/decrypt")
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
+                }`}
+              >
+                <Unlock className="h-4 w-4 flex-shrink-0" />
+                {isOpen && <span className="truncate">Decrypt File</span>}
+              </Link>
+            </nav>
+          </div>
+
+          <div className="mt-6 px-4">
+            {isOpen && (
+              <p className="mb-2 text-xs font-medium text-gray-500">
+                Developer
+              </p>
+            )}
+            <nav className="space-y-1">
+              <Link
+                href="/dashboard/api-keys"
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                  isActive("/dashboard/api-keys")
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
+                }`}
+              >
+                <Key className="h-4 w-4 flex-shrink-0" />
+                {isOpen && <span className="truncate">API Key Management</span>}
+              </Link>
+
+              {/* API Documentation with dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => isOpen && setApiDocsOpen(!apiDocsOpen)}
+                  className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm ${
+                    isApiDocsPath
+                      ? "bg-purple-600 text-white"
+                      : "text-gray-300 hover:bg-gray-800"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <FileText className="h-4 w-4 flex-shrink-0" />
+                    {isOpen && (
+                      <span className="truncate">API Documentation</span>
+                    )}
+                  </div>
+                  {isOpen &&
+                    (apiDocsOpen ? (
+                      <ChevronDown className="h-4 w-4 transition-transform duration-200" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4 transition-transform duration-200" />
+                    ))}
+                </button>
+
+                {/* Dropdown menu */}
+                {isOpen && (
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                      apiDocsOpen
+                        ? "max-h-[200px] opacity-100"
+                        : "max-h-0 opacity-0"
                     }`}
                   >
-                    Encrypt
-                  </Link>
-                  <Link
-                    href="/dashboard/api-docs/decrypt"
-                    className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                      isActive("/dashboard/api-docs/decrypt")
-                        ? "bg-gray-800 text-white"
-                        : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
-                    }`}
-                  >
-                    Decrypt
-                  </Link>
-                  <Link
-                    href="/dashboard/api-docs/auth"
-                    className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                      isActive("/dashboard/api-docs/auth")
-                        ? "bg-gray-800 text-white"
-                        : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
-                    }`}
-                  >
-                    Auth
-                  </Link>
-                  <Link
-                    href="/dashboard/api-docs/errors"
-                    className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                      isActive("/dashboard/api-docs/errors")
-                        ? "bg-gray-800 text-white"
-                        : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
-                    }`}
-                  >
-                    Errors
-                  </Link>
-                  <Link
-                    href="/dashboard/api-docs/rate-limit"
-                    className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                      isActive("/dashboard/api-docs/rate-limit")
-                        ? "bg-gray-800 text-white"
-                        : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
-                    }`}
-                  >
-                    Rate Limit
-                  </Link>
-                </div>
+                    <div className="mt-1 ml-4 space-y-1 border-l border-gray-700 pb-3 pl-4">
+                      <Link
+                        href="/dashboard/api-docs/encrypt"
+                        className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                          isActive("/dashboard/api-docs/encrypt")
+                            ? "bg-gray-800 text-white"
+                            : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
+                        }`}
+                      >
+                        Encrypt
+                      </Link>
+                      <Link
+                        href="/dashboard/api-docs/decrypt"
+                        className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                          isActive("/dashboard/api-docs/decrypt")
+                            ? "bg-gray-800 text-white"
+                            : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
+                        }`}
+                      >
+                        Decrypt
+                      </Link>
+                      <Link
+                        href="/dashboard/api-docs/auth"
+                        className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                          isActive("/dashboard/api-docs/auth")
+                            ? "bg-gray-800 text-white"
+                            : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
+                        }`}
+                      >
+                        Auth
+                      </Link>
+                      <Link
+                        href="/dashboard/api-docs/errors"
+                        className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                          isActive("/dashboard/api-docs/errors")
+                            ? "bg-gray-800 text-white"
+                            : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
+                        }`}
+                      >
+                        Errors
+                      </Link>
+                      <Link
+                        href="/dashboard/api-docs/rate-limit"
+                        className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                          isActive("/dashboard/api-docs/rate-limit")
+                            ? "bg-gray-800 text-white"
+                            : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
+                        }`}
+                      >
+                        Rate Limit
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          </nav>
+            </nav>
+          </div>
+
+          <div className="mt-6 px-4">
+            <nav className="space-y-1">
+              <Link
+                href="/dashboard/logs"
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                  isActive("/dashboard/logs")
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
+                }`}
+              >
+                <File className="h-4 w-4 flex-shrink-0" />
+                {isOpen && <span className="truncate">Logs & Usage</span>}
+              </Link>
+              <Link
+                href="/dashboard/settings"
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                  isActive("/dashboard/settings")
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
+                }`}
+              >
+                <Settings className="h-4 w-4 flex-shrink-0" />
+                {isOpen && <span className="truncate">Settings</span>}
+              </Link>
+              <Link
+                href="/dashboard/team"
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                  isActive("/dashboard/team")
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
+                }`}
+              >
+                <User className="h-4 w-4 flex-shrink-0" />
+                {isOpen && <span className="truncate">Team</span>}
+              </Link>
+            </nav>
+          </div>
         </div>
 
-        <div className="px-4">
-          <nav className="space-y-1">
-            <Link
-              href="/dashboard/logs"
-              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                isActive("/dashboard/logs")
-                  ? "bg-purple-600 text-white"
-                  : "text-gray-300 hover:bg-gray-800"
-              }`}
-            >
-              <File className="h-4 w-4" />
-              Logs & Usage
-            </Link>
-            <Link
-              href="/dashboard/settings"
-              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                isActive("/dashboard/settings")
-                  ? "bg-purple-600 text-white"
-                  : "text-gray-300 hover:bg-gray-800"
-              }`}
-            >
-              <Settings className="h-4 w-4" />
-              Settings
-            </Link>
-          </nav>
+        <div className="border-t border-gray-800 p-4">
+          <button className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-gray-800">
+            <LogOut className="h-4 w-4 flex-shrink-0" />
+            {isOpen && <span className="truncate">Logout</span>}
+          </button>
         </div>
       </div>
 
-      <div className="border-t border-gray-800 p-4">
-        <button className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-gray-800">
-          <LogOut className="h-4 w-4" />
-          Logout
-        </button>
+      {/* Mobile bottom navigation for quick access */}
+      {isMobile && (
+        <div className="fixed right-0 bottom-0 left-0 z-20 flex items-center justify-around border-t border-gray-800 bg-black py-2">
+          <Link
+            href="/dashboard"
+            className={`flex flex-col items-center p-2 ${
+              isActive("/dashboard", true) ? "text-purple-500" : "text-gray-400"
+            }`}
+          >
+            <BarChart2 className="h-5 w-5" />
+            <span className="text-xs">Overview</span>
+          </Link>
+          <Link
+            href="/dashboard/encrypt"
+            className={`flex flex-col items-center p-2 ${
+              isActive("/dashboard/encrypt")
+                ? "text-purple-500"
+                : "text-gray-400"
+            }`}
+          >
+            <Lock className="h-5 w-5" />
+            <span className="text-xs">Encrypt</span>
+          </Link>
+          <Link
+            href="/dashboard/decrypt"
+            className={`flex flex-col items-center p-2 ${
+              isActive("/dashboard/decrypt")
+                ? "text-purple-500"
+                : "text-gray-400"
+            }`}
+          >
+            <Unlock className="h-5 w-5" />
+            <span className="text-xs">Decrypt</span>
+          </Link>
+          <Link
+            href="/dashboard/settings"
+            className={`flex flex-col items-center p-2 ${
+              isActive("/dashboard/settings")
+                ? "text-purple-500"
+                : "text-gray-400"
+            }`}
+          >
+            <Settings className="h-5 w-5" />
+            <span className="text-xs">Settings</span>
+          </Link>
+        </div>
+      )}
+
+      {/* Main content */}
+      <div
+        className={`flex-1 transition-all duration-300 ease-in-out ${
+          isOpen ? "md:ml-[250px]" : isMobile ? "ml-0" : "md:ml-[70px]"
+        } ${isMobile ? "pb-16" : ""}`}
+      >
+        {children}
       </div>
     </div>
   );
