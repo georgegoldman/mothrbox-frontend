@@ -45,13 +45,14 @@ export default function HomePage() {
           <div className="px-4 md:px-0">
             <div className="flex flex-row justify-center gap-x-2 md:gap-x-5">
               <Link
-                href="#docs"
+              target="blank"
+                href="https://mothrbox-docs.vercel.app/"
                 className="rounded-xl bg-purple-400 px-7 py-3 text-sm font-bold text-white transition"
               >
                 View Docs
               </Link>
               <Link
-                href="/dashboard"
+                href="https://mothrbox-frontend.vercel.app/dashboard/encrypt"
                 className="rounded-xl border border-purple-300 bg-black px-7 py-3 text-sm font-bold text-white shadow-[inset_0_0_25px_#6366f1] transition"
               >
                 Start Encryption
@@ -401,7 +402,7 @@ export default function HomePage() {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="#docs"
+                    href="https://mothrbox-docs.vercel.app/"
                     className="text-gray-600 transition hover:text-purple-600"
                   >
                     Docs
@@ -419,7 +420,7 @@ export default function HomePage() {
                 </li>
                 <li>
                   <a
-                    href="https://github.com/georgegoldman/mothrbox-frontend"
+                    href="https://github.com/georgegoldman/mothrbox"
                     referrerPolicy="no-referrer"
                     target="_blank"
                     className="text-gray-600 transition hover:text-purple-600"
@@ -429,7 +430,8 @@ export default function HomePage() {
                 </li>
                 <li>
                   <Link
-                    href="/privacy"
+                    href="/docs/mothrbox_privacy_policy.pdf"
+                    target="blank"
                     className="text-gray-600 transition hover:text-purple-600"
                   >
                     Privacy
@@ -437,7 +439,9 @@ export default function HomePage() {
                 </li>
                 <li>
                   <Link
-                    href="/terms"
+
+                    href="/docs/mothrbox_terms_of_service.pdf"
+                    target="blank"
                     className="text-gray-600 transition hover:text-purple-600"
                   >
                     Terms
