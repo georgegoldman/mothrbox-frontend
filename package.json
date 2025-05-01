@@ -46,13 +46,7 @@
   "packageManager": "pnpm@10.10.0",
   "pnpm": {
     "onlyBuiltDependencies": [
-<<<<<<< HEAD
-      "sharp"
-    ],
-    "ignoredBuiltDependencies": [
-=======
       "sharp",
->>>>>>> 5c81bacb57749ea8518144828e55daf655cb7219
       "unrs-resolver"
     ]
   }
