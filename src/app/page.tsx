@@ -45,7 +45,7 @@ export default function HomePage() {
           <div className="px-4 md:px-0">
             <div className="flex flex-row justify-center gap-x-2 md:gap-x-5">
               <Link
-              target="blank"
+                target="blank"
                 href="https://mothrbox-docs.vercel.app/"
                 className="rounded-xl bg-purple-400 px-7 py-3 text-sm font-bold text-white transition"
               >
@@ -429,23 +429,24 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <Link
+                  <a
                     href="/docs/mothrbox_privacy_policy.pdf"
-                    target="blank"
+                    target="_blank"
+                    referrerPolicy="no-referrer"
                     className="text-gray-600 transition hover:text-purple-600"
                   >
                     Privacy
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link
-
+                  <a
                     href="/docs/mothrbox_terms_of_service.pdf"
-                    target="blank"
+                    target="_blank"
+                    referrerPolicy="no-referrer"
                     className="text-gray-600 transition hover:text-purple-600"
                   >
                     Terms
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>

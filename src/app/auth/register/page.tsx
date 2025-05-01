@@ -1,136 +1,144 @@
 "use client";
 
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import Link from "next/link";
-import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { InputField } from "@/components/ui/input-field";
+
+// Zod schema for validation
+const registerSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  email: z.string().email("Invalid email address"),
+  phone: z
+    .string()
+    .min(10, "Phone number is required")
+    .regex(/^\+?\d{10,}$/, "Enter a valid phone number"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  agreeToTerms: z.literal(true, {
+    errorMap: () => ({
+      message: "You must agree to the terms and conditions",
+    }),
+  }),
+});
+
+// Infer form type
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [username, setUsername] = useState("");
-  const [emailPhone, setEmailPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!agreeToTerms) {
-      alert("Please agree to the terms and conditions");
-      return;
-    }
-    // Handle signup logic here
-    console.log("Signup attempt with:", { username, emailPhone, password });
+  const onSubmit = (data: RegisterFormValues) => {
+    console.log("Validated Signup:", data);
+    // 🔒 Handle actual signup logic here (e.g. API call)
   };
 
   return (
-    <div className="rounded-lg bg-white p-8 shadow-sm">
-      <h1 className="mb-6 text-center text-2xl font-bold">
-        Welcome to Cryptix!
+    <div className="w-full rounded-lg bg-white p-6 shadow-sm">
+      <h1 className="mb-3 text-center text-xl font-bold lg:text-[32px]">
+        Welcome to Mothrbox!
       </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <label htmlFor="username" className="block text-sm font-medium">
-            Username
-          </label>
-          <input
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+          <InputField
             id="username"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            label="Username"
             placeholder="Choose a username"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
-            required
+            {...register("username")}
+            error={errors.username?.message}
+            autoComplete="username"
           />
-        </div>
 
-        <div className="space-y-2">
-          <label htmlFor="emailPhone" className="block text-sm font-medium">
-            Email/Phone Number
-          </label>
-          <input
-            id="emailPhone"
-            type="text"
-            value={emailPhone}
-            onChange={(e) => setEmailPhone(e.target.value)}
+          <InputField
+            id="email"
+            type="email"
+            label="Email"
             placeholder="example@email.com"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
-            required
+            {...register("email")}
+            error={errors.email?.message}
+            autoComplete="email"
+          />
+
+          <InputField
+            id="phone"
+            type="tel"
+            label="Phone Number"
+            placeholder="+2349012345678"
+            {...register("phone")}
+            error={errors.phone?.message}
+          />
+
+          <InputField
+            id="password"
+            type="password"
+            label="Password"
+            placeholder="Enter password"
+            {...register("password")}
+            error={errors.password?.message}
+            showPasswordToggle
+            autoComplete="new-password"
           />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="password" className="block text-sm font-medium">
-            Password
-          </label>
-          <div className="relative">
-            <input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter Password"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
-              required
-            />
-            <button
-              type="button"
-              className="absolute inset-y-0 right-0 flex items-center pr-3"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? (
-                <EyeOff className="h-5 w-5 text-gray-400" />
-              ) : (
-                <Eye className="h-5 w-5 text-gray-400" />
-              )}
-            </button>
+          <div className="flex items-start">
+            <div className="flex h-5 items-center">
+              <input
+                id="terms"
+                type="checkbox"
+                {...register("agreeToTerms")}
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+              />
+            </div>
+            <label htmlFor="terms" className="ml-2 block text-xs text-gray-600">
+              By clicking continue to join or sign in, you agree to{" "}
+              <Link
+                href="/terms"
+                className="text-purple-600 hover:text-purple-700"
+              >
+                Mothrbox User Agreement
+              </Link>
+              ,{" "}
+              <Link
+                href="/privacy"
+                className="text-purple-600 hover:text-purple-700"
+              >
+                Privacy Policy
+              </Link>
+              , and{" "}
+              <Link
+                href="/cookie-policy"
+                className="text-purple-600 hover:text-purple-700"
+              >
+                Cookie Policy
+              </Link>
+              .
+            </label>
           </div>
-        </div>
-
-        <div className="flex items-start">
-          <input
-            id="terms"
-            type="checkbox"
-            checked={agreeToTerms}
-            onChange={(e) => setAgreeToTerms(e.target.checked)}
-            className="mt-1 h-4 w-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
-          />
-          <label htmlFor="terms" className="ml-2 block text-sm text-gray-600">
-            By clicking continue to join or sign in, you agree to{" "}
-            <Link
-              href="/terms"
-              className="text-purple-600 hover:text-purple-700"
-            >
-              Cryptix User Agreement
-            </Link>
-            ,{" "}
-            <Link
-              href="/privacy"
-              className="text-purple-600 hover:text-purple-700"
-            >
-              Privacy Policy
-            </Link>
-            , and{" "}
-            <Link
-              href="/cookie-policy"
-              className="text-purple-600 hover:text-purple-700"
-            >
-              Cookie Policy
-            </Link>
-            .
-          </label>
+          {errors.agreeToTerms && (
+            <p className="text-xs text-red-500">
+              {errors.agreeToTerms.message}
+            </p>
+          )}
         </div>
 
         <button
           type="submit"
-          className="w-full rounded-md bg-purple-600 px-4 py-2 font-medium text-white transition duration-200 hover:bg-purple-700"
+          className="w-full cursor-pointer rounded-md bg-purple-600 px-4 py-2.5 text-base font-medium text-white transition duration-200 hover:bg-purple-700"
         >
           Sign up
         </button>
-
-        <div className="text-center text-sm text-gray-500">OR</div>
       </form>
 
-      <div className="mt-6 text-center text-sm">
+      <div className="mt-3 text-center text-sm">
         Already have an account?{" "}
         <Link
           href="/auth/login"
