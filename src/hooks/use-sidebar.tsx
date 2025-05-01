@@ -22,7 +22,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const checkScreenSize = () => {
-      const isMobileView = window.innerWidth < 768;
+      const isMobileView = window.innerWidth < 1024;
       setIsMobile(isMobileView);
 
       // Auto-close sidebar on mobile

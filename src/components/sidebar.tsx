@@ -352,7 +352,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <div
         className={`flex-1 transition-all duration-300 ease-in-out ${
-          isOpen ? "md:ml-[250px]" : isMobile ? "ml-0" : "md:ml-[70px]"
+          isOpen ? "lg:ml-[250px]" : isMobile ? "ml-0" : "lg:ml-[70px]"
         } ${isMobile ? "pb-16" : ""}`}
       >
         {children}
