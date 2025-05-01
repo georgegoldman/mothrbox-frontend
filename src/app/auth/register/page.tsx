@@ -1,11 +1,30 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { InputField } from "@/components/ui/input-field";
+
+// Types for API responses
+type RegisterSuccessResponse = {
+  message: string;
+  user?: {
+    id: string;
+    username: string;
+    email: string;
+    phone: string;
+  };
+};
+
+type ErrorResponse = {
+  message: string;
+  statusCode?: number;
+  errors?: Record<string, string[]>;
+};
 
 // Zod schema for validation
 const registerSchema = z.object({
@@ -27,6 +46,10 @@ const registerSchema = z.object({
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -35,9 +58,49 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (data: RegisterFormValues) => {
-    console.log("Validated Signup:", data);
-    // 🔒 Handle actual signup logic here (e.g. API call)
+  const onSubmit = async (data: RegisterFormValues) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        "https://mothrbox-backend-9vxz.onrender.com/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: data.username,
+            email: data.email,
+            phone: data.phone,
+            password: data.password,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        const errorData: ErrorResponse = await response.json();
+        throw new Error(
+          errorData.message ??
+            errorData.errors?.[0]?.[1] ??
+            "Registration failed",
+        );
+      }
+
+      const result: RegisterSuccessResponse = await response.json();
+      console.log("Registration successful:", result);
+
+      // Redirect to login page after successful registration
+      router.push("/auth/login?registered=true");
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Registration failed";
+      setError(errorMessage);
+      console.error("Registration error:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -45,6 +108,12 @@ export default function RegisterPage() {
       <h1 className="mb-3 text-center text-xl font-bold lg:text-[32px]">
         Welcome to Mothrbox!
       </h1>
+
+      {error && (
+        <div className="mb-4 rounded-md bg-red-50 p-4 text-red-600">
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
@@ -132,9 +201,10 @@ export default function RegisterPage() {
 
         <button
           type="submit"
-          className="w-full cursor-pointer rounded-md bg-purple-600 px-4 py-2.5 text-base font-medium text-white transition duration-200 hover:bg-purple-700"
+          disabled={isLoading}
+          className="w-full cursor-pointer rounded-md bg-purple-600 px-4 py-2.5 text-base font-medium text-white transition duration-200 hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-70"
         >
-          Sign up
+          {isLoading ? "Creating account..." : "Sign up"}
         </button>
       </form>
 

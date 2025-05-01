@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import Link from "next/link";
@@ -5,6 +6,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputField } from "@/components/ui/input-field";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import type { ErrorResponse, LoginSuccessResponse } from "@/types/auth";
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -12,8 +16,6 @@ const loginSchema = z.object({
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
-
-// new update
 
 export default function LoginPage() {
   const {
@@ -24,9 +26,51 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log("Login attempt with:", data);
-    // 🧠 Place actual login logic here (e.g. API call)
+  const router = useRouter();
+
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // const onSubmit = (data: LoginFormValues) => {
+  //   console.log("Login attempt with:", data);
+  //   // 🧠 Place actual login logic here (e.g. API call)
+  // };
+
+  const onSubmit = async (data: LoginFormValues) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        "https://mothrbox-backend-9vxz.onrender.com/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        const errorData: ErrorResponse = await response.json();
+        throw new Error(errorData.message || "Login failed");
+      }
+
+      const result: LoginSuccessResponse = await response.json();
+      console.log("Login successful:", result);
+
+      // Handle successful login (store token, redirect, etc.)
+      router.push("/dashboard"); // or wherever you want to redirect
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
+      console.error("Login error:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -34,6 +78,12 @@ export default function LoginPage() {
       <h1 className="mb-3 text-center text-xl font-bold lg:text-[32px]">
         Welcome Back!
       </h1>
+
+      {error && (
+        <div className="mb-4 rounded-md bg-red-50 p-4 text-red-600">
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <InputField
@@ -75,9 +125,10 @@ export default function LoginPage() {
 
         <button
           type="submit"
+          disabled={isLoading}
           className="w-full cursor-pointer rounded-md bg-purple-600 px-4 py-2.5 text-base font-medium text-white transition duration-200 hover:bg-purple-700"
         >
-          Login
+          {isLoading ? "Logging in..." : "Login"}
         </button>
       </form>
 
