@@ -1,7 +1,9 @@
 "use client";
 
-import { Bell, ChevronDown, Search } from "lucide-react";
+import { Bell, ChevronDown, Menu, Search } from "lucide-react";
 import Image from "next/image";
+import { useSidebar } from "@/hooks/use-sidebar";
+import { useState } from "react";
 
 interface HeaderProps {
   title: string;
@@ -9,15 +11,58 @@ interface HeaderProps {
 }
 
 export function Header({ title, subtitle }: HeaderProps) {
+  const { toggleSidebar } = useSidebar();
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
+
   return (
-    <header className="flex items-center justify-between border-b border-gray-800 p-4">
-      <div>
-        <h1 className="text-xl font-bold">{title}</h1>
-        {subtitle && <p className="text-sm text-gray-400">{subtitle}</p>}
+    <header className="flex flex-col border-b border-gray-800 p-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={toggleSidebar}
+            className="rounded-md p-2 hover:bg-gray-800"
+            aria-label="Toggle sidebar"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+          <div>
+            <h1 className="text-lg font-bold md:text-xl">{title}</h1>
+            {subtitle && (
+              <p className="text-xs text-gray-400 md:text-sm">{subtitle}</p>
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 md:hidden">
+          <button
+            onClick={() => setShowMobileSearch(!showMobileSearch)}
+            className="rounded-full p-2 hover:bg-gray-800"
+            aria-label="Search"
+          >
+            <Search className="h-5 w-5" />
+          </button>
+          <button className="relative rounded-full p-2 hover:bg-gray-800">
+            <Bell className="h-5 w-5" />
+            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-purple-500"></span>
+          </button>
+        </div>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="relative hidden md:block">
+      {showMobileSearch && (
+        <div className="mt-4 md:hidden">
+          <div className="relative">
+            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
+            <input
+              type="search"
+              placeholder="Search..."
+              className="w-full rounded-full bg-gray-800 py-2 pr-4 pl-10 text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
+            />
+          </div>
+        </div>
+      )}
+
+      <div className="hidden items-center gap-4 md:flex">
+        <div className="relative">
           <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
           <input
             type="search"
