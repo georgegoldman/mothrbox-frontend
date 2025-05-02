@@ -10,7 +10,7 @@ type LoginResponse = {
 type RegisterResponse = {
   message: string;
   user?: {
-    id: string;
+    _id: string;
     username: string;
     email: string;
     phone: string;
@@ -18,7 +18,7 @@ type RegisterResponse = {
 };
 
 type UserDataResponse = {
-  id: string;
+  _id: string;
   username: string;
   email: string;
   phone: string;

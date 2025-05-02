@@ -3,7 +3,7 @@
 import { Bell, PanelLeft, Search } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useState } from "react";
-import UserProfile from "./user-profile";
+import { useUser } from "@/app/contexts/user-context";
 
 interface HeaderProps {
   title: string;
@@ -14,8 +14,10 @@ export function Header({ title, subtitle }: HeaderProps) {
   const { toggleSidebar } = useSidebar();
   const [showMobileSearch, setShowMobileSearch] = useState(false);
 
+  const { user, initials } = useUser();
+
   return (
-    <header className="flex flex-col border-b border-gray-800 p-4 md:flex-row md:items-center md:justify-between">
+    <header className="flex h-[72.67px] flex-col border-b border-gray-800 p-4 md:flex-row md:items-center md:justify-between">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
@@ -78,7 +80,18 @@ export function Header({ title, subtitle }: HeaderProps) {
           <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-purple-500"></span>
         </button>
 
-        <UserProfile />
+        <div className="flex items-center gap-2">
+          <div
+            className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border bg-teal-700 font-bold text-white"
+            // style={{ backgroundColor: bgColor }}
+          >
+            {initials}
+          </div>
+          <div className="hidden md:block">
+            <p className="text-sm font-medium">{user?.username}</p>
+            <p className="text-xs text-gray-400">{user?.email}</p>
+          </div>
+        </div>
       </div>
     </header>
   );
