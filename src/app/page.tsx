@@ -44,15 +44,16 @@ export default function HomePage() {
 
           <div className="px-4 md:px-0">
             <div className="flex flex-row justify-center gap-x-2 md:gap-x-5">
-              <Link
-                target="blank"
+              <a
                 href="https://mothrbox-docs.vercel.app/"
+                target="_blank"
+                referrerPolicy="no-referrer"
                 className="rounded-xl bg-purple-400 px-7 py-3 text-sm font-bold text-white transition"
               >
                 View Docs
-              </Link>
+              </a>
               <Link
-                href="https://mothrbox-frontend.vercel.app/dashboard/encrypt"
+                href="/dashboard/encrypt"
                 className="rounded-xl border border-purple-300 bg-black px-7 py-3 text-sm font-bold text-white shadow-[inset_0_0_25px_#6366f1] transition"
               >
                 Start Encryption

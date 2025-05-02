@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -8,23 +7,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { InputField } from "@/components/ui/input-field";
-
-// Types for API responses
-type RegisterSuccessResponse = {
-  message: string;
-  user?: {
-    id: string;
-    username: string;
-    email: string;
-    phone: string;
-  };
-};
-
-type ErrorResponse = {
-  message: string;
-  statusCode?: number;
-  errors?: Record<string, string[]>;
-};
+import { registerAction } from "@/app/actions/auth";
 
 // Zod schema for validation
 const registerSchema = z.object({
@@ -42,7 +25,6 @@ const registerSchema = z.object({
   }),
 });
 
-// Infer form type
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
@@ -61,43 +43,22 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
     setError(null);
-
     try {
-      const response = await fetch(
-        "https://mothrbox-backend-9vxz.onrender.com/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: data.username,
-            email: data.email,
-            phone: data.phone,
-            password: data.password,
-          }),
-        },
-      );
+      await registerAction({
+        username: data.username,
+        email: data.email,
+        phone: data.phone,
+        password: data.password,
+      });
+      console.log(data);
 
-      if (!response.ok) {
-        const errorData: ErrorResponse = await response.json();
-        throw new Error(
-          errorData.message ??
-            errorData.errors?.[0]?.[1] ??
-            "Registration failed",
-        );
-      }
-
-      const result: RegisterSuccessResponse = await response.json();
-      console.log("Registration successful:", result);
-
-      // Redirect to login page after successful registration
       router.push("/auth/login?registered=true");
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Registration failed";
-      setError(errorMessage);
-      console.error("Registration error:", err);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Registration failed");
+      }
     } finally {
       setIsLoading(false);
     }
