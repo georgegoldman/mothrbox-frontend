@@ -85,7 +85,6 @@ export function AnalyticsChart({
           x: {
             grid: {
               display: false,
-              drawBorder: false,
             },
             ticks: {
               color: "#9ca3af",
@@ -97,7 +96,6 @@ export function AnalyticsChart({
           y: {
             grid: {
               color: "rgba(75, 85, 99, 0.2)",
-              drawBorder: false,
             },
             ticks: {
               color: "#9ca3af",

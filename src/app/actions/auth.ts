@@ -82,6 +82,7 @@ export async function registerAction(data: {
 
 export async function logout() {
   document.cookie = "accessToken=; Max-Age=0; path=/;";
+  document.cookie = "userId=; Max-Age=0; path=/;";
 
   window.location.href = "/auth/login";
 }
