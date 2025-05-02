@@ -17,33 +17,28 @@ type SidebarContextType = {
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false); // default to false
   const [isMobile, setIsMobile] = useState(false);
+  const [hydrated, setHydrated] = useState(false); // new state
 
   useEffect(() => {
     const checkScreenSize = () => {
       const isMobileView = window.innerWidth < 1024;
       setIsMobile(isMobileView);
-
-      // Auto-close sidebar on mobile
-      if (isMobileView) {
-        setIsOpen(false);
-      } else {
-        setIsOpen(true);
-      }
+      setIsOpen(!isMobileView); // open if desktop, closed if mobile
     };
 
-    // Initial check
     checkScreenSize();
+    setHydrated(true); // we're ready to render now
 
-    // Add event listener for window resize
     window.addEventListener("resize", checkScreenSize);
-
-    // Cleanup
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  const toggleSidebar = () => setIsOpen(!isOpen);
+  const toggleSidebar = () => setIsOpen((prev) => !prev);
+
+  // 🚫 Don't render until hydrated to avoid layout mismatch / flicker
+  if (!hydrated) return null;
 
   return (
     <SidebarContext.Provider value={{ isOpen, toggleSidebar, isMobile }}>

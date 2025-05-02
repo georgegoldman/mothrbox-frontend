@@ -20,6 +20,7 @@ import {
   User,
 } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
+import { logout } from "@/app/actions/auth";
 
 export function Sidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -294,7 +295,10 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
         </div>
 
         <div className="border-t border-gray-800 p-4">
-          <button className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-gray-800">
+          <button
+            onClick={logout}
+            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-gray-800"
+          >
             <LogOut className="h-4 w-4 flex-shrink-0" />
             {isOpen && <span className="truncate">Logout</span>}
           </button>

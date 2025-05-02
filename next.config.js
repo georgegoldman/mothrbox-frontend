@@ -5,6 +5,14 @@
 import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  // You can add other Next.js configurations here if needed
+};
 
 export default config;
+
+// Export the middleware matcher configuration
+export const middlewareMatcher = {
+  // This tells Next.js to run middleware on all routes under /dashboard
+  matcher: ["/dashboard/:path*"],
+};

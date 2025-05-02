@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import Link from "next/link";
@@ -8,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { InputField } from "@/components/ui/input-field";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { ErrorResponse, LoginSuccessResponse } from "@/types/auth";
+import { loginAction } from "@/app/actions/auth";
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -31,43 +30,22 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // const onSubmit = (data: LoginFormValues) => {
-  //   console.log("Login attempt with:", data);
-  //   // 🧠 Place actual login logic here (e.g. API call)
-  // };
-
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
     setError(null);
-
     try {
-      const response = await fetch(
-        "https://mothrbox-backend-9vxz.onrender.com/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-          credentials: "include",
-        },
-      );
-
-      if (!response.ok) {
-        const errorData: ErrorResponse = await response.json();
-        throw new Error(errorData.message || "Login failed");
-      }
-
-      const result: LoginSuccessResponse = await response.json();
+      const result = await loginAction(data);
       console.log("Login successful:", result);
 
-      // Handle successful login (store token, redirect, etc.)
-      router.push("/dashboard"); // or wherever you want to redirect
+      if (result.accessToken) {
+        document.cookie = `accessToken=${result.accessToken}; path=/; max-age=86400; secure; samesite=lax`;
+      }
+
+      router.push("/dashboard");
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "An unknown error occurred",
       );
-      console.error("Login error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -126,7 +104,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full cursor-pointer rounded-md bg-purple-600 px-4 py-2.5 text-base font-medium text-white transition duration-200 hover:bg-purple-700"
+          className="w-full cursor-pointer rounded-md bg-purple-600 px-4 py-2.5 text-base font-medium text-white transition duration-200 hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isLoading ? "Logging in..." : "Login"}
         </button>
