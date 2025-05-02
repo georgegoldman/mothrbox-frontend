@@ -3,11 +3,10 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  console.log("Middleware invoked for:", request.nextUrl.pathname);
+  // console.log("Middleware invoked for:", request.nextUrl.pathname);
 
   const { pathname } = new URL(request.url);
   const cookieHeader = request.headers.get("cookie") ?? "";
-  console.log("Cookies header:", cookieHeader);
   const cookies: Record<string, string> = Object.fromEntries(
     cookieHeader
       .split("; ")
@@ -20,13 +19,12 @@ export function middleware(request: NextRequest) {
       })
       .filter((entry): entry is [string, string] => entry !== null),
   );
-  console.log("Parsed cookies:", cookies);
   const token = cookies.accessToken;
-  console.log("Access token:", token);
+  // console.log("Access token:", token);
 
   if (pathname.startsWith("/dashboard")) {
     if (!token) {
-      console.log("No token, redirecting...");
+      // console.log("No token, redirecting...");
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
   }

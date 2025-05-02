@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { logout } from "@/app/actions/auth";
+import Image from "next/image";
 
 export function Sidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -85,20 +86,17 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
       <div
         className={`fixed top-0 left-0 z-30 h-full overflow-y-auto border-r border-gray-800 bg-black transition-all duration-300 ease-in-out ${isOpen ? "w-[250px]" : isMobile ? "w-0 -translate-x-full" : "w-[70px]"} `}
       >
-        <div className="flex h-16 items-center justify-between border-b border-gray-800 px-4">
+        <div className="flex h-[80.67px] items-center justify-between border-b border-gray-800 p-4">
           <div className="flex items-center gap-2 overflow-hidden">
-            <Lock className="h-6 w-6 flex-shrink-0" />
-            {isOpen && (
-              <span className="font-bold whitespace-nowrap">Logo</span>
-            )}
+            <Image src="/images/logo.png" alt="logo" width={36} height={0} />
           </div>
           {isMobile && isOpen && (
             <button
               onClick={toggleSidebar}
-              className="rounded-md p-1 hover:bg-gray-800"
+              className="rounded-md p-1"
               aria-label="Close sidebar"
             >
-              <X className="h-5 w-5" />
+              <X className="h-5 w-5 cursor-pointer text-white" />
             </button>
           )}
         </div>
