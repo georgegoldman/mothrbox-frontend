@@ -12,8 +12,8 @@ export default function DashboardLayout({
     <UserProvider>
       <SidebarProvider>
         <Sidebar>
-          <div className="flex min-h-screen flex-col text-white">
-            <main className="flex-1 bg-black">{children}</main>
+          <div className="flex min-h-screen flex-col overflow-x-hidden text-white">
+            <main className="relative flex-1 bg-black">{children}</main>
           </div>
         </Sidebar>
       </SidebarProvider>
