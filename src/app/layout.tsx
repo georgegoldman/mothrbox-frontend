@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 
 import { type Metadata } from "next";
 import { Montserrat } from "next/font/google";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Mothrbox",
@@ -20,7 +21,15 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${montserrat.className}`}>
-      <body>{children}</body>
+      <body>
+        <div className="block lg:hidden">
+          <Toaster richColors position="top-center" />
+        </div>
+        <div className="hidden lg:block">
+          <Toaster richColors position="top-right" />
+        </div>
+        {children}
+      </body>
     </html>
   );
 }

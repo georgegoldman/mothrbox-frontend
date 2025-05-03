@@ -46,6 +46,21 @@ export default function Navbar() {
         <NavLinks />
       </div>
 
+      <div className="hidden items-center space-x-4 lg:flex">
+        <Link
+          href="/auth/login"
+          className="rounded-xl border border-purple-500 px-7 py-3 text-sm font-bold text-black transition hover:bg-gray-100"
+        >
+          Login
+        </Link>
+        <Link
+          href="/auth/register"
+          className="rounded-xl border border-purple-300 bg-black px-7 py-3 text-sm font-bold text-white shadow-[inset_0_0_25px_#6366f1] transition"
+        >
+          Sign Up
+        </Link>
+      </div>
+
       {/* Hamburger */}
       <div className="flex cursor-pointer lg:hidden" onClick={toggleMenu}>
         {isOpen ? <X size={30} /> : <Menu size={30} />}
@@ -79,10 +94,10 @@ export default function Navbar() {
               Login
             </Link>
             <Link
-              href="/auth/signup"
+              href="/auth/register"
               className="rounded-xl border border-purple-300 bg-black px-7 py-3 text-sm font-bold text-white shadow-[inset_0_0_25px_#6366f1] transition"
             >
-              Sign In
+              Sign Up
             </Link>
           </div>
         </div>

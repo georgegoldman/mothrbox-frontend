@@ -8,6 +8,7 @@ import { InputField } from "@/components/ui/input-field";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginAction } from "@/app/actions/auth";
+import { toast } from "sonner";
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -35,17 +36,24 @@ export default function LoginPage() {
     setError(null);
     try {
       const result = await loginAction(data);
-      console.log("Login successful:", result);
+      // console.log("Login successful:", result);
 
       if (result.accessToken) {
         document.cookie = `accessToken=${result.accessToken}; path=/; max-age=86400; secure; samesite=lax`;
       }
 
+      if (result._id) {
+        document.cookie = `userId=${result._id}; path=/; max-age=86400; secure; samesite=lax`;
+      }
+
       router.push("/dashboard");
+      // toast.success("Login successful!");
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "An unknown error occurred",
       );
+      toast.error(error ?? "Login failed. Please try again.");
+      console.error("Login error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -57,11 +65,11 @@ export default function LoginPage() {
         Welcome Back!
       </h1>
 
-      {error && (
+      {/* {error && (
         <div className="mb-4 rounded-md bg-red-50 p-4 text-red-600">
           {error}
         </div>
-      )}
+      )} */}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <InputField

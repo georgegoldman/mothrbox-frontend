@@ -17,10 +17,10 @@ import {
   ChevronDown,
   ChevronRight,
   X,
-  User,
 } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { logout } from "@/app/actions/auth";
+import Image from "next/image";
 
 export function Sidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -83,27 +83,28 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 z-30 h-full overflow-y-auto border-r border-gray-800 bg-black transition-all duration-300 ease-in-out ${isOpen ? "w-[250px]" : isMobile ? "w-0 -translate-x-full" : "w-[70px]"} `}
+        className={`fixed top-0 left-0 z-30 flex h-full flex-col border-r border-gray-800 bg-black transition-all duration-300 ease-in-out ${
+          isOpen ? "w-[250px]" : isMobile ? "w-0 -translate-x-full" : "w-[70px]"
+        } `}
       >
-        <div className="flex h-16 items-center justify-between border-b border-gray-800 px-4">
+        {/* Sidebar Header */}
+        <div className="flex h-[72.67px] items-center justify-between border-b border-gray-800 p-4">
           <div className="flex items-center gap-2 overflow-hidden">
-            <Lock className="h-6 w-6 flex-shrink-0" />
-            {isOpen && (
-              <span className="font-bold whitespace-nowrap">Logo</span>
-            )}
+            <Image src="/images/logo.png" alt="logo" width={36} height={0} />
           </div>
           {isMobile && isOpen && (
             <button
               onClick={toggleSidebar}
-              className="rounded-md p-1 hover:bg-gray-800"
+              className="rounded-md p-1"
               aria-label="Close sidebar"
             >
-              <X className="h-5 w-5" />
+              <X className="h-5 w-5 cursor-pointer text-white" />
             </button>
           )}
         </div>
 
-        <div className="flex-1 overflow-auto py-4">
+        {/* Scrollable Navigation Area */}
+        <div className="flex-1 overflow-y-auto py-4">
           <div className="mb-2 px-4">
             {isOpen && (
               <p className="mb-2 text-xs font-medium text-gray-500">General</p>
@@ -279,25 +280,15 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                 <Settings className="h-4 w-4 flex-shrink-0" />
                 {isOpen && <span className="truncate">Settings</span>}
               </Link>
-              <Link
-                href="/dashboard/team"
-                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                  isActive("/dashboard/team")
-                    ? "bg-purple-600 text-white"
-                    : "text-gray-300 hover:bg-gray-800"
-                }`}
-              >
-                <User className="h-4 w-4 flex-shrink-0" />
-                {isOpen && <span className="truncate">Team</span>}
-              </Link>
             </nav>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 p-4">
+        {/* Fixed Logout Button */}
+        <div className="mt-auto border-t border-gray-800 px-4">
           <button
             onClick={logout}
-            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-gray-800"
+            className="flex h-[50px] w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-300"
           >
             <LogOut className="h-4 w-4 flex-shrink-0" />
             {isOpen && <span className="truncate">Logout</span>}
