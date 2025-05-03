@@ -25,19 +25,22 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
     const checkScreenSize = () => {
       const isMobileView = window.innerWidth < 1024;
       setIsMobile(isMobileView);
-      setIsOpen(!isMobileView); // open if desktop, closed if mobile
+      // Only set isOpen to true for desktop on initial load
+      if (!hydrated) {
+        setIsOpen(!isMobileView);
+      }
     };
 
     checkScreenSize();
-    setHydrated(true); // we're ready to render now
+    setHydrated(true);
 
     window.addEventListener("resize", checkScreenSize);
     return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
+  }, [hydrated]);
 
   const toggleSidebar = () => setIsOpen((prev) => !prev);
 
-  // 🚫 Don't render until hydrated to avoid layout mismatch / flicker
+  // Don't render until hydrated to avoid layout mismatch / flicker
   if (!hydrated) return null;
 
   return (
