@@ -15,10 +15,7 @@ export default function EncryptPage() {
 
   return (
     <div>
-      <Header
-        title="Dashboard"
-        subtitle="Welcome back Michael, Ready to secure your data?"
-      />
+      <Header title="Encrypt Data" subtitle="Ready to encrypt your data?" />
 
       <div className="p-4 md:p-6">
         <h2 className="mb-4 text-base font-medium md:text-lg">

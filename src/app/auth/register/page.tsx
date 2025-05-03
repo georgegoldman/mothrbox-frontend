@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { InputField } from "@/components/ui/input-field";
 import { registerAction } from "@/app/actions/auth";
+import { toast } from "sonner";
 
 // Zod schema for validation
 const registerSchema = z.object({
@@ -50,15 +51,16 @@ export default function RegisterPage() {
         phone: data.phone,
         password: data.password,
       });
-      console.log(data);
+      // console.log(data);
+      toast.success("Account created successful!");
 
       router.push("/auth/login?registered=true");
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Registration failed");
-      }
+      setError(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
+      toast.error(error ?? "Registration failed. Please try again.");
+      console.error("Registration error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -70,11 +72,11 @@ export default function RegisterPage() {
         Welcome to Mothrbox!
       </h1>
 
-      {error && (
+      {/* {error && (
         <div className="mb-4 rounded-md bg-red-50 p-4 text-red-600">
           {error}
         </div>
-      )}
+      )} */}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
