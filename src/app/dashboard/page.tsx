@@ -11,6 +11,7 @@ import { StatsDonutChart } from "@/components/stats-donut-chart";
 import { HistoryLog } from "@/components/history-log";
 import { useAnalyticsData } from "@/hooks/use-analytics-data";
 import { useHistoryData } from "@/hooks/use-history-data";
+import { useUser } from "../contexts/user-context";
 
 export default function OverviewPage() {
   const {
@@ -22,6 +23,8 @@ export default function OverviewPage() {
   } = useAnalyticsData();
   const { historyItems, loading: historyLoading } = useHistoryData();
 
+  const { user } = useUser();
+
   // Stats data for the donut chart
   const donutData = [
     { label: "Calls Today", value: statsData.callsToday, color: "#ec4899" }, // pink-500
@@ -31,7 +34,10 @@ export default function OverviewPage() {
 
   return (
     <div>
-      <Header title="Usage Statistics" subtitle="Welcome back Michael" />
+      <Header
+        title="Usage Statistics"
+        subtitle={`Welcome back ${user?.username}`}
+      />
 
       <div className="p-3 sm:p-4 md:p-6">
         {/* Cards with responsive layout */}

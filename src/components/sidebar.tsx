@@ -71,7 +71,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="flex min-h-screen bg-black">
+    <div className="flex min-h-screen overflow-hidden bg-black">
       {/* Mobile overlay */}
       {isMobile && isOpen && (
         <div
@@ -82,15 +82,16 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Sidebar */}
-      <div
+      <aside
         className={`fixed top-0 left-0 z-30 flex h-full flex-col border-r border-gray-800 bg-black transition-all duration-300 ease-in-out ${
-          isOpen ? "w-[250px]" : isMobile ? "w-0 -translate-x-full" : "w-[70px]"
-        } `}
+          isOpen ? "w-[250px]" : isMobile ? "w-0" : "w-[70px]"
+        } overflow-hidden`}
       >
         {/* Sidebar Header */}
         <div className="flex h-[72.67px] items-center justify-between border-b border-gray-800 p-4">
           <div className="flex items-center gap-2 overflow-hidden">
-            <Image src="/images/logo.png" alt="logo" width={36} height={0} />
+            <Image src="/images/logo.png" alt="logo" width={36} height={36} />
+            {isOpen && <span className="font-medium text-white">Mothrbox</span>}
           </div>
           {isMobile && isOpen && (
             <button
@@ -285,16 +286,16 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Fixed Logout Button */}
-        <div className="mt-auto border-t border-gray-800 px-4">
+        <div className="border-t border-gray-800 p-4">
           <button
             onClick={logout}
-            className="flex h-[50px] w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-300"
+            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-gray-800"
           >
             <LogOut className="h-4 w-4 flex-shrink-0" />
             {isOpen && <span className="truncate">Logout</span>}
           </button>
         </div>
-      </div>
+      </aside>
 
       {/* Mobile bottom navigation for quick access */}
       {isMobile && (
@@ -348,7 +349,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
       <div
         className={`flex-1 transition-all duration-300 ease-in-out ${
           isOpen ? "lg:ml-[250px]" : isMobile ? "ml-0" : "lg:ml-[70px]"
-        } ${isMobile ? "pb-16" : ""}`}
+        } ${isMobile ? "pb-16" : ""} relative z-10`}
       >
         {children}
       </div>
