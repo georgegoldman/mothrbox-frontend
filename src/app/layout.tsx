@@ -1,3 +1,4 @@
+import { PageTransition } from "@/components/motion/page-transition";
 import "@/styles/globals.css";
 
 import { type Metadata } from "next";
@@ -28,7 +29,7 @@ export default function RootLayout({
         <div className="hidden lg:block">
           <Toaster richColors position="top-right" />
         </div>
-        {children}
+        <PageTransition>{children}</PageTransition>
       </body>
     </html>
   );
