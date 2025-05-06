@@ -25,7 +25,7 @@ import Image from "next/image";
 export function Sidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [apiDocsOpen, setApiDocsOpen] = useState(false);
-  const { isOpen, toggleSidebar, isMobile } = useSidebar();
+  const { isOpen, toggleSidebar, isMobile, closeSidebar } = useSidebar();
 
   // Check if the current path is under API docs
   const isApiDocsPath = pathname.startsWith("/dashboard/api-docs");
@@ -89,10 +89,10 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
       >
         {/* Sidebar Header */}
         <div className="flex h-[72.67px] items-center justify-between border-b border-gray-800 p-4">
-          <div className="flex items-center gap-2 overflow-hidden">
+          <Link href="/" className="flex items-center gap-2 overflow-hidden">
             <Image src="/images/logo.png" alt="logo" width={36} height={36} />
             {isOpen && <span className="font-medium text-white">Mothrbox</span>}
-          </div>
+          </Link>
           {isMobile && isOpen && (
             <button
               onClick={toggleSidebar}
@@ -113,6 +113,11 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
             <nav className="space-y-1">
               <Link
                 href="/dashboard"
+                onClick={() => {
+                  if (isMobile) {
+                    closeSidebar();
+                  }
+                }}
                 className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
                   isActive("/dashboard", true)
                     ? "bg-purple-600 text-white"
@@ -122,8 +127,14 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                 <BarChart2 className="h-4 w-4 flex-shrink-0" />
                 {isOpen && <span className="truncate">Overview</span>}
               </Link>
+
               <Link
                 href="/dashboard/encrypt"
+                onClick={() => {
+                  if (isMobile) {
+                    closeSidebar();
+                  }
+                }}
                 className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
                   isActive("/dashboard/encrypt")
                     ? "bg-purple-600 text-white"
@@ -133,8 +144,14 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                 <Lock className="h-4 w-4 flex-shrink-0" />
                 {isOpen && <span className="truncate">Encrypt File</span>}
               </Link>
+
               <Link
                 href="/dashboard/decrypt"
+                onClick={() => {
+                  if (isMobile) {
+                    closeSidebar();
+                  }
+                }}
                 className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
                   isActive("/dashboard/decrypt")
                     ? "bg-purple-600 text-white"
@@ -156,6 +173,11 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
             <nav className="space-y-1">
               <Link
                 href="/dashboard/api-keys"
+                onClick={() => {
+                  if (isMobile) {
+                    closeSidebar();
+                  }
+                }}
                 className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
                   isActive("/dashboard/api-keys")
                     ? "bg-purple-600 text-white"
@@ -202,6 +224,11 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                     <div className="mt-1 ml-4 space-y-1 border-l border-gray-700 pb-3 pl-4">
                       <Link
                         href="/dashboard/api-docs/encrypt"
+                        onClick={() => {
+                          if (isMobile) {
+                            closeSidebar();
+                          }
+                        }}
                         className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
                           isActive("/dashboard/api-docs/encrypt")
                             ? "bg-gray-800 text-white"
@@ -210,8 +237,14 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                       >
                         Encrypt
                       </Link>
+
                       <Link
                         href="/dashboard/api-docs/decrypt"
+                        onClick={() => {
+                          if (isMobile) {
+                            closeSidebar();
+                          }
+                        }}
                         className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
                           isActive("/dashboard/api-docs/decrypt")
                             ? "bg-gray-800 text-white"
@@ -220,8 +253,14 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                       >
                         Decrypt
                       </Link>
+
                       <Link
                         href="/dashboard/api-docs/auth"
+                        onClick={() => {
+                          if (isMobile) {
+                            closeSidebar();
+                          }
+                        }}
                         className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
                           isActive("/dashboard/api-docs/auth")
                             ? "bg-gray-800 text-white"
@@ -230,8 +269,14 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                       >
                         Auth
                       </Link>
+
                       <Link
                         href="/dashboard/api-docs/errors"
+                        onClick={() => {
+                          if (isMobile) {
+                            closeSidebar();
+                          }
+                        }}
                         className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
                           isActive("/dashboard/api-docs/errors")
                             ? "bg-gray-800 text-white"
@@ -240,8 +285,14 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                       >
                         Errors
                       </Link>
+
                       <Link
                         href="/dashboard/api-docs/rate-limit"
+                        onClick={() => {
+                          if (isMobile) {
+                            closeSidebar();
+                          }
+                        }}
                         className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
                           isActive("/dashboard/api-docs/rate-limit")
                             ? "bg-gray-800 text-white"
@@ -261,6 +312,11 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
             <nav className="space-y-1">
               <Link
                 href="/dashboard/logs"
+                onClick={() => {
+                  if (isMobile) {
+                    closeSidebar();
+                  }
+                }}
                 className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
                   isActive("/dashboard/logs")
                     ? "bg-purple-600 text-white"
@@ -270,8 +326,14 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                 <File className="h-4 w-4 flex-shrink-0" />
                 {isOpen && <span className="truncate">Logs & Usage</span>}
               </Link>
+
               <Link
                 href="/dashboard/settings"
+                onClick={() => {
+                  if (isMobile) {
+                    closeSidebar();
+                  }
+                }}
                 className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
                   isActive("/dashboard/settings")
                     ? "bg-purple-600 text-white"
@@ -289,7 +351,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
         <div className="border-t border-gray-800 p-4">
           <button
             onClick={logout}
-            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-gray-800"
+            className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-300"
           >
             <LogOut className="h-4 w-4 flex-shrink-0" />
             {isOpen && <span className="truncate">Logout</span>}

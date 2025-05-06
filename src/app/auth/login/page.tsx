@@ -28,12 +28,12 @@ export default function LoginPage() {
 
   const router = useRouter();
 
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
-    setError(null);
+    // setError(null);
     try {
       const result = await loginAction(data);
       // console.log("Login successful:", result);
@@ -49,10 +49,15 @@ export default function LoginPage() {
       router.push("/dashboard");
       // toast.success("Login successful!");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "An unknown error occurred",
-      );
-      toast.error(error ?? "Login failed. Please try again.");
+      const errorMessage =
+        err instanceof Error ? err.message : "An unknown error occurred";
+
+      // Set the error state to display in your UI
+      // setError(errorMessage);
+
+      // Optionally, show a toast notification
+      toast.error(errorMessage);
+
       console.error("Login error:", err);
     } finally {
       setIsLoading(false);
