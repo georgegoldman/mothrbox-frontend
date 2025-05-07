@@ -127,3 +127,23 @@ export async function deleteAccount({ _id }: Delete) {
 
   window.location.href = "/";
 }
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+api.interceptors.request.use(
+  (config) => {
+    const accessToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("accessToken="));
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken.split("=")[1]}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(new Error(error?.message ?? String(error))),
+);

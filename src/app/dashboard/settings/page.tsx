@@ -21,6 +21,10 @@ export default function SettingsPage() {
   const handleDeleteAccount = async () => {
     if (!user?._id) return;
 
+    const accessToken = getCookieValue("accessToken");
+    console.log(accessToken, user?._id);
+    if (!accessToken) return; // Handle case where accessToken is not available
+
     if (confirmationText.trim().toLowerCase() !== "delete my account") {
       setError(true);
       return;
@@ -28,7 +32,7 @@ export default function SettingsPage() {
 
     setLoading(true);
     try {
-      await deleteAccount({ _id: user._id });
+      await deleteAccount({ _id: user?._id, accessToken });
       // After successful deletion, you might want to redirect or show a message
       // Clear cookies
       document.cookie = "accessToken=; Max-Age=0; path=/;";
@@ -36,6 +40,10 @@ export default function SettingsPage() {
 
       // Remove user data from localStorage
       localStorage.removeItem("user");
+
+      setIsModalOpen(false);
+      setConfirmationText("");
+      setError(false);
 
       // Redirect or show message
       window.location.href = "/";
@@ -46,30 +54,23 @@ export default function SettingsPage() {
     }
   };
 
-  const handleConfirmClick = async () => {
-    if (confirmationText.trim().toLowerCase() !== "delete my account") {
-      setError(true);
-      return; // Don't close modal
-    }
-    // Proceed with deletion
-    await handleDeleteAccount();
-    // If deletion successful, close modal
-    setIsModalOpen(false);
-    setConfirmationText("");
-    setError(false);
-  };
+  // const handleConfirmClick = async () => {
+  //   if (confirmationText.trim().toLowerCase() !== "delete my account") {
+  //     setError(true);
+  //     return; // Don't close modal
+  //   }
+  //   // Proceed with deletion
+  //   await handleDeleteAccount();
+  //   // If deletion successful, close modal
+
+  // };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div>
       <Header title="Settings" />
 
       {/* Wrap the main content in a motion.div for a subtle entrance animation */}
-      <motion.div
-        className="p-6"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
+      <div className="p-3 sm:p-4 md:p-6">
         {/* Profile Section */}
         <div className="mb-10">
           <div className="flex flex-col items-center md:flex-row md:items-start md:gap-8">
@@ -122,7 +123,7 @@ export default function SettingsPage() {
                       Cancel
                     </button>
                     <button
-                      onClick={handleConfirmClick}
+                      onClick={handleDeleteAccount}
                       disabled={loading}
                       className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                     >
@@ -219,7 +220,7 @@ export default function SettingsPage() {
             Save changes
           </button>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
