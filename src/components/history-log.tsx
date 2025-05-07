@@ -46,7 +46,7 @@ export function HistoryLog({ items, showFilters = false }: HistoryLogProps) {
   });
 
   return (
-    <div className="rounded-xl p-4 md:p-6">
+    <div>
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-bold">History</h2>
 

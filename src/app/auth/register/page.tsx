@@ -30,7 +30,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -43,7 +43,7 @@ export default function RegisterPage() {
 
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
-    setError(null);
+    // setError(null);
     try {
       await registerAction({
         username: data.username,
@@ -51,15 +51,20 @@ export default function RegisterPage() {
         phone: data.phone,
         password: data.password,
       });
-      // console.log(data);
+      console.log(data);
       toast.success("Account created successful!");
 
       router.push("/auth/login?registered=true");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "An unknown error occurred",
-      );
-      toast.error(error ?? "Registration failed. Please try again.");
+      const errorMessage =
+        err instanceof Error ? err.message : "An unknown error occurred";
+
+      // Set the error state to display in your UI
+      // setError(errorMessage);
+
+      // Optionally, show a toast notification
+      toast.error(errorMessage);
+
       console.error("Registration error:", err);
     } finally {
       setIsLoading(false);

@@ -1,9 +1,11 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
+import MobileSidebar from "./mobile-sidebar";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,15 +37,83 @@ export default function Navbar() {
     };
   }, [isOpen]);
 
+  // Define navigation links in one place for reuse
+  const navigationLinks = [
+    {
+      href: "#features",
+      label: "Features",
+    },
+
+    {
+      href: "https://mothrbox-docs.vercel.app/",
+      label: "Docs",
+      isExternal: true,
+    },
+
+    {
+      href: "/dashboard",
+      label: "Dashboard",
+    },
+
+    {
+      href: "mailto:mothrbox.gold@gmail.com",
+      label: "Contact",
+      isExternal: true,
+    },
+  ];
+
   return (
     <nav className="relative z-50 flex items-center justify-between px-4 py-4">
-      <Link href="/">
-        <Image src="/images/marine_logo.png" alt="logo" width={40} height={0} />
-      </Link>
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        transition={{ duration: 0.2 }}
+      >
+        <Link href="/">
+          <Image
+            src="/images/marine_logo.png"
+            alt="logo"
+            width={40}
+            height={0}
+          />
+        </Link>
+      </motion.div>
 
       {/* Desktop nav */}
       <div className="hidden items-center space-x-8 lg:flex">
-        <NavLinks />
+        {navigationLinks.map((link, index) => {
+          const NavLink = link.isExternal ? (
+            <a
+              key={index}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-black transition hover:text-purple-600"
+            >
+              {link.label}
+            </a>
+          ) : (
+            <Link
+              key={index}
+              href={link.href}
+              className="text-sm text-black transition hover:text-purple-600"
+            >
+              {link.label}
+            </Link>
+          );
+
+          return (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 * index }}
+              whileHover={{ y: -3 }}
+            >
+              {NavLink}
+            </motion.div>
+          );
+        })}
       </div>
 
       <div className="hidden items-center space-x-4 lg:flex">
@@ -61,10 +131,17 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* Hamburger */}
-      <div className="flex cursor-pointer lg:hidden" onClick={toggleMenu}>
-        {isOpen ? <X size={30} /> : <Menu size={30} />}
-      </div>
+      {/* Mobile menu button */}
+      <motion.button
+        className="flex cursor-pointer items-center justify-center p-2 lg:hidden"
+        onClick={toggleMenu}
+        aria-expanded={isOpen}
+        aria-controls="mobile-menu"
+        aria-label={isOpen ? "Close menu" : "Open menu"}
+        whileTap={{ scale: 0.9 }}
+      >
+        <Menu size={30} />
+      </motion.button>
 
       {/* Backdrop */}
       <div
@@ -73,73 +150,12 @@ export default function Navbar() {
         } lg:hidden`}
       />
 
-      {/* Sidebar */}
-      <div
-        ref={sidebarRef}
-        className={`fixed top-0 right-0 z-50 h-full w-64 transform bg-white shadow-xl transition-transform duration-300 ease-in-out lg:hidden ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        <div className="flex justify-end px-5 py-7">
-          <X size={28} onClick={toggleMenu} className="cursor-pointer" />
-        </div>
-
-        <div className="flex flex-col items-center space-y-6 px-6">
-          <NavLinks onClick={toggleMenu} />
-          <div className="flex flex-col items-center space-y-4">
-            <Link
-              href="/auth/login"
-              className="rounded-xl border border-purple-500 px-7 py-3 text-sm font-bold text-black transition hover:bg-gray-100"
-            >
-              Login
-            </Link>
-            <Link
-              href="/auth/register"
-              className="rounded-xl border border-purple-300 bg-black px-7 py-3 text-sm font-bold text-white shadow-[inset_0_0_25px_#6366f1] transition"
-            >
-              Sign Up
-            </Link>
-          </div>
-        </div>
-      </div>
+      {/* Mobile sidebar */}
+      <MobileSidebar
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        links={navigationLinks}
+      />
     </nav>
-  );
-}
-
-function NavLinks({ onClick }: { onClick?: () => void }) {
-  return (
-    <>
-      <Link
-        href="#features"
-        onClick={onClick}
-        className="text-sm text-black transition hover:text-purple-600"
-      >
-        Features
-      </Link>
-      <Link
-        href="https://mothrbox-docs.vercel.app/"
-        target="_blank"
-        onClick={onClick}
-        className="text-sm text-black transition hover:text-purple-600"
-      >
-        Docs
-      </Link>
-      <Link
-        href="/dashboard"
-        onClick={onClick}
-        className="text-sm text-black transition hover:text-purple-600"
-      >
-        Dashboard
-      </Link>
-      <a
-        href="mailto:mothrbox.gold@gmail.com"
-        referrerPolicy="no-referrer"
-        target="_blank"
-        onClick={onClick}
-        className="text-sm text-black transition hover:text-purple-600"
-      >
-        Contact
-      </a>
-    </>
   );
 }

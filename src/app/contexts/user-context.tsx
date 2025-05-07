@@ -1,7 +1,6 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import type { ReactNode } from "react";
 import { fetchUserProfile } from "@/app/actions/fetchUserProfile";
 import { getInitials } from "@/lib/helpers";
 
@@ -21,24 +20,39 @@ type UserContextType = {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider = ({ children }: { children: ReactNode }) => {
+export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserDataResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const initials = getInitials(user?.username ?? "?");
 
   useEffect(() => {
-    fetchUserProfile()
-      .then((fetchedUser) => {
-        setUser(fetchedUser);
+    const loadUserFromLocalStorage = async () => {
+      if (typeof window === "undefined") return;
+
+      const storedUser = localStorage.getItem("user");
+
+      if (storedUser) {
+        setUser(JSON.parse(storedUser) as UserDataResponse);
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching user profile:", err);
-        setError("Failed to load user");
-        setLoading(false);
-      });
+      } else {
+        try {
+          const fetchedUser = await fetchUserProfile();
+          if (fetchedUser) {
+            setUser(fetchedUser);
+            localStorage.setItem("user", JSON.stringify(fetchedUser));
+          }
+        } catch (err) {
+          console.error("Error fetching user profile:", err);
+          setError("Failed to load user");
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadUserFromLocalStorage();
   }, []);
 
   return (
@@ -48,7 +62,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Custom hook for easier access
+// Custom hook
 export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {

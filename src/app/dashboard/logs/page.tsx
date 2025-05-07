@@ -16,10 +16,7 @@ export default function LogsPage() {
 
   return (
     <div>
-      <Header
-        title="Logs & Usage"
-        subtitle="View your encryption and decryption history"
-      />
+      <Header title="Logs & Usage" subtitle="View your usage history" />
 
       <div className="p-4 md:p-6">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -30,7 +27,7 @@ export default function LogsPage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <div className="relative w-full sm:w-auto">
               <select
                 value={dateRange}
@@ -60,7 +57,7 @@ export default function LogsPage() {
         </div>
 
         {loading ? (
-          <div className="flex h-64 items-center justify-center rounded-xl bg-gray-800">
+          <div className="flex h-64 items-center justify-center rounded-xl">
             <div className="text-center">
               <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-4 border-gray-600 border-t-purple-600"></div>
               <p className="text-gray-400">Loading history data...</p>

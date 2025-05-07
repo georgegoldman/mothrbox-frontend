@@ -29,21 +29,20 @@ type UserDataResponse = {
 // }
 
 interface Delete {
-  id: string;
+  _id: string;
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export async function loginAction(data: { email: string; password: string }) {
-  const response = await fetch(
-    "https://mothrbox-backend-9vxz.onrender.com/auth/login",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-      credentials: "include",
+  const response = await fetch(`${API_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify(data),
+    credentials: "include",
+  });
 
   if (!response.ok) {
     const errorData: { message: string } = await response.json();
@@ -60,16 +59,13 @@ export async function registerAction(data: {
   phone: string;
   password: string;
 }) {
-  const response = await fetch(
-    "https://mothrbox-backend-9vxz.onrender.com/auth/register",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+  const response = await fetch(`${API_URL}/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify(data),
+  });
 
   if (!response.ok) {
     const errorData: { message: string } = await response.json();
@@ -81,27 +77,29 @@ export async function registerAction(data: {
 }
 
 export async function logout() {
+  // Clear cookies
   document.cookie = "accessToken=; Max-Age=0; path=/;";
   document.cookie = "userId=; Max-Age=0; path=/;";
 
+  // Remove user data from localStorage
+  localStorage.removeItem("user");
+
+  // Redirect to login page
   window.location.href = "/auth/login";
 }
 
 export async function userProfile(
-  id: string,
+  _id: string,
   accessToken: string,
 ): Promise<UserDataResponse> {
-  const response = await fetch(
-    `https://mothrbox-backend-9vxz.onrender.com/user/${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      credentials: "include",
+  const response = await fetch(`${API_URL}/user/${_id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
-  );
+    credentials: "include",
+  });
 
   if (!response.ok) {
     const errorData: { message: string } = await response.json();
@@ -113,17 +111,14 @@ export async function userProfile(
   return result;
 }
 
-export async function deleteAccount({ id }: Delete) {
-  const response = await fetch(
-    `https://mothrbox-backend-9vxz.onrender.com/user/${id}`,
-    {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
+export async function deleteAccount({ _id }: Delete) {
+  const response = await fetch(`${API_URL}/user/${_id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    credentials: "include",
+  });
 
   if (!response.ok) {
     const errorData: { message: string } = await response.json();
