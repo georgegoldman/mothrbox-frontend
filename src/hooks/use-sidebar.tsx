@@ -12,6 +12,7 @@ type SidebarContextType = {
   isOpen: boolean;
   toggleSidebar: () => void;
   isMobile: boolean;
+  closeSidebar: () => void; // Added closeSidebar method
 };
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
@@ -40,11 +41,20 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
 
   const toggleSidebar = () => setIsOpen((prev) => !prev);
 
+  // Method to close sidebar on mobile
+  const closeSidebar = () => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
+  };
+
   // Don't render until hydrated to avoid layout mismatch / flicker
   if (!hydrated) return null;
 
   return (
-    <SidebarContext.Provider value={{ isOpen, toggleSidebar, isMobile }}>
+    <SidebarContext.Provider
+      value={{ isOpen, toggleSidebar, isMobile, closeSidebar }}
+    >
       {children}
     </SidebarContext.Provider>
   );

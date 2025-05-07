@@ -36,7 +36,7 @@ export default function OverviewPage() {
     <div>
       <Header
         title="Usage Statistics"
-        subtitle={`Welcome back ${user?.username}`}
+        subtitle={`Welcome back, ${user?.username}`}
       />
 
       <div className="p-3 sm:p-4 md:p-6">
