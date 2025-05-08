@@ -20,7 +20,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${montserrat.className}`}>
+    <html
+      lang="en"
+      className={`${montserrat.className}`}
+      suppressHydrationWarning
+    >
       <body>
         <div className="block lg:hidden">
           <Toaster richColors position="top-center" />

@@ -54,7 +54,7 @@ export function Modal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-5 md:p-0">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -86,7 +86,7 @@ export function Modal({
               </button>
             </div>
 
-            <div className="p-4">{children}</div>
+            <div className="p-2 md:p-4">{children}</div>
 
             {footer && (
               <div className="border-t border-gray-700 p-4">{footer}</div>

@@ -16,7 +16,7 @@ export default function DecryptPage() {
     <div>
       <Header title="Decrypt" subtitle="Ready to decrypt your data?" />
 
-      <div className="p-4 md:p-6">
+      <div className="p-3 sm:p-4 md:p-6">
         <h2 className="mb-4 text-base font-medium md:text-lg">
           Upload Or Paste Your Decrypted File
         </h2>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import MobileSidebar from "./mobile-sidebar";
+import { ModeToggle } from "./mode-toggle";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -117,12 +118,15 @@ export default function Navbar() {
       </div>
 
       <div className="hidden items-center space-x-4 lg:flex">
+        <ModeToggle />
+
         <Link
           href="/auth/login"
           className="rounded-xl border border-purple-500 px-7 py-3 text-sm font-bold text-black transition hover:bg-gray-100"
         >
           Login
         </Link>
+
         <Link
           href="/auth/register"
           className="rounded-xl border border-purple-300 bg-black px-7 py-3 text-sm font-bold text-white shadow-[inset_0_0_25px_#6366f1] transition"

@@ -5,9 +5,11 @@ import { Header } from "@/components/header";
 import { useUser } from "@/app/contexts/user-context";
 import { deleteAccount } from "@/app/actions/auth";
 // First, add the import for the Modal component
-import { Modal } from "@/components/ui/modal";
+import { Modal } from "@/components/modal";
 // Add the import for framer-motion at the top of the file
-import { motion } from "motion/react";
+// import { motion } from "motion/react";
+import { getCookieValue } from "@/lib/helpers";
+import { Switch } from "@/components/ui/switch";
 
 export default function SettingsPage() {
   const [usageNotification, setUsageNotification] = useState(true);
@@ -73,9 +75,9 @@ export default function SettingsPage() {
       <div className="p-3 sm:p-4 md:p-6">
         {/* Profile Section */}
         <div className="mb-10">
-          <div className="flex flex-col items-center md:flex-row md:items-start md:gap-8">
+          <div className="flex flex-col items-center gap-3 md:flex-row md:items-start md:gap-8">
             {/* Profile Image */}
-            <div className="relative mb-6 md:mb-0">
+            <div className="relative md:mb-0">
               <div className="relative flex size-[128px] items-center justify-center overflow-hidden rounded-full border bg-teal-700 text-6xl font-bold text-white">
                 {initials}
               </div>
@@ -205,7 +207,7 @@ export default function SettingsPage() {
                   checked={usageNotification}
                   onChange={() => setUsageNotification(!usageNotification)}
                 />
-                <div className="peer h-6 w-11 rounded-full bg-gray-700 peer-checked:bg-purple-600 peer-focus:ring-2 peer-focus:ring-purple-400 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full"></div>
+                <Switch className="data-[state=checked]:bg-purple-500 data-[state=unchecked]:bg-gray-500" />
                 <span className="ml-3 text-sm text-gray-300">
                   Email me when my usage exceeds 80% of quota
                 </span>

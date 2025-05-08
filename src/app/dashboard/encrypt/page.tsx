@@ -17,7 +17,7 @@ export default function EncryptPage() {
     <div>
       <Header title="Encrypt Data" subtitle="Ready to encrypt your data?" />
 
-      <div className="p-4 md:p-6">
+      <div className="p-3 sm:p-4 md:p-6">
         <h2 className="mb-4 text-base font-medium md:text-lg">
           Upload Or Paste Your Encrypted File
         </h2>
