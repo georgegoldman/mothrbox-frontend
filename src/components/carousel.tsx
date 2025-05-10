@@ -1,17 +1,18 @@
 import React, { useEffect } from "react";
-import type { StaticImageData } from "next/image";
+// import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
+import { trustedDevs } from "public";
 
-interface CarouselProps {
-  trustedDevs: {
-    id: number;
-    image: StaticImageData;
-  }[];
-}
+// interface CarouselProps {
+//   trustedDevs: {
+//     id: number;
+//     image: string;
+//   }[];
+// }
 
-export default function Carousel({ trustedDevs }: CarouselProps) {
+export default function Carousel() {
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
     slides: { perView: 4 },
