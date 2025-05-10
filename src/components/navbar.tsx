@@ -6,7 +6,6 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import MobileSidebar from "./mobile-sidebar";
-import { ModeToggle } from "./mode-toggle";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -118,7 +117,7 @@ export default function Navbar() {
       </div>
 
       <div className="hidden items-center space-x-4 lg:flex">
-        <ModeToggle />
+        {/* <ModeToggle /> */}
 
         <Link
           href="/auth/login"

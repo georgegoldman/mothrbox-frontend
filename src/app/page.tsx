@@ -23,6 +23,7 @@ import {
   StaggerItem,
 } from "@/components/motion/animation-component";
 import { PageTransition } from "@/components/motion/page-transition";
+import Carousel from "@/components/carousel";
 
 export default function HomePage() {
   // const [isLoaded, setIsLoaded] = useState(false);
@@ -184,17 +185,19 @@ export default function HomePage() {
               />
             </ScrollReveal>
 
-            <StaggerContainer className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
+            {/* <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
               {trustedDevs.map((dev) => (
-                <StaggerItem key={dev?.id}>
-                  <Image
-                    src={dev?.image}
-                    alt="dev_logo"
-                    className="object-contain"
-                  />
-                </StaggerItem>
+                <div key={dev?.id}> */}
+            <Carousel trustedDevs={trustedDevs} />
+            {/* <Image
+                      src={dev?.image}
+                      alt="dev_logo"
+                      className="object-contain"
+                    />
+                  </Carousel> */}
+            {/* </div>
               ))}
-            </StaggerContainer>
+            </div> */}
           </div>
         </section>
 
