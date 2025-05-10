@@ -11,9 +11,8 @@ import {
   Linkedin,
 } from "lucide-react";
 import Navbar from "@/components/navbar";
-import { trustedDevs } from "public";
+// import { trustedDevs } from "public";
 import SectionHeader from "@/components/section-header";
-// import { useEffect, useState } from "react";
 import {
   AnimatedButton,
   FadeIn,
@@ -23,15 +22,9 @@ import {
   StaggerItem,
 } from "@/components/motion/animation-component";
 import { PageTransition } from "@/components/motion/page-transition";
+import Carousel from "@/components/carousel";
 
 export default function HomePage() {
-  // const [isLoaded, setIsLoaded] = useState(false);
-
-  // // Set isLoaded to true after component mounts to enable animations
-  // useEffect(() => {
-  //   setIsLoaded(true);
-  // }, []);
-
   return (
     <PageTransition>
       <div className="mx-auto min-h-screen max-w-[1200px] bg-white">
@@ -184,17 +177,7 @@ export default function HomePage() {
               />
             </ScrollReveal>
 
-            <StaggerContainer className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
-              {trustedDevs.map((dev) => (
-                <StaggerItem key={dev?.id}>
-                  <Image
-                    src={dev?.image}
-                    alt="dev_logo"
-                    className="object-contain"
-                  />
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
+            <Carousel />
           </div>
         </section>
 

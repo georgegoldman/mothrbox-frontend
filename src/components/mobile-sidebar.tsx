@@ -81,7 +81,7 @@ export default function MobileSidebar({
             </div>
 
             <nav className="mt-8">
-              <ul className="space-y-4">
+              <ul className="flex flex-col items-center space-y-4">
                 {links.map((link, index) => (
                   <motion.li
                     key={index}
@@ -120,7 +120,7 @@ export default function MobileSidebar({
               </ul>
             </nav>
 
-            <div className="flex flex-col items-center space-y-4 lg:hidden">
+            <div className="mt-5 flex flex-col items-center space-y-4 lg:hidden">
               <Link
                 href="/auth/login"
                 className="rounded-xl border border-purple-500 px-7 py-3 text-sm font-bold text-black transition hover:bg-gray-100"

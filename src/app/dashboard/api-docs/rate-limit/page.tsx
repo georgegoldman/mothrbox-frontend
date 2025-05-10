@@ -5,7 +5,7 @@ export default function RateLimitPage() {
     <div>
       <Header title="API Rate Limits" />
 
-      <div className="p-4 md:p-6">
+      <div className="p-3 sm:p-4 md:p-6">
         <div className="max-w-3xl">
           <h2 className="mb-4 text-lg font-bold md:text-xl">
             Understanding Rate Limits
