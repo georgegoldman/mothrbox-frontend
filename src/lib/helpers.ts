@@ -21,3 +21,14 @@ export function getRandomBgColor(): string {
   const randomIndex = Math.floor(Math.random() * colors.length);
   return colors[randomIndex]!;
 }
+
+export function getCookieValue(cookieName: string): string | null {
+  const cookies = document.cookie.split(";").map((cookie) => cookie.trim());
+  for (const cookie of cookies) {
+    const [name, value] = cookie.split("=");
+    if (name === cookieName) {
+      return value !== undefined ? decodeURIComponent(value) : null;
+    }
+  }
+  return null;
+}

@@ -6,7 +6,7 @@ export default function DecryptApiPage() {
     <div>
       <Header title="Decrypt API" />
 
-      <div className="p-4 md:p-6">
+      <div className="p-3 sm:p-4 md:p-6">
         <div className="mb-4 rounded-xl bg-gray-800/50 p-4 md:mb-6 md:p-6">
           <h2 className="mb-2 text-sm font-medium">Endpoint</h2>
           <p className="mb-4 text-xs text-gray-400">

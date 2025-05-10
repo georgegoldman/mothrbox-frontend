@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import axios from "axios";
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 type LoginResponse = {
   accessToken?: string;
@@ -28,9 +32,9 @@ type UserDataResponse = {
 //   id: string;
 // }
 
-interface Delete {
-  _id: string;
-}
+// interface Delete {
+//   _id: string;
+// }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -111,11 +115,19 @@ export async function userProfile(
   return result;
 }
 
-export async function deleteAccount({ _id }: Delete) {
+export async function deleteAccount({
+  _id,
+  accessToken,
+}: {
+  _id: string;
+  accessToken: string;
+}) {
+  console.log(accessToken);
   const response = await fetch(`${API_URL}/user/${_id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
     credentials: "include",
   });
@@ -127,3 +139,23 @@ export async function deleteAccount({ _id }: Delete) {
 
   window.location.href = "/";
 }
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+api.interceptors.request.use(
+  (config) => {
+    const accessToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("accessToken="));
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken.split("=")[1]}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(new Error(error?.message ?? String(error))),
+);

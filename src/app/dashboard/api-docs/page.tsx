@@ -7,7 +7,7 @@ export default function ApiDocsPage() {
     <div>
       <Header title="API Documentation" />
 
-      <div className="p-4 md:p-6">
+      <div className="p-3 sm:p-4 md:p-6">
         <div className="max-w-3xl">
           <h2 className="mb-4 text-xl font-bold md:text-2xl">
             Getting Started with the API

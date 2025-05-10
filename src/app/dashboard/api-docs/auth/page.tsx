@@ -5,7 +5,7 @@ export default function AuthenticationPage() {
     <div>
       <Header title="API Authentication" />
 
-      <div className="p-4 md:p-6">
+      <div className="p-3 sm:p-4 md:p-6">
         <div className="mb-6 md:mb-8">
           <h2 className="mb-3 text-base font-medium md:mb-4 md:text-lg">
             How To Authenticate

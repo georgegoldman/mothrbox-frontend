@@ -6,7 +6,7 @@ export default function ApiKeysPage() {
     <div>
       <Header title="Key ID:" subtitle="sk_live_abc123" />
 
-      <div className="p-4 md:p-6">
+      <div className="p-3 sm:p-4 md:p-6">
         <div className="mb-6 rounded-xl bg-purple-600/20 p-4 md:p-6">
           <h2 className="mb-2 text-base font-bold md:text-lg">Quick Copy</h2>
           <p className="mb-4 text-xs text-gray-300 md:text-sm">

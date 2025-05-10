@@ -5,7 +5,7 @@ export default function ErrorsPage() {
     <div>
       <Header title="Error" />
 
-      <div className="p-4 md:p-6">
+      <div className="p-3 sm:p-4 md:p-6">
         <div className="mb-6 rounded-xl bg-gray-800/50 p-4 md:p-6">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-sm font-medium">Error:</h2>
