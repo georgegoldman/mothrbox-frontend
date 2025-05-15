@@ -116,10 +116,12 @@ export default function HomePage() {
                     <Lock className="h-8 w-8 text-purple-500" />
                   </div>
                   <h3 className="mb-4 text-[18px] font-bold">
-                    End-to-End Encryption
+                    Unbreakable Privacy by Design
                   </h3>
-                  <p>
-                    Encrypt files, text, or data streams securely using AES-256.
+                  <p className="text-sm">
+                    Secure your data with client-side ECC encryption (NIST
+                    P-256), delivering effortless, end-to-end confidentiality
+                    without relying on external trust
                   </p>
                 </ScaleOnHover>
               </StaggerItem>
@@ -130,10 +132,12 @@ export default function HomePage() {
                     <Zap className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="mb-4 text-[18px] font-bold">
-                    Instant Results
+                    Revolutionary NFT-Powered Access
                   </h3>
-                  <p>
-                    Encrypt files, text, or data streams securely using AES-256.
+                  <p className="text-sm">
+                    Grant precise, user-controlled permissions through
+                    decentralized NFT tokens, enabling flexible, tamper-proof
+                    access to your private data
                   </p>
                 </ScaleOnHover>
               </StaggerItem>
@@ -144,10 +148,12 @@ export default function HomePage() {
                     <ShieldCheck className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="mb-4 text-[18px] font-bold">
-                    Privacy-first Design
+                    Seamlessly Scalable Decentralization
                   </h3>
-                  <p>
-                    Encrypt files, text, or data streams securely using AES-256.
+                  <p className="text-sm">
+                    Leverage Walrus&apos;s robust, decentralized storage
+                    backbone, scale your project with no infrastructure
+                    headaches or vendor lock-in
                   </p>
                 </ScaleOnHover>
               </StaggerItem>
@@ -157,9 +163,13 @@ export default function HomePage() {
                   <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-purple-500">
                     <Layers className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="mb-4 text-[18px] font-bold">Full-featured</h3>
-                  <p>
-                    Encrypt files, text, or data streams securely using AES-256.
+                  <h3 className="mb-4 text-[18px] font-bold">
+                    Developer-Centric Design
+                  </h3>
+                  <p className="text-sm">
+                    Ship faster with secure, high-performance APIs and intuitive
+                    SDKs (coming soon), designed to integrate cleanly into your
+                    workflow
                   </p>
                 </ScaleOnHover>
               </StaggerItem>
