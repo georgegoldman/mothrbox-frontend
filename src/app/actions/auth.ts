@@ -1,3 +1,5 @@
+import { getCookieValue } from "@/lib/helpers";
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 type LoginResponse = {
   accessToken?: string;
@@ -134,4 +136,34 @@ export async function deleteAccount({
   }
 
   window.location.href = "/";
+}
+
+type UploadFileResponse = {
+  url: string;
+  filename: string;
+  message?: string;
+};
+
+export async function uploadFile(file: File): Promise<UploadFileResponse> {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const accessToken = getCookieValue("accessToken");
+
+  const res = await fetch(`${API_URL}/files/upload`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    credentials: "include",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const errorData: { message: string } = await res.json();
+    throw new Error(errorData.message || "File upload failed");
+  }
+
+  const result: UploadFileResponse = await res.json();
+  return result;
 }
