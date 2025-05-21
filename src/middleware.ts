@@ -26,9 +26,7 @@ export function middleware(request: NextRequest) {
   if (pathname.startsWith("/dashboard")) {
     if (!token) {
       console.log("No token found, redirecting...");
-      return NextResponse.redirect(
-        new URL("/auth/login?msg=not-logged-in", request.url),
-      );
+      return NextResponse.redirect(new URL("/auth/login", request.url));
     }
   }
 
@@ -40,9 +38,7 @@ export function middleware(request: NextRequest) {
   ) {
     if (token) {
       console.log(`Token (${token}) found, redirecting...`);
-      return NextResponse.redirect(
-        new URL("/dashboard?msg=already-logged-in", request.url),
-      );
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }
   return NextResponse.next();
