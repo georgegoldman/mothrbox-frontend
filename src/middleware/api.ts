@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/prefer-promise-reject-errors */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import axios from "axios";
 
@@ -22,7 +20,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // Response Interceptor - Handles token expiration
@@ -34,7 +32,9 @@ api.interceptors.response.use(
         const refresh_token = localStorage.getItem("refresh_token");
         if (!refresh_token) throw new Error("No refresh token found");
 
-        const response = await axios.post(`${apiUrl}/auth/refresh`, { refresh_token });
+        const response = await axios.post(`${apiUrl}/auth/refresh`, {
+          refresh_token,
+        });
 
         const { access_token } = response.data;
 
@@ -52,7 +52,7 @@ api.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

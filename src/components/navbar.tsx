@@ -45,7 +45,7 @@ export default function Navbar() {
     },
 
     {
-      href: "https://mothrbox-docs.vercel.app/",
+      href: "https://docs.mothrbox.xyz/",
       label: "Docs",
       isExternal: true,
     },
