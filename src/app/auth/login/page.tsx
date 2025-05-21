@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputField } from "@/components/ui/input-field";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { loginAction } from "@/app/actions/auth";
 import { toast } from "sonner";
 
@@ -18,6 +18,15 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const msg = searchParams.get("msg");
+    if (msg === "not-logged-in") {
+      toast.warning("You are not logged in!, Login to continue");
+    }
+  }, [searchParams]);
+
   const {
     register,
     handleSubmit,

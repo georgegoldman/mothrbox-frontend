@@ -12,8 +12,20 @@ import { HistoryLog } from "@/components/history-log";
 import { useAnalyticsData } from "@/hooks/use-analytics-data";
 import { useHistoryData } from "@/hooks/use-history-data";
 import { useUser } from "../contexts/user-context";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 export default function OverviewPage() {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const msg = searchParams.get("msg");
+    if (msg === "already-logged-in") {
+      toast.success("You're already logged in ✨");
+    }
+  }, [searchParams]);
+
   const {
     period,
     setPeriod,
