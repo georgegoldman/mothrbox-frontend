@@ -20,7 +20,7 @@ export default function BackToHome({ className }: { className?: string }) {
         className,
       )}
     >
-      <ArrowLeft size={24} /> <span className="text-sm">Go Back</span>
+      <ArrowLeft size={24} /> <span className="text-sm">Go Home</span>
     </div>
   );
 }
