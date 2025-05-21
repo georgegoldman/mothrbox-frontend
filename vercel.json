@@ -1,9 +1,0 @@
-{
-  "redirects": [
-    {
-      "source": "/:path*",
-      "destination": "https://www.mothrbox.xyz/:path*",
-      "permanent": true
-    }
-  ]
-}
