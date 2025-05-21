@@ -66,7 +66,7 @@ export default function HomePage() {
               <div className="flex flex-row justify-center gap-x-2 md:gap-x-5">
                 <AnimatedButton className="rounded-xl bg-purple-400 px-7 py-3 text-sm font-bold text-white transition">
                   <a
-                    href="https://mothrbox-docs.vercel.app/"
+                    href="https://docs.mothrbox.xyz/"
                     target="_blank"
                     referrerPolicy="no-referrer"
                   >
@@ -468,12 +468,14 @@ export default function HomePage() {
                   <StaggerContainer staggerChildren={0.05}>
                     <StaggerItem>
                       <li>
-                        <Link
-                          href="https://mothrbox-docs.vercel.app/"
+                        <a
+                          href="https://docs.mothrbox.xyz/"
+                          target="_blank"
+                          referrerPolicy="no-referrer"
                           className="text-gray-600 transition hover:text-purple-600"
                         >
                           Docs
-                        </Link>
+                        </a>
                       </li>
                     </StaggerItem>
 

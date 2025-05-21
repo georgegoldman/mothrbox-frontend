@@ -22,10 +22,27 @@ export function middleware(request: NextRequest) {
   const token = cookies.accessToken;
   // console.log("Access token:", token);
 
+  // 🛡️ un-authenticated users can't route to /dashboard
   if (pathname.startsWith("/dashboard")) {
     if (!token) {
-      // console.log("No token, redirecting...");
-      return NextResponse.redirect(new URL("/auth/login", request.url));
+      console.log("No token found, redirecting...");
+      return NextResponse.redirect(
+        new URL("/auth/login?msg=not-logged-in", request.url),
+      );
+    }
+  }
+
+  // 🚫 logged-in users can't access /auth routes
+  if (
+    pathname === "/auth" ||
+    pathname.startsWith("/auth/login") ||
+    pathname.startsWith("/auth/register")
+  ) {
+    if (token) {
+      console.log(`Token (${token}) found, redirecting...`);
+      return NextResponse.redirect(
+        new URL("/dashboard?msg=already-logged-in", request.url),
+      );
     }
   }
   return NextResponse.next();
