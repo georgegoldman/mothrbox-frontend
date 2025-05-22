@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputField } from "@/components/ui/input-field";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+// import { useState } from "react";
+// import { useRouter } from "next/navigation";
 import { loginAction } from "@/app/actions/auth";
 import { toast } from "sonner";
 
@@ -26,44 +26,80 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const router = useRouter();
+  // const router = useRouter();
 
   // const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: LoginFormValues) => {
-    setIsLoading(true);
+    // setIsLoading(true);
     // setError(null);
     try {
-      const result = await loginAction(data);
-      // console.log("Login successful:", result);
-
-      if (result.accessToken) {
-        document.cookie = `accessToken=${result.accessToken}; path=/; max-age=86400; secure; samesite=lax`;
-      }
-
-      if (result._id) {
-        document.cookie = `userId=${result._id}; path=/; max-age=86400; secure; samesite=lax`;
-      }
-
-      toast.success("Login successful!");
-      router.push("/dashboard");
-      // toast.success("Login successful!");
+      toast.promise(
+        loginAction(data).then((result) => {
+          // Set cookies here if needed
+          if (result.accessToken) {
+            document.cookie = `accessToken=${result.accessToken}; path=/; max-age=86400; secure; samesite=lax`;
+          }
+          if (result._id) {
+            document.cookie = `userId=${result._id}; path=/; max-age=86400; secure; samesite=lax`;
+          }
+          // Navigate to dashboard
+          window.location.href = "/dashboard"; // full reload to trigger middleware
+          return "Login successful!";
+        }),
+        {
+          loading: "Logging in...",
+          success: (msg) => msg,
+          error: (err: unknown) => {
+            if (err && typeof err === "object" && "message" in err) {
+              return (err as { message?: string }).message ?? "Login failed!";
+            }
+            return "Login failed!";
+          },
+        },
+      );
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "An unknown error occurred";
-
-      // Set the error state to display in your UI
-      // setError(errorMessage);
-
-      // Optionally, show a toast notification
-      toast.error(errorMessage);
-
+      // Optional: handle unexpected errors
       console.error("Login error:", err);
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
+
+  // const onSubmit = async (data: LoginFormValues) => {
+  //   setIsLoading(true);
+  //   // setError(null);
+  //   try {
+  //     const result = await loginAction(data);
+  //     // console.log("Login successful:", result);
+
+  //     if (result.accessToken) {
+  //       document.cookie = `accessToken=${result.accessToken}; path=/; max-age=86400; secure; samesite=lax`;
+  //     }
+
+  //     if (result._id) {
+  //       document.cookie = `userId=${result._id}; path=/; max-age=86400; secure; samesite=lax`;
+  //     }
+
+  //     toast.success("Login successful!");
+  //     router.push("/dashboard");
+  //     window.location.reload();
+  //   } catch (err) {
+  //     const errorMessage =
+  //       err instanceof Error ? err.message : "An unknown error occurred";
+
+  //     // Set the error state to display in your UI
+  //     // setError(errorMessage);
+
+  //     // Optionally, show a toast notification
+  //     toast.error(errorMessage);
+
+  //     console.error("Login error:", err);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <div className="w-full rounded-lg bg-white p-6 shadow-sm sm:p-8">
@@ -117,10 +153,11 @@ export default function LoginPage() {
 
         <button
           type="submit"
-          disabled={isLoading}
+          // disabled={isLoading}
           className="w-full cursor-pointer rounded-md bg-purple-600 px-4 py-2.5 text-base font-medium text-white transition duration-200 hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-70"
         >
-          {isLoading ? "Logging in..." : "Login"}
+          {/* {isLoading ? "Logging in..." : "Login"} */}
+          Login
         </button>
       </form>
 
