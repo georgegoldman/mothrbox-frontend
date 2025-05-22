@@ -29,10 +29,19 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
   const { isOpen, toggleSidebar, isMobile, closeSidebar } = useSidebar();
 
   const handleLogout = async () => {
-    await logout();
-    toast.success("Logged out successfully");
+    toast.promise(logout(), {
+      loading: "Logging out...",
+      success: "Logged out successfully",
+      error: "Error during logout",
+    });
     window.location.href = "/auth/login";
   };
+
+  // const handleLogout = async () => {
+  //   await logout();
+  //   toast.success("Logged out successfully");
+  //   window.location.href = "/auth/login";
+  // };
 
   // Check if the current path is under API docs
   const isApiDocsPath = pathname.startsWith("/dashboard/api-docs");

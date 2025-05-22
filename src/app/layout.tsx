@@ -27,10 +27,10 @@ export default function RootLayout({
     >
       <body>
         <div className="block lg:hidden">
-          <Toaster richColors position="top-center" />
+          <Toaster richColors position="top-center" closeButton />
         </div>
         <div className="hidden lg:block">
-          <Toaster richColors position="top-right" />
+          <Toaster richColors position="top-right" closeButton />
         </div>
         {children}
       </body>
