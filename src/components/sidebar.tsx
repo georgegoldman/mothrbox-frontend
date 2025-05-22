@@ -21,11 +21,18 @@ import {
 import { useSidebar } from "@/hooks/use-sidebar";
 import { logout } from "@/app/actions/auth";
 import Image from "next/image";
+import { toast } from "sonner";
 
 export function Sidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [apiDocsOpen, setApiDocsOpen] = useState(false);
   const { isOpen, toggleSidebar, isMobile, closeSidebar } = useSidebar();
+
+  const handleLogout = async () => {
+    await logout();
+    toast.success("Logged out successfully");
+    window.location.href = "/auth/login";
+  };
 
   // Check if the current path is under API docs
   const isApiDocsPath = pathname.startsWith("/dashboard/api-docs");
@@ -350,7 +357,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
         {/* Fixed Logout Button */}
         <div className="border-t border-gray-800 p-4">
           <button
-            onClick={logout}
+            onClick={handleLogout}
             className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-300"
           >
             <LogOut className="h-4 w-4 flex-shrink-0" />
