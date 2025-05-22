@@ -3,8 +3,8 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+// import { useState } from "react";
+// import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { InputField } from "@/components/ui/input-field";
 import { registerAction } from "@/app/actions/auth";
@@ -29,9 +29,9 @@ const registerSchema = z.object({
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
-  const router = useRouter();
+  // const router = useRouter();
   // const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -42,34 +42,71 @@ export default function RegisterPage() {
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
-    setIsLoading(true);
-    // setError(null);
+    // setIsLoading(true);
     try {
-      await registerAction({
-        username: data.username,
-        email: data.email,
-        phone: data.phone,
-        password: data.password,
-      });
-      console.log(data);
-      toast.success("Account created successful!");
-
-      router.push("/auth/login?registered=true");
+      toast.promise(
+        registerAction({
+          username: data.username,
+          email: data.email,
+          phone: data.phone,
+          password: data.password,
+        }),
+        {
+          loading: "Creating account...",
+          success: () => {
+            // toast.success("Account created successfully!");
+            // Redirect to login page after registration
+            // router.push("/auth/login?registered=true");
+            window.location.href = "/auth/login?registered=true";
+            return "Registration successful!";
+          },
+          error: (err: unknown) => {
+            if (err && typeof err === "object" && "message" in err) {
+              return (
+                (err as { message?: string }).message ?? "Registration failed!"
+              );
+            }
+            return "Registration failed!";
+          },
+        },
+      );
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "An unknown error occurred";
-
-      // Set the error state to display in your UI
-      // setError(errorMessage);
-
-      // Optionally, show a toast notification
-      toast.error(errorMessage);
-
+      // Optional: handle unexpected errors
       console.error("Registration error:", err);
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
+
+  // const onSubmit = async (data: RegisterFormValues) => {
+  //   setIsLoading(true);
+  //   // setError(null);
+  //   try {
+  //     await registerAction({
+  //       username: data.username,
+  //       email: data.email,
+  //       phone: data.phone,
+  //       password: data.password,
+  //     });
+  //     console.log(data);
+  //     toast.success("Account created successful!");
+
+  //     router.push("/auth/login?registered=true");
+  //   } catch (err) {
+  //     const errorMessage =
+  //       err instanceof Error ? err.message : "An unknown error occurred";
+
+  //     // Set the error state to display in your UI
+  //     // setError(errorMessage);
+
+  //     // Optionally, show a toast notification
+  //     toast.error(errorMessage);
+
+  //     console.error("Registration error:", err);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <div className="w-full rounded-lg bg-white p-6 shadow-sm">
@@ -169,10 +206,11 @@ export default function RegisterPage() {
 
         <button
           type="submit"
-          disabled={isLoading}
+          // disabled={isLoading}
           className="w-full cursor-pointer rounded-md bg-purple-600 px-4 py-2.5 text-base font-medium text-white transition duration-200 hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-70"
         >
-          {isLoading ? "Creating account..." : "Sign up"}
+          {/* {isLoading ? "Creating account..." : "Sign up"} */}
+          Sign Up
         </button>
       </form>
 
