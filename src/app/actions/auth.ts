@@ -114,17 +114,17 @@ export async function userProfile(
 }
 
 export async function deleteAccount({
-  _id,
+  // _id,
   accessToken,
 }: {
-  _id: string;
+  // _id: string;
   accessToken: string;
 }) {
   console.log(accessToken);
-  const response = await fetch(`${API_URL}/user/${_id}`, {
+  const response = await fetch(`${API_URL}/user`, {
     method: "DELETE",
     headers: {
-      "Content-Type": "application/json",
+      // "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
     credentials: "include",
@@ -149,8 +149,9 @@ export async function uploadFile(file: File): Promise<UploadFileResponse> {
   formData.append("file", file);
 
   const accessToken = getCookieValue("accessToken");
+  const userId = getCookieValue("userId");
 
-  const res = await fetch(`${API_URL}/files/upload`, {
+  const res = await fetch(`${API_URL}/encrypt/${userId}/upload`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
