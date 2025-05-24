@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.mothrbox.xyz
+
+# Sitemaps
+Sitemap: https://www.mothrbox.xyz/sitemap.xml

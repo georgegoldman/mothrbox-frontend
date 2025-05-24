@@ -4,19 +4,17 @@ import { useState } from "react";
 import { Header } from "@/components/header";
 import { useUser } from "@/app/contexts/user-context";
 import { deleteAccount } from "@/app/actions/auth";
-// First, add the import for the Modal component
 import { Modal } from "@/components/modal";
-// Add the import for framer-motion at the top of the file
-// import { motion } from "motion/react";
 import { getCookieValue } from "@/lib/helpers";
 import { Switch } from "@/components/ui/switch";
+import { toast } from "sonner";
 
 export default function SettingsPage() {
   const [usageNotification, setUsageNotification] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false); // loading state
+  const [loading, setLoading] = useState(false);
 
   const { initials, user } = useUser();
 
@@ -24,8 +22,7 @@ export default function SettingsPage() {
     if (!user?._id) return;
 
     const accessToken = getCookieValue("accessToken");
-    console.log(accessToken, user?._id);
-    if (!accessToken) return; // Handle case where accessToken is not available
+    if (!accessToken) return;
 
     if (confirmationText.trim().toLowerCase() !== "delete my account") {
       setError(true);
@@ -33,39 +30,46 @@ export default function SettingsPage() {
     }
 
     setLoading(true);
+
     try {
-      await deleteAccount({ _id: user?._id, accessToken });
-      // After successful deletion, you might want to redirect or show a message
-      // Clear cookies
-      document.cookie = "accessToken=; Max-Age=0; path=/;";
-      document.cookie = "userId=; Max-Age=0; path=/;";
+      toast.promise(
+        deleteAccount({ accessToken }).then(() => {
+          // Clear cookies
+          document.cookie = "accessToken=; Max-Age=0; path=/;";
+          document.cookie = "userId=; Max-Age=0; path=/;";
 
-      // Remove user data from localStorage
-      localStorage.removeItem("user");
+          // Remove from localStorage
+          localStorage.removeItem("user");
 
-      setIsModalOpen(false);
-      setConfirmationText("");
-      setError(false);
+          // Close modal + reset UI
+          setIsModalOpen(false);
+          setConfirmationText("");
+          setError(false);
 
-      // Redirect or show message
-      window.location.href = "/";
+          // Redirect
+          window.location.href = "/";
+
+          return "Account successfully deleted";
+        }),
+        {
+          loading: "Deleting your account...",
+          success: (msg) => msg,
+          error: (err: unknown) => {
+            if (err && typeof err === "object" && "message" in err) {
+              return (
+                (err as { message?: string }).message ?? "Deletion failed!"
+              );
+            }
+            return "Deletion failed!";
+          },
+        },
+      );
     } catch (error) {
-      console.error(error);
+      console.error("Delete error:", error);
     } finally {
       setLoading(false);
     }
   };
-
-  // const handleConfirmClick = async () => {
-  //   if (confirmationText.trim().toLowerCase() !== "delete my account") {
-  //     setError(true);
-  //     return; // Don't close modal
-  //   }
-  //   // Proceed with deletion
-  //   await handleDeleteAccount();
-  //   // If deletion successful, close modal
-
-  // };
 
   return (
     <div>

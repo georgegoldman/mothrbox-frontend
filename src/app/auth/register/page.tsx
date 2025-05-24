@@ -3,14 +3,17 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { useState } from "react";
-// import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { InputField } from "@/components/ui/input-field";
 import { registerAction } from "@/app/actions/auth";
 import { toast } from "sonner";
+import { useEffect, useState } from "react";
 
-// Zod schema for validation
+// Password regex for validation
+const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+
+// Zod schema
 const registerSchema = z.object({
   username: z.string().min(1, "Username is required"),
   email: z.string().email("Invalid email address"),
@@ -18,7 +21,13 @@ const registerSchema = z.object({
     .string()
     .min(10, "Phone number is required")
     .regex(/^\+?\d{10,}$/, "Enter a valid phone number"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(
+      passwordRegex,
+      "Password must include uppercase, lowercase, number, and special character",
+    ),
   agreeToTerms: z.literal(true, {
     errorMap: () => ({
       message: "You must agree to the terms and conditions",
@@ -29,20 +38,35 @@ const registerSchema = z.object({
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
-  // const router = useRouter();
-  // const [error, setError] = useState<string | null>(null);
-  // const [isLoading, setIsLoading] = useState(false);
-
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
   });
 
+  const passwordValue = watch("password");
+  const [passwordStrength, setPasswordStrength] = useState(0);
+
+  // Evaluate password strength
+  const evaluatePasswordStrength = (password: string) => {
+    let score = 0;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    if (password.length >= 8) score++;
+    setPasswordStrength(score);
+  };
+
+  // Watch password input to update strength
+  useEffect(() => {
+    evaluatePasswordStrength(passwordValue || "");
+  }, [passwordValue]);
+
   const onSubmit = async (data: RegisterFormValues) => {
-    // setIsLoading(true);
     try {
       toast.promise(
         registerAction({
@@ -54,9 +78,6 @@ export default function RegisterPage() {
         {
           loading: "Creating account...",
           success: () => {
-            // toast.success("Account created successfully!");
-            // Redirect to login page after registration
-            // router.push("/auth/login?registered=true");
             window.location.href = "/auth/login?registered=true";
             return "Registration successful!";
           },
@@ -71,42 +92,23 @@ export default function RegisterPage() {
         },
       );
     } catch (err) {
-      // Optional: handle unexpected errors
       console.error("Registration error:", err);
-    } finally {
-      // setIsLoading(false);
     }
   };
 
-  // const onSubmit = async (data: RegisterFormValues) => {
-  //   setIsLoading(true);
-  //   // setError(null);
-  //   try {
-  //     await registerAction({
-  //       username: data.username,
-  //       email: data.email,
-  //       phone: data.phone,
-  //       password: data.password,
-  //     });
-  //     console.log(data);
-  //     toast.success("Account created successful!");
+  // Determine strength label and color
+  const getStrengthLabel = () => {
+    if (passwordStrength <= 2) return "Weak";
+    if (passwordStrength === 3 || passwordStrength === 4) return "Medium";
+    if (passwordStrength >= 5) return "Strong";
+  };
 
-  //     router.push("/auth/login?registered=true");
-  //   } catch (err) {
-  //     const errorMessage =
-  //       err instanceof Error ? err.message : "An unknown error occurred";
-
-  //     // Set the error state to display in your UI
-  //     // setError(errorMessage);
-
-  //     // Optionally, show a toast notification
-  //     toast.error(errorMessage);
-
-  //     console.error("Registration error:", err);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+  const getStrengthColor = () => {
+    if (passwordStrength <= 2) return "bg-red-500";
+    if (passwordStrength === 3 || passwordStrength === 4)
+      return "bg-yellow-500";
+    if (passwordStrength >= 5) return "bg-green-500";
+  };
 
   return (
     <div className="w-full rounded-lg bg-white p-6 shadow-sm">
@@ -114,13 +116,7 @@ export default function RegisterPage() {
         Welcome to Mothrbox!
       </h1>
 
-      {/* {error && (
-        <div className="mb-4 rounded-md bg-red-50 p-4 text-red-600">
-          {error}
-        </div>
-      )} */}
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           <InputField
             id="username"
@@ -150,16 +146,41 @@ export default function RegisterPage() {
             error={errors.phone?.message}
           />
 
-          <InputField
-            id="password"
-            type="password"
-            label="Password"
-            placeholder="Enter password"
-            {...register("password")}
-            error={errors.password?.message}
-            showPasswordToggle
-            autoComplete="new-password"
-          />
+          <div className="relative">
+            <InputField
+              id="password"
+              type="password"
+              label="Password"
+              placeholder="Enter password"
+              {...register("password")}
+              error={errors.password?.message}
+              showPasswordToggle
+              autoComplete="new-password"
+            />
+
+            {passwordValue && (
+              <>
+                {/* Password Strength Bar */}
+                <div className="mt-2 h-2 w-full rounded-full bg-gray-200">
+                  <div
+                    className={`h-2 rounded-full ${getStrengthColor()}`}
+                    style={{ width: `${(passwordStrength / 5) * 100}%` }}
+                  ></div>
+                </div>
+                {/* Optional: Show strength label */}
+                <p
+                  className="mt-1 text-xs font-semibold"
+                  style={{
+                    color: getStrengthColor()
+                      ? getStrengthColor()!.replace("bg-", "")
+                      : undefined,
+                  }}
+                >
+                  {getStrengthLabel()}
+                </p>
+              </>
+            )}
+          </div>
         </div>
 
         <div className="space-y-2">
@@ -206,10 +227,8 @@ export default function RegisterPage() {
 
         <button
           type="submit"
-          // disabled={isLoading}
           className="w-full cursor-pointer rounded-md bg-purple-600 px-4 py-2.5 text-base font-medium text-white transition duration-200 hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-70"
         >
-          {/* {isLoading ? "Creating account..." : "Sign up"} */}
           Sign Up
         </button>
       </form>
