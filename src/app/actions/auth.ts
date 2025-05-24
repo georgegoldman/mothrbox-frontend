@@ -1,6 +1,5 @@
 import { getCookieValue } from "@/lib/helpers";
 
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 type LoginResponse = {
   accessToken?: string;
   _id: string;
@@ -26,14 +25,6 @@ type UserDataResponse = {
   phone: string;
 };
 
-// interface UserProfile {
-//   id: string;
-// }
-
-// interface Delete {
-//   _id: string;
-// }
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function loginAction(data: { email: string; password: string }) {
@@ -47,11 +38,11 @@ export async function loginAction(data: { email: string; password: string }) {
   });
 
   if (!response.ok) {
-    const errorData: { message: string } = await response.json();
+    const errorData = (await response.json()) as { message: string };
     throw new Error(errorData.message || "Login failed");
   }
 
-  const result: LoginResponse = await response.json();
+  const result = (await response.json()) as LoginResponse;
   return result;
 }
 
@@ -70,11 +61,11 @@ export async function registerAction(data: {
   });
 
   if (!response.ok) {
-    const errorData: { message: string } = await response.json();
+    const errorData = (await response.json()) as { message: string };
     throw new Error(errorData.message || "Registration failed");
   }
 
-  const result: RegisterResponse = await response.json();
+  const result = (await response.json()) as RegisterResponse;
   return result;
 }
 
@@ -104,34 +95,27 @@ export async function userProfile(
   });
 
   if (!response.ok) {
-    const errorData: { message: string } = await response.json();
+    const errorData = (await response.json()) as { message: string };
     throw new Error(errorData.message || "Failed to fetch profile");
   }
 
-  const result: UserDataResponse = await response.json();
+  const result = (await response.json()) as UserDataResponse;
   console.log(result);
   return result;
 }
 
-export async function deleteAccount({
-  _id,
-  accessToken,
-}: {
-  _id: string;
-  accessToken: string;
-}) {
+export async function deleteAccount({ accessToken }: { accessToken: string }) {
   console.log(accessToken);
-  const response = await fetch(`${API_URL}/user/${_id}`, {
+  const response = await fetch(`${API_URL}/user`, {
     method: "DELETE",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
     credentials: "include",
   });
 
   if (!response.ok) {
-    const errorData: { message: string } = await response.json();
+    const errorData = (await response.json()) as { message: string };
     throw new Error(errorData.message || "Account deletion failed");
   }
 
@@ -149,8 +133,9 @@ export async function uploadFile(file: File): Promise<UploadFileResponse> {
   formData.append("file", file);
 
   const accessToken = getCookieValue("accessToken");
+  const userId = getCookieValue("userId");
 
-  const res = await fetch(`${API_URL}/files/upload`, {
+  const res = await fetch(`${API_URL}/encrypt/${userId}/upload`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -160,10 +145,10 @@ export async function uploadFile(file: File): Promise<UploadFileResponse> {
   });
 
   if (!res.ok) {
-    const errorData: { message: string } = await res.json();
+    const errorData = (await res.json()) as { message: string };
     throw new Error(errorData.message || "File upload failed");
   }
 
-  const result: UploadFileResponse = await res.json();
+  const result = (await res.json()) as UploadFileResponse;
   return result;
 }

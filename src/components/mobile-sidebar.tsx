@@ -58,7 +58,7 @@ export default function MobileSidebar({
 
           {/* Sidebar */}
           <motion.div
-            className="fixed inset-y-0 right-0 z-50 w-64 max-w-full bg-white p-6 shadow-lg"
+            className="fixed inset-y-0 right-0 z-50 w-[16rem] overflow-y-auto bg-white px-6 py-6 shadow-lg"
             role="dialog"
             aria-modal="true"
             aria-label="Navigation menu"
@@ -66,12 +66,20 @@ export default function MobileSidebar({
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            // className="fixed inset-y-0 right-0 z-50 w-64 max-w-full bg-white p-6 shadow-lg"
+            // role="dialog"
+            // aria-modal="true"
+            // aria-label="Navigation menu"
+            // initial={{ x: "100%" }}
+            // animate={{ x: 0 }}
+            // exit={{ x: "100%" }}
+            // transition={{ type: "spring", damping: 25, stiffness: 300 }}
           >
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold">Menu</h2>
               <motion.button
                 onClick={onClose}
-                className="rounded-full p-1 hover:bg-gray-100"
+                className="flex-shrink-0 rounded-full p-1 hover:bg-gray-100"
                 aria-label="Close menu"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}

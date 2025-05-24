@@ -1,94 +1,62 @@
+import {
+  SectionCard,
+  CodeBlock,
+  ErrorCard,
+  RateCard,
+} from "@/components/api-docs";
 import { Header } from "@/components/header";
-import { Copy } from "lucide-react";
 
 export default function EncryptApiPage() {
   return (
     <div>
       <Header title="Encrypt API" />
 
-      <div className="p-3 sm:p-4 md:p-6">
-        <div className="mb-4 rounded-xl bg-gray-800/50 p-4 md:mb-6 md:p-6">
-          <h2 className="mb-2 text-sm font-medium">Endpoint</h2>
-          <p className="mb-4 text-xs text-gray-400">
-            Use this endpoint to securely encrypt text or files using your API
-            key.
-          </p>
+      <div className="space-y-6 px-4 py-6 sm:px-6 md:px-8">
+        {/* Endpoint */}
+        <SectionCard
+          title="Endpoint"
+          description="Use this endpoint to securely encrypt text or files using your API key."
+        >
+          <CodeBlock label="POST /api/v1/encrypt" />
+        </SectionCard>
 
-          <div className="mb-4 flex items-center gap-2 rounded-lg bg-gray-800 px-3 py-2 md:px-4">
-            <span className="text-xs sm:text-sm">POST /api/v1/encrypt</span>
-            <button className="ml-auto rounded p-1 hover:bg-gray-700">
-              <Copy className="h-4 w-4" />
-            </button>
+        {/* Request */}
+        <SectionCard title="Request:">
+          <CodeBlock
+            label={`curl -X POST "https://api.mothrbox.com/encrypt" -H "Authorization: Bearer"`}
+            isMono
+          />
+        </SectionCard>
+
+        {/* Response */}
+        <SectionCard title="Response:">
+          <CodeBlock
+            label={`json { "encrypted": "SGVsbG8gV29ybGQ=" }`}
+            isMono
+          />
+        </SectionCard>
+
+        {/* Errors */}
+        <SectionCard title="Error:" tag="Usage">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <ErrorCard
+              title="401 Rate Limit Exceeded"
+              message="Invalid or missing API key"
+            />
+            <ErrorCard
+              title="Unauthorized"
+              message="Invalid or expired token"
+            />
           </div>
-        </div>
+        </SectionCard>
 
-        <div className="mb-4 rounded-xl bg-gray-800/50 p-4 md:mb-6 md:p-6">
-          <h2 className="mb-2 text-sm font-medium">Request:</h2>
-
-          <div className="mb-4 flex items-center gap-2 overflow-x-auto rounded-lg bg-gray-800 px-3 py-2 md:px-4">
-            <span className="font-mono text-xs whitespace-nowrap sm:text-sm">
-              {`bash curl -X POST "https://api.cryptix.com/encrypt" -H "Authorization: Bearer"`}
-            </span>
-            <button className="ml-auto flex-shrink-0 rounded p-1 hover:bg-gray-700">
-              <Copy className="h-4 w-4" />
-            </button>
+        {/* Rate Limit */}
+        <SectionCard title="Rate Limit:" tag="Usage">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <RateCard count="10" label="requests/second" />
+            <RateCard count="1000" label="requests/day" />
           </div>
-        </div>
-
-        <div className="mb-4 rounded-xl bg-gray-800/50 p-4 md:mb-6 md:p-6">
-          <h2 className="mb-2 text-sm font-medium">Response:</h2>
-
-          <div className="mb-4 flex items-center gap-2 overflow-x-auto rounded-lg bg-gray-800 px-3 py-2 md:px-4">
-            <span className="font-mono text-xs whitespace-nowrap sm:text-sm">
-              json {'decrypted": "hello world'}
-            </span>
-            <button className="ml-auto flex-shrink-0 rounded p-1 hover:bg-gray-700">
-              <Copy className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-
-        <div className="mb-4 rounded-xl bg-gray-800/50 p-4 md:mb-6 md:p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-medium">Error:</h2>
-            <span className="rounded bg-gray-700 px-2 py-1 text-xs">Usage</span>
-          </div>
-
-          <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="rounded-lg bg-gray-800 p-4">
-              <h3 className="mb-1 text-xs font-medium sm:text-sm">
-                401 Rate Limit Exceeded
-              </h3>
-              <p className="text-xs text-gray-400">
-                Invalid or missing API key
-              </p>
-            </div>
-            <div className="rounded-lg bg-gray-800 p-4">
-              <h3 className="mb-1 text-xs font-medium sm:text-sm">
-                Unauthorized
-              </h3>
-              <p className="text-xs text-gray-400">Invalid or invalid token</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded-xl bg-gray-800/50 p-4 md:p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-medium">Rate Limit:</h2>
-            <span className="rounded bg-gray-700 px-2 py-1 text-xs">Usage</span>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="rounded-lg bg-gray-800 p-4 text-center">
-              <p className="text-sm font-medium">10</p>
-              <p className="text-xs text-gray-400">requests/seconds</p>
-            </div>
-            <div className="rounded-lg bg-gray-800 p-4 text-center">
-              <p className="text-sm font-medium">1000</p>
-              <p className="text-xs text-gray-400">requests/day</p>
-            </div>
-          </div>
-        </div>
+        </SectionCard>
       </div>
     </div>
   );
