@@ -1,6 +1,7 @@
 import { getCookieValue } from "@/lib/helpers";
 
-type LoginResponse = {
+type Response = {
+  message?: string;
   accessToken?: string;
   _id: string;
   email: string;
@@ -8,15 +9,14 @@ type LoginResponse = {
   username: string;
 };
 
-type RegisterResponse = {
-  message: string;
-  user?: {
-    _id: string;
-    username: string;
-    email: string;
-    phone: string;
-  };
-};
+// type Response = {
+//   message?: string;
+//   accessToken?: string;
+//   _id: string;
+//   username: string;
+//   email: string;
+//   phone: string;
+// };
 
 type UserDataResponse = {
   _id: string;
@@ -42,7 +42,7 @@ export async function loginAction(data: { email: string; password: string }) {
     throw new Error(errorData.message || "Login failed");
   }
 
-  const result = (await response.json()) as LoginResponse;
+  const result = (await response.json()) as Response;
   return result;
 }
 
@@ -58,6 +58,7 @@ export async function registerAction(data: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -65,7 +66,7 @@ export async function registerAction(data: {
     throw new Error(errorData.message || "Registration failed");
   }
 
-  const result = (await response.json()) as RegisterResponse;
+  const result = (await response.json()) as Response;
   return result;
 }
 
@@ -133,9 +134,8 @@ export async function uploadFile(file: File): Promise<UploadFileResponse> {
   formData.append("file", file);
 
   const accessToken = getCookieValue("accessToken");
-  const userId = getCookieValue("userId");
 
-  const res = await fetch(`${API_URL}/encrypt/${userId}/upload`, {
+  const res = await fetch(`${API_URL}/encrypt`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -152,3 +152,83 @@ export async function uploadFile(file: File): Promise<UploadFileResponse> {
   const result = (await res.json()) as UploadFileResponse;
   return result;
 }
+
+// export async function registerAction(data: {
+//   username: string;
+//   email: string;
+//   phone: string;
+//   password: string;
+// }) {
+//   try {
+//     // STEP 1: REGISTER
+//     const registerRes = await fetch(`${API_URL}/auth/register`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(data),
+//       credentials: "include",
+//     });
+
+//     const registerResult = (await registerRes.json()) as RegisterResponse;
+
+//     // Logs raw output
+//     console.log("📥 registerResult raw:", registerResult);
+
+//     if (!registerRes.ok || !registerResult._id) {
+//       console.error("❌ Registration API error:", registerResult);
+//       throw new Error(registerResult.message ?? "Registration failed");
+//     }
+
+//     const user = {
+//       _id: registerResult._id,
+//       username: registerResult.username,
+//       email: registerResult.email,
+//       phone: registerResult.phone,
+//       accessToken: registerResult.accessToken,
+//     };
+
+//     // STEP 2: GENERATE KEY
+//     const keyPayload = {
+//       algorithm: "AES",
+//       owner: user._id,
+//       alias: `mtx-${user._id.slice(0, 10)}`,
+//     };
+
+//     const accessToken = user.accessToken;
+
+//     const keyRes = await fetch(`${API_URL}/keys/generate`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${accessToken}`,
+//       },
+//       body: JSON.stringify(keyPayload),
+//       credentials: "include",
+//     });
+
+//     const keyResult = (await keyRes.json()) as KeyGenResponse;
+
+//     if (!keyRes.ok || keyResult.status !== 200) {
+//       console.error("❌ Key generation failed:", keyResult);
+//       throw new Error(keyResult.message || "Key generation failed");
+//     }
+
+//     console.log("✅ User created:", user);
+//     console.log("🔑 Key created:", keyResult);
+
+//     return {
+//       user,
+//       keyStatus: keyResult.status,
+//       keyMessage: keyResult.message,
+//     };
+//   } catch (error) {
+//     console.error("🔥 Registration process failed:", error);
+
+//     if (error instanceof Error) {
+//       throw new Error(error.message);
+//     }
+
+//     throw new Error("Unexpected error occurred during registration.");
+//   }
+// }

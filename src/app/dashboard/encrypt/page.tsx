@@ -4,26 +4,55 @@ import { uploadFile } from "@/app/actions/auth";
 import { Header } from "@/components/header";
 import { StatusBadge } from "@/components/status-badge";
 import type { StatusType } from "@/lib/types";
-import { ChevronDown, Copy, File, Upload, X } from "lucide-react";
+import { ChevronDown, Copy, File, Upload } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function EncryptPage() {
   const [activeTab, setActiveTab] = useState<"upload" | "paste">("upload");
   const [selectedFile, setSelectedFile] = useState<globalThis.File | null>(
     null,
   );
-  const [tempStore, setTempStore] = useState(true);
+  // const [tempStore, setTempStore] = useState(true);
+
+  const [progress, setProgress] = useState(0);
+
+  const simulateProgress = () => {
+    let value = 0;
+    const interval = setInterval(() => {
+      value += 10;
+      setProgress(value);
+      if (value >= 100) {
+        clearInterval(interval);
+      }
+    }, 150); // adjust speed here
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
-    const file = formData.get("file") as File | null;
+    if (!selectedFile || selectedFile.size === 0 || selectedFile.name === "") {
+      toast.error("Please select a valid file before submitting!");
+      return;
+    }
 
-    if (!file) return;
+    toast.promise(uploadFile(selectedFile), {
+      loading: "Encrypting file...",
+      success: (result) => {
+        console.log(result);
+        // Reset UI
+        setSelectedFile(null);
+        setProgress(0);
+        return "File encrypted successfully!";
+      },
 
-    const result = await uploadFile(file);
-    console.log(result);
+      error: (err: unknown) => {
+        if (err && typeof err === "object" && "message" in err) {
+          return (err as { message?: string }).message ?? "File upload failed!";
+        }
+        return "File upload failed!";
+      },
+    });
   };
 
   return (
@@ -64,76 +93,103 @@ export default function EncryptPage() {
           {activeTab === "upload" && (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="mb-4 rounded-lg border border-dashed border-gray-700 bg-gray-800/50 p-4 md:p-6">
-                <div className="text-center">
-                  <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-600 p-3">
-                    <Upload className="h-5 w-5" />
+                {!selectedFile && (
+                  <div className="text-center">
+                    <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-600 p-3">
+                      <Upload className="h-5 w-5" />
+                    </div>
+                    <p className="mb-2 text-xs text-gray-400 sm:text-sm">
+                      Drag & Drop your encrypted file here or click to upload
+                    </p>
+                    <input
+                      type="file"
+                      name="file"
+                      className="hidden"
+                      id="file-upload"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setSelectedFile(file);
+                          setProgress(0); // Reset progress
+                          simulateProgress(); // Start loading bar
+                        }
+                      }}
+                    />
+                    <label
+                      htmlFor="file-upload"
+                      className="inline-block cursor-pointer rounded bg-purple-600 px-3 py-1.5 text-xs font-medium hover:bg-purple-700 sm:px-4 sm:py-2 sm:text-sm"
+                    >
+                      Select File
+                    </label>
                   </div>
-                  <p className="mb-2 text-xs text-gray-400 sm:text-sm">
-                    Drag & Drop your encrypted file here or click to upload
-                  </p>
-                  <input
-                    type="file"
-                    name="file"
-                    className="hidden"
-                    id="file-upload"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        setSelectedFile(file);
-                      }
-                    }}
-                  />
-                  <label
-                    htmlFor="file-upload"
-                    className="inline-block cursor-pointer rounded bg-purple-600 px-3 py-1.5 text-xs font-medium hover:bg-purple-700 sm:px-4 sm:py-2 sm:text-sm"
-                  >
-                    Select File
-                  </label>
-                </div>
-              </div>
+                )}
 
-              <div>
-                <label className="mb-2 block text-xs text-gray-400 sm:text-sm">
-                  Select encryption method e.g., XOR, AES
-                </label>
-                <div className="relative">
-                  <select className="w-full appearance-none rounded-lg border border-gray-700 bg-gray-800 p-2 text-sm focus:border-purple-500 focus:outline-none md:p-3">
-                    <option value="">Select</option>
-                    <option value="xor">XOR</option>
-                    <option value="aes">AES</option>
-                  </select>
-                  <ChevronDown className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 transform text-gray-400 sm:h-5 sm:w-5" />
-                </div>
-              </div>
-
-              {/* {selectedFile && (
-                <div className="mb-6 rounded-lg border border-gray-700 bg-gray-800/30 p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <File className="h-4 w-4 flex-shrink-0 text-gray-400 sm:h-5 sm:w-5" />
-                      <div>
-                        <p className="text-xs font-medium sm:text-sm">
-                          {selectedFile.name.length > 20
-                            ? selectedFile.name.substring(0, 20) + "..."
-                            : selectedFile.name}
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          ({(selectedFile.size / 1024).toFixed(2)} KB)
-                        </p>
+                {selectedFile && (
+                  <div className="mb-6 rounded-lg border border-gray-700 bg-gray-800/30 p-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <File className="h-4 w-4 flex-shrink-0 text-gray-400 sm:h-5 sm:w-5" />
+                        <div>
+                          <p className="text-xs font-medium sm:text-sm">
+                            {selectedFile.name.length > 20
+                              ? selectedFile.name.substring(0, 20) + "..."
+                              : selectedFile.name}
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            ({(selectedFile.size / 1024).toFixed(2)} KB)
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="text-xs text-gray-400">{progress}%</div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedFile(null);
+                            setProgress(0);
+                          }}
+                          className="rounded-full p-1 hover:bg-gray-700"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 text-red-500"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                          </svg>
+                        </button>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="text-xs text-gray-400">80%</div>
-                      <button className="rounded-full p-1 hover:bg-gray-700">
-                        <X className="h-4 w-4" />
-                      </button>
+                    <div className="mt-2 h-1 rounded-full bg-gray-700">
+                      <div
+                        className="h-1 rounded-full bg-purple-600 transition-all duration-500"
+                        style={{ width: `${progress}%` }}
+                      />
                     </div>
                   </div>
-                  <div className="mt-2 h-1 rounded-full bg-gray-700">
-                    <div className="h-1 w-4/5 rounded-full bg-purple-600"></div>
-                  </div>
-                </div>
-              )} */}
+                )}
+              </div>
+
+              {/* Uncomment this section if you're using encryption method selector */}
+              {/* <div>
+      <label className="mb-2 block text-xs text-gray-400 sm:text-sm">
+        Select encryption method e.g., XOR, AES
+      </label>
+      <div className="relative">
+        <select className="w-full appearance-none rounded-lg border border-gray-700 bg-gray-800 p-2 text-sm focus:border-purple-500 focus:outline-none md:p-3">
+          <option value="">Select</option>
+          <option value="xor">XOR</option>
+          <option value="aes">AES</option>
+        </select>
+        <ChevronDown className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 transform text-gray-400 sm:h-5 sm:w-5" />
+      </div>
+    </div> */}
             </div>
           )}
 
@@ -163,7 +219,7 @@ export default function EncryptPage() {
 
           <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2"></div>
 
-          <div className="mb-6 flex items-center">
+          {/* <div className="mb-6 flex items-center">
             <input
               type="checkbox"
               id="temp-store"
@@ -177,7 +233,7 @@ export default function EncryptPage() {
             >
               Temporarily store encrypted file (auto-deletes after 24 hours)
             </label>
-          </div>
+          </div> */}
 
           <button className="w-full rounded-lg bg-purple-600 py-2 text-sm font-medium transition hover:bg-purple-700 md:py-3">
             Encrypt Now

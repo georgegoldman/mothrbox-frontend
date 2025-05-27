@@ -74,18 +74,24 @@ export default function RegisterPage() {
           email: data.email,
           phone: data.phone,
           password: data.password,
+        }).then((result) => {
+          // Set cookies here if needed
+          if (result.accessToken) {
+            document.cookie = `accessToken=${result.accessToken}; path=/; max-age=86400; secure; samesite=lax`;
+          }
+          if (result._id) {
+            document.cookie = `userId=${result._id}; path=/; max-age=86400; secure; samesite=lax`;
+          }
+          // Navigate to dashboard
+          window.location.href = "/dashboard"; // full reload to trigger middleware
+          return "Created account successful!";
         }),
         {
           loading: "Creating account...",
-          success: () => {
-            window.location.href = "/auth/login?registered=true";
-            return "Registration successful!";
-          },
+          success: (msg) => msg,
           error: (err: unknown) => {
             if (err && typeof err === "object" && "message" in err) {
-              return (
-                (err as { message?: string }).message ?? "Registration failed!"
-              );
+              return (err as { message?: string }).message ?? "Login failed!";
             }
             return "Registration failed!";
           },
@@ -93,12 +99,14 @@ export default function RegisterPage() {
       );
     } catch (err) {
       console.error("Registration error:", err);
+    } finally {
+      // setIsLoading(false);
     }
   };
 
   // Determine strength label and color
   const getStrengthLabel = () => {
-    if (passwordStrength <= 2) return "Weak";
+    if (passwordStrength <= 2) return "Too Weak";
     if (passwordStrength === 3 || passwordStrength === 4) return "Medium";
     if (passwordStrength >= 5) return "Strong";
   };
