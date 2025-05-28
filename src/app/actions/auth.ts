@@ -152,15 +152,8 @@ export async function uploadFile(file: File, alias: string): Promise<void> {
 
   const blob = await res.blob();
 
-  // 🧠 Extract original file name + extension
-  const originalName = file.name;
-  const dotIndex = originalName.lastIndexOf(".");
-
-  const nameWithoutExt =
-    dotIndex !== -1 ? originalName.substring(0, dotIndex) : originalName;
-
-  // ✨ Append _enc before extension
-  const filename = `${nameWithoutExt}.enc`;
+  // ✅ Add .enc to full original name (with extension)
+  const filename = `${file.name}.enc`;
 
   // 🧲 Download logic
   const blobUrl = window.URL.createObjectURL(blob);
