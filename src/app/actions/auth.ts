@@ -129,13 +129,14 @@ type UploadFileResponse = {
   message?: string;
 };
 
-export async function uploadFile(file: File): Promise<UploadFileResponse> {
+export async function uploadFile(file: File, alias: string): Promise<void> {
   const formData = new FormData();
   formData.append("file", file);
+  formData.append("alias", alias);
 
   const accessToken = getCookieValue("accessToken");
 
-  const res = await fetch(`${API_URL}/encrypt`, {
+  const res = await fetch(`${API_URL}/file-upload/encrypt`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -145,13 +146,60 @@ export async function uploadFile(file: File): Promise<UploadFileResponse> {
   });
 
   if (!res.ok) {
-    const errorData = (await res.json()) as { message: string };
-    throw new Error(errorData.message || "File upload failed");
+    const errorData = await res.text();
+    throw new Error(errorData || "File upload failed");
   }
 
-  const result = (await res.json()) as UploadFileResponse;
-  return result;
+  const blob = await res.blob();
+
+  // 🧠 Extract original file name + extension
+  const originalName = file.name;
+  const dotIndex = originalName.lastIndexOf(".");
+
+  const nameWithoutExt =
+    dotIndex !== -1 ? originalName.substring(0, dotIndex) : originalName;
+
+  // ✨ Append _enc before extension
+  const filename = `${nameWithoutExt}.enc`;
+
+  // 🧲 Download logic
+  const blobUrl = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = blobUrl;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(blobUrl);
 }
+
+// export async function uploadFile(
+//   file: File,
+//   alias: string,
+// ): Promise<UploadFileResponse> {
+//   const formData = new FormData();
+//   formData.append("file", file);
+//   formData.append("alias", alias);
+
+//   const accessToken = getCookieValue("accessToken");
+
+//   const res = await fetch(`${API_URL}/file-upload/encrypt`, {
+//     method: "POST",
+//     headers: {
+//       Authorization: `Bearer ${accessToken}`,
+//     },
+//     credentials: "include",
+//     body: formData,
+//   });
+
+//   if (!res.ok) {
+//     const errorData = (await res.json()) as { message: string };
+//     throw new Error(errorData.message || "File upload failed");
+//   }
+
+//   const result = (await res.json()) as UploadFileResponse;
+//   return result;
+// }
 
 // export async function registerAction(data: {
 //   username: string;

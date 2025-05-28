@@ -13,8 +13,8 @@ export default function EncryptPage() {
   const [selectedFile, setSelectedFile] = useState<globalThis.File | null>(
     null,
   );
+  const [alias, setAlias] = useState<string>("");
   // const [tempStore, setTempStore] = useState(true);
-
   const [progress, setProgress] = useState(0);
 
   const simulateProgress = () => {
@@ -36,7 +36,7 @@ export default function EncryptPage() {
       return;
     }
 
-    toast.promise(uploadFile(selectedFile), {
+    toast.promise(uploadFile(selectedFile, alias), {
       loading: "Encrypting file...",
       success: (result) => {
         console.log(result);
@@ -174,6 +174,23 @@ export default function EncryptPage() {
                     </div>
                   </div>
                 )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="alias"
+                  className="mb-2 block text-xs text-gray-400 sm:text-sm"
+                >
+                  Encryption Key Alias
+                </label>
+                <input
+                  type="text"
+                  name="alias"
+                  id="alias"
+                  placeholder="Enter Alias"
+                  onChange={(e) => setAlias(e.target.value)}
+                  className="mb-4 w-full rounded-lg border border-gray-700 bg-gray-800/50 p-3 text-sm focus:border-purple-500 focus:outline-none md:p-4"
+                />
               </div>
 
               {/* Uncomment this section if you're using encryption method selector */}
