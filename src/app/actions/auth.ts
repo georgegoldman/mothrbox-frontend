@@ -123,11 +123,11 @@ export async function deleteAccount({ accessToken }: { accessToken: string }) {
   window.location.href = "/";
 }
 
-type UploadFileResponse = {
-  url: string;
-  filename: string;
-  message?: string;
-};
+// type UploadFileResponse = {
+//   url: string;
+//   filename: string;
+//   message?: string;
+// };
 
 export async function uploadFile(file: File, alias: string): Promise<void> {
   const formData = new FormData();
