@@ -1,0 +1,191 @@
+// LOGGED VERSION
+export async function uploadFile(
+  file: File,
+  alias: string,
+): Promise<{ encryptedFile: Blob; originalFileName: string }> {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("alias", alias);
+  formData.append("originalFileName", file.name);
+
+  const accessToken = getCookieValue("accessToken");
+  console.log("[uploadFile] Access Token:", accessToken);
+  console.log("[uploadFile] Uploading file:", file.name);
+
+  const res = await fetch(`${API_URL}/file-upload/encrypt`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    credentials: "include",
+    body: formData,
+  });
+
+  console.log("[uploadFile] Server response status:", res.status);
+
+  if (!res.ok) {
+    const errorData = (await res.json().catch(() => ({}))) as {
+      message?: string;
+    };
+    console.error("[uploadFile] Upload failed:", errorData.message);
+    throw new Error(errorData.message ?? "File encryption failed");
+  }
+
+  const encryptedBlob = await res.blob();
+  console.log("[uploadFile] Encrypted file size:", encryptedBlob.size);
+
+  // Try to get filename from headers first
+  const contentDisposition = res.headers.get("Content-Disposition");
+  console.log("[uploadFile] Content-Disposition:", contentDisposition);
+
+  let originalFileName = file.name; // Fallback
+
+  if (!contentDisposition) {
+    const customHeader =
+      res.headers.get("Original-File-Name") ?? res.headers.get("X-File-Name");
+    console.log("[uploadFile] Custom header file name:", customHeader);
+    if (customHeader) {
+      originalFileName = customHeader;
+    }
+  } else {
+    const fileNameRegex = /filename\*?=["']?(?:UTF-\d['"]*)?([^;"'\n]*)/i;
+    const fileNameMatch = fileNameRegex.exec(contentDisposition);
+    if (fileNameMatch?.[1]) {
+      originalFileName = decodeURIComponent(fileNameMatch[1]);
+      console.log("[uploadFile] Parsed filename:", originalFileName);
+    }
+  }
+
+  return {
+    encryptedFile: encryptedBlob,
+    originalFileName,
+  };
+}
+
+export async function downloadAndDecryptFile(
+  encryptedFile: File,
+  alias: string,
+): Promise<{
+  decryptedBlob: Blob;
+  originalFileName: string;
+  originalFileType: string;
+}> {
+  const formData = new FormData();
+  formData.append("file", encryptedFile);
+  formData.append("alias", alias);
+
+  const accessToken = getCookieValue("accessToken");
+  console.log("[decryptFile] Access Token:", accessToken);
+  console.log("[decryptFile] Decrypting file:", encryptedFile.name);
+
+  const res = await fetch(`${API_URL}/file-upload/decrypt`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    credentials: "include",
+    body: formData,
+  });
+
+  console.log("[decryptFile] Response status:", res.status);
+
+  if (!res.ok) {
+    const errorData = (await res.json().catch(() => ({}))) as {
+      message?: string;
+    };
+    console.error("[decryptFile] Decryption failed:", errorData.message);
+    throw new Error(errorData.message ?? "File decryption failed");
+  }
+
+  const decryptedBlob = await res.blob();
+  console.log("[decryptFile] Decrypted file size:", decryptedBlob.size);
+
+  // Filename extraction
+  let originalFileName = "decrypted_file";
+  const contentDisposition = res.headers.get("Content-Disposition");
+  const customHeader =
+    res.headers.get("Original-File-Name") ?? res.headers.get("X-File-Name");
+
+  console.log("[decryptFile] Content-Disposition:", contentDisposition);
+  console.log("[decryptFile] Custom filename header:", customHeader);
+
+  if (contentDisposition) {
+    const fileNameRegex = /filename\*?=["']?(?:UTF-\d['"]*)?([^;"'\n]*)/i;
+    const fileNameMatch = fileNameRegex.exec(contentDisposition);
+    if (fileNameMatch?.[1]) {
+      originalFileName = decodeURIComponent(fileNameMatch[1]);
+    }
+  } else if (customHeader) {
+    originalFileName = customHeader;
+  }
+
+  const originalFileType =
+    res.headers.get("Content-Type") ??
+    res.headers.get("Original-File-Type") ??
+    "application/octet-stream";
+
+  console.log("[decryptFile] File type:", originalFileType);
+
+  if (
+    !originalFileName.includes(".") &&
+    originalFileType !== "application/octet-stream"
+  ) {
+    const extension = getExtensionFromMimeType(originalFileType);
+    if (extension) {
+      originalFileName += `.${extension}`;
+    }
+  }
+
+  return {
+    decryptedBlob,
+    originalFileName,
+    originalFileType,
+  };
+}
+
+function getExtensionFromMimeType(mimeType: string): string | null {
+  const mimeToExt: Record<string, string> = {
+    "application/pdf": "pdf",
+    "application/msword": "doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+      "docx",
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "text/plain": "txt",
+    // 🔥 Add more as needed
+  };
+  return mimeToExt[mimeType] ?? null;
+}
+
+export function triggerFileDownload(
+  blob: Blob,
+  fileName: string,
+  fileType?: string,
+) {
+  console.log("[download] Triggering download:", fileName);
+  console.log("[download] Blob type:", fileType);
+
+  let finalFileName = fileName;
+  if (
+    fileType &&
+    fileType !== "application/octet-stream" &&
+    !fileName.includes(".")
+  ) {
+    const extension = getExtensionFromMimeType(fileType);
+    if (extension) {
+      finalFileName = `${fileName}.${extension}`;
+    }
+  }
+
+  const downloadBlob = fileType ? new Blob([blob], { type: fileType }) : blob;
+  const url = window.URL.createObjectURL(downloadBlob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = finalFileName;
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+  document.body.removeChild(a);
+
+  console.log("[download] Download triggered:", finalFileName);
+}
