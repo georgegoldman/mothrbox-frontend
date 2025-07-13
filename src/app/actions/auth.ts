@@ -133,6 +133,10 @@ export async function uploadFile(file: File, alias: string): Promise<void> {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("alias", alias);
+  formData.append(
+    "owner",
+    "0xa35de887586ac1a9e644bc8f1b24a0d54c6eea66b8feef8bfd94297adde8d479",
+  );
 
   const accessToken = getCookieValue("accessToken");
 
