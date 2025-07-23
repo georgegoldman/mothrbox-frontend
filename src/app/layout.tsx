@@ -1,3 +1,5 @@
+import Footer from "@/components/footer";
+import Navbar from "@/components/navbar";
 import StructuredData from "@/components/structured-data";
 import "@/styles/globals.css";
 
@@ -90,7 +92,14 @@ export default function RootLayout({
         <div className="hidden lg:block">
           <Toaster richColors position="top-right" closeButton />
         </div>
-        {children}
+
+        <main className="bg-[#000000]">
+          <div className="mb-10 pt-5">
+            <Navbar />
+          </div>
+          {children}
+          <Footer />
+        </main>
       </body>
     </html>
   );

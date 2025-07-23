@@ -4,8 +4,18 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+  --font-sans:
+    var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* === Your custom glow color added to the @theme block === */
+  --color-angular-purple: #9e5ed6;
+
+  /* === Your box-shadow utilities added to the @theme block === */
+  /* These will now generate classes like shadow-angular-glow, etc. */
+  --shadow-angular-glow: 0 0 15px 5px rgba(158, 94, 214, 0.7);
+  --shadow-angular-glow-md: 0 0 25px 8px rgba(158, 94, 214, 0.8);
+  --shadow-angular-glow-lg: 0 0 40px 12px rgba(158, 94, 214, 0.9);
 }
 
 @theme inline {
@@ -121,5 +131,71 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .shadow-inner-deep {
+    box-shadow: inset 0 6px 12px rgba(128, 90, 213, 0.5); /* Tailwind's purple-500 */
+  }
+
+  .shadow-inner-deeper {
+    box-shadow: inset 0 0 22px rgba(158, 94, 214, 1);
+  }
+
+  .shadow-inner-glow {
+    box-shadow: inset 0 0 15px rgba(158, 94, 214, 1); /* More glow-style */
+  }
+
+  .glow-deeper {
+    /* Renamed from bg-glow-deeper as it's a box-shadow, not background */
+    box-shadow: inset 0 0 22px rgba(158, 94, 214, 1);
+  }
+
+  /* === Keyframes and animation utilities for glow-pulse, glow-fade, and twinkle === */
+  @keyframes glow-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 15px 5px rgba(158, 94, 214, 0.7);
+    }
+    50% {
+      box-shadow: 0 0 30px 10px rgba(158, 94, 214, 1);
+    }
+  }
+
+  .animate-lamp-glow {
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes glow-fade {
+    0%,
+    100% {
+      opacity: 0.7;
+      box-shadow: 0 0 15px 5px rgba(158, 94, 214, 0.7);
+    }
+    50% {
+      opacity: 1;
+      box-shadow: 0 0 30px 10px rgba(158, 94, 214, 1);
+    }
+  }
+
+  .animate-lamp-glow-fade {
+    animation: glow-fade 2.5s ease-in-out infinite;
+  }
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.4);
+    }
+  }
+
+  .animate-twinkle {
+    animation: twinkle 3s infinite ease-in-out;
   }
 }
