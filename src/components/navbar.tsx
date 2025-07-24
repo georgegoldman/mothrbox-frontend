@@ -6,6 +6,7 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import MobileSidebar from "./mobile-sidebar";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +41,7 @@ export default function Navbar() {
   // Define navigation links in one place for reuse
   const navigationLinks = [
     {
-      href: "#features",
+      href: "features",
       label: "Features",
     },
 
@@ -62,8 +63,10 @@ export default function Navbar() {
     },
   ];
 
+  const isPathname = usePathname();
+
   return (
-    <nav className="mx-auto max-w-[825px] rounded-2xl border border-white/30 px-5 py-[10px] text-white">
+    <nav className="mx-auto max-w-[825px] rounded-2xl border-white/30 px-5 py-[10px] text-white lg:border">
       <div className="flex items-center justify-between">
         <Link href="/">
           <Image
@@ -90,7 +93,7 @@ export default function Navbar() {
               <Link
                 key={idx}
                 href={link.href}
-                className="text-sm transition hover:text-[#9E5ED6]"
+                className={`text-sm transition hover:text-[#9E5ED6] ${isPathname === link.href ? "text-[#9E5ED6]" : ""}`}
               >
                 {link.label}
               </Link>
