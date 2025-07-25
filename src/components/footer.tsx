@@ -49,79 +49,67 @@ export default function Footer() {
         </div>
 
         <div>
-          <h3 className="mb-4 font-bold">Links</h3>
+          <h3 className="mb-4 text-xl font-bold">Links</h3>
           <ul className="space-y-5">
-            <div>
-              <div>
-                <li>
-                  <a
-                    href="https://docs.mothrbox.xyz/"
-                    target="_blank"
-                    referrerPolicy="no-referrer"
-                    className="transition hover:text-purple-600"
-                  >
-                    Docs
-                  </a>
-                </li>
-              </div>
+            <li>
+              <a
+                href="https://docs.mothrbox.xyz/"
+                target="_blank"
+                referrerPolicy="no-referrer"
+                className="transition hover:text-purple-600"
+              >
+                Docs
+              </a>
+            </li>
 
-              <div>
-                <li>
-                  <a
-                    href="mailto:mothrbox.gold@gmail.com"
-                    referrerPolicy="no-referrer"
-                    target="_blank"
-                    className="transition hover:text-purple-600"
-                  >
-                    mothrbox.gold@gmail.com
-                  </a>
-                </li>
-              </div>
+            <li>
+              <a
+                href="mailto:mothrbox.gold@gmail.com"
+                referrerPolicy="no-referrer"
+                target="_blank"
+                className="transition hover:text-purple-600"
+              >
+                mothrbox.gold@gmail.com
+              </a>
+            </li>
 
-              <div>
-                <li>
-                  <a
-                    href="https://github.com/georgegoldman/mothrbox"
-                    referrerPolicy="no-referrer"
-                    target="_blank"
-                    className="transition hover:text-purple-600"
-                  >
-                    Our GitHub
-                  </a>
-                </li>
-              </div>
+            <li>
+              <a
+                href="https://github.com/georgegoldman/mothrbox"
+                referrerPolicy="no-referrer"
+                target="_blank"
+                className="transition hover:text-purple-600"
+              >
+                Our GitHub
+              </a>
+            </li>
 
-              <div>
-                <li>
-                  <a
-                    href="/docs/mothrbox_privacy_policy.pdf"
-                    target="_blank"
-                    referrerPolicy="no-referrer"
-                    className="transition hover:text-purple-600"
-                  >
-                    Privacy
-                  </a>
-                </li>
-              </div>
+            <li>
+              <a
+                href="/docs/mothrbox_privacy_policy.pdf"
+                target="_blank"
+                referrerPolicy="no-referrer"
+                className="transition hover:text-purple-600"
+              >
+                Privacy
+              </a>
+            </li>
 
-              <div>
-                <li>
-                  <a
-                    href="/docs/mothrbox_terms_of_service.pdf"
-                    target="_blank"
-                    referrerPolicy="no-referrer"
-                    className="transition hover:text-purple-600"
-                  >
-                    Terms
-                  </a>
-                </li>
-              </div>
-            </div>
+            <li>
+              <a
+                href="/docs/mothrbox_terms_of_service.pdf"
+                target="_blank"
+                referrerPolicy="no-referrer"
+                className="transition hover:text-purple-600"
+              >
+                Terms
+              </a>
+            </li>
           </ul>
         </div>
 
         <div>
-          <h3 className="mb-4 font-bold">Newsletter</h3>
+          <h3 className="mb-4 text-xl font-bold">Newsletter</h3>
           <p className="mb-4">
             Stay updated with everything related to Mothrbox
           </p>

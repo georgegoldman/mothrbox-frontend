@@ -41,7 +41,7 @@ export default function Navbar() {
   // Define navigation links in one place for reuse
   const navigationLinks = [
     {
-      href: "features",
+      href: "/features",
       label: "Features",
     },
 
@@ -52,8 +52,8 @@ export default function Navbar() {
     },
 
     {
-      href: "/dashboard",
-      label: "Dashboard",
+      href: "/support",
+      label: "Support",
     },
 
     {
@@ -93,7 +93,7 @@ export default function Navbar() {
               <Link
                 key={idx}
                 href={link.href}
-                className={`text-sm transition hover:text-[#9E5ED6] ${isPathname === link.href ? "text-[#9E5ED6]" : ""}`}
+                className={`text-sm transition ${isPathname === link.href ? "rounded-xl bg-gradient-to-b from-[#9E5ED6] to-[#000000] px-5 py-2" : "hover:text-[#9E5ED6]"}`}
               >
                 {link.label}
               </Link>
