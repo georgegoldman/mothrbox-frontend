@@ -1,8 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import { uploadFile } from "@/app/actions/auth";
 import { Header } from "@/components/header";
+import HistoryPage from "@/components/history";
 import { StatusBadge } from "@/components/status-badge";
+import { extractApiError } from "@/lib/axios";
+import { useEncryptFile } from "@/lib/dal/encrypt";
+import { getCookieValue } from "@/lib/helpers";
 import type { StatusType } from "@/lib/types";
 import { ChevronDown, Copy, File, Upload } from "lucide-react";
 import { useState } from "react";
@@ -16,6 +23,7 @@ export default function EncryptPage() {
   const [alias, setAlias] = useState<string>("");
   // const [tempStore, setTempStore] = useState(true);
   const [progress, setProgress] = useState(0);
+  const { mutateAsync: encrypt } = useEncryptFile();
 
   const simulateProgress = () => {
     let value = 0;
@@ -36,22 +44,21 @@ export default function EncryptPage() {
       return;
     }
 
-    toast.promise(uploadFile(selectedFile, alias), {
+    const payload = {
+      file: selectedFile,
+      alias,
+      owner: getCookieValue("userId") ?? "unknown", // Replace with your logic
+    };
+
+    toast.promise(encrypt(payload), {
       loading: "Encrypting file...",
-      success: (result) => {
-        console.log(result);
-        // Reset UI
+      success: () => {
         setSelectedFile(null);
+        setAlias("");
         setProgress(0);
         return "File encrypted successfully!";
       },
-
-      error: (err: unknown) => {
-        if (err && typeof err === "object" && "message" in err) {
-          return (err as { message?: string }).message ?? "File upload failed!";
-        }
-        return "File upload failed!";
-      },
+      error: (err) => extractApiError(err),
     });
   };
 
@@ -262,7 +269,8 @@ export default function EncryptPage() {
             Recent History
           </h2>
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <HistoryPage />
+            {/* <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-700 text-left text-xs text-gray-400">
                   <th className="pb-2">File/Text</th>
@@ -330,7 +338,7 @@ export default function EncryptPage() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table> */}
           </div>
         </div>
       </div>

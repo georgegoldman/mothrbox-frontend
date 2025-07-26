@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import Link from "next/link";
@@ -5,8 +9,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputField } from "@/components/ui/input-field";
-import { loginAction } from "@/app/actions/auth";
 import { toast } from "sonner";
+import { useLogin } from "@/lib/dal/auth";
+import { extractApiError } from "@/lib/axios";
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -24,37 +29,33 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
+  const { mutateAsync: login } = useLogin();
+
   const onSubmit = async (data: LoginFormValues) => {
     try {
       toast.promise(
-        loginAction(data).then((result) => {
-          // Set cookies here if needed
-          if (result.accessToken) {
-            document.cookie = `accessToken=${result.accessToken}; path=/; max-age=86400; secure; samesite=lax`;
+        login(data).then((result) => {
+          // Set cookies if needed
+          if (result?.accessToken) {
+            document.cookie = `accessToken=${result?.accessToken}; path=/; max-age=86400; secure; samesite=lax`;
           }
-          if (result._id) {
-            document.cookie = `userId=${result._id}; path=/; max-age=86400; secure; samesite=lax`;
+
+          if (result?._id) {
+            document.cookie = `userId=${result?._id}; path=/; max-age=86400; secure; samesite=lax`;
           }
+
           // Navigate to dashboard
-          window.location.href = "/dashboard"; // full reload to trigger middleware
+          window.location.href = "/dashboard";
           return "Login successful!";
         }),
         {
           loading: "Logging in...",
           success: (msg) => msg,
-          error: (err: unknown) => {
-            if (err && typeof err === "object" && "message" in err) {
-              return (err as { message?: string }).message ?? "Login failed!";
-            }
-            return "Login failed!";
-          },
+          error: (err) => extractApiError(err),
         },
       );
     } catch (err) {
-      // Optional: handle unexpected errors
       console.error("Login error:", err);
-    } finally {
-      // setIsLoading(false);
     }
   };
 

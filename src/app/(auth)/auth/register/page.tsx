@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -5,9 +9,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { InputField } from "@/components/ui/input-field";
-import { registerAction } from "@/app/actions/auth";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
+import { useRegister } from "@/lib/dal/auth";
+import { extractApiError } from "@/lib/axios";
 
 // Password regex for validation
 const passwordRegex =
@@ -66,41 +71,34 @@ export default function RegisterPage() {
     evaluatePasswordStrength(passwordValue || "");
   }, [passwordValue]);
 
+  const { mutateAsync: registerUser } = useRegister();
+
   const onSubmit = async (data: RegisterFormValues) => {
     try {
       toast.promise(
-        registerAction({
-          username: data.username,
-          email: data.email,
-          phone: data.phone,
-          password: data.password,
-        }).then((result) => {
-          // Set cookies here if needed
-          if (result.accessToken) {
-            document.cookie = `accessToken=${result.accessToken}; path=/; max-age=86400; secure; samesite=lax`;
+        registerUser(data).then((result) => {
+          // Set cookies if needed
+          if (result?.accessToken) {
+            document.cookie = `accessToken=${result?.accessToken}; path=/; max-age=86400; secure; samesite=lax`;
           }
-          if (result._id) {
-            document.cookie = `userId=${result._id}; path=/; max-age=86400; secure; samesite=lax`;
+
+          if (result?._id) {
+            document.cookie = `userId=${result?._id}; path=/; max-age=86400; secure; samesite=lax`;
           }
+
           // Navigate to dashboard
-          window.location.href = "/dashboard"; // full reload to trigger middleware
-          return "Created account successful!";
+          window.location.href = "/dashboard";
+          return "Created account successfully!";
         }),
+
         {
           loading: "Creating account...",
           success: (msg) => msg,
-          error: (err: unknown) => {
-            if (err && typeof err === "object" && "message" in err) {
-              return (err as { message?: string }).message ?? "Login failed!";
-            }
-            return "Registration failed!";
-          },
+          error: (err) => extractApiError(err),
         },
       );
     } catch (err) {
       console.error("Registration error:", err);
-    } finally {
-      // setIsLoading(false);
     }
   };
 

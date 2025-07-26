@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import type React from "react";
@@ -22,19 +25,29 @@ import { useSidebar } from "@/hooks/use-sidebar";
 import { logout } from "@/app/actions/auth";
 import Image from "next/image";
 import { toast } from "sonner";
+import { useLogout } from "@/lib/dal/auth";
 
 export function Sidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [apiDocsOpen, setApiDocsOpen] = useState(false);
   const { isOpen, toggleSidebar, isMobile, closeSidebar } = useSidebar();
+  const { mutateAsync: logoutUser } = useLogout();
 
   const handleLogout = async () => {
-    toast.promise(logout(), {
-      loading: "Logging out...",
-      success: "Logged out successfully",
-      error: "Error during logout",
-    });
-    window.location.href = "/auth/login";
+    try {
+      toast.promise(logoutUser(), {
+        loading: "Logging out...",
+        success: "Logged out successfully",
+        error: "Error during logout",
+      });
+
+      // Optional: Add a small delay for UX smoothness
+      setTimeout(() => {
+        window.location.href = "/auth/login";
+      }, 300);
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
   // const handleLogout = async () => {
