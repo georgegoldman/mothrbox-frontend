@@ -6,6 +6,7 @@ import type { EncryptPayload } from "@/lib/types";
 
 export const useEncryptFile = () => {
   return useMutation({
-    mutationFn: (data: EncryptPayload) => encryptFile(data),
+    mutationFn: ({ alias, file, owner }: EncryptPayload) =>
+      encryptFile(file, alias, owner),
   });
 };
