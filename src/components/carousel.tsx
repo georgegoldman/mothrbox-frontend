@@ -1,60 +1,64 @@
-import React, { useEffect } from "react";
-// import type { StaticImageData } from "next/image";
-import Image from "next/image";
-import { useKeenSlider } from "keen-slider/react";
-import "keen-slider/keen-slider.min.css";
-import { trustedDevs } from "public";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
-// interface CarouselProps {
-//   trustedDevs: {
-//     id: number;
-//     image: string;
-//   }[];
-// }
+import {
+  Bash,
+  Docker,
+  Figma,
+  Git,
+  GitHub,
+  OpenAI,
+  VisualStudioCode,
+} from "./svgs/companies";
 
-export default function Carousel() {
-  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
-    loop: true,
-    slides: { perView: 4 },
-    breakpoints: {
-      "(max-width: 640px)": {
-        slides: { perView: 2 },
+export const companies = [
+  { id: "figma", name: "Figma", logo: Figma },
+  { id: "vscode", name: "VS Code", logo: VisualStudioCode },
+  { id: "bash", name: "Terminal", logo: Bash },
+  { id: "docker", name: "Docker", logo: Docker },
+  { id: "openai", name: "OpenAI", logo: OpenAI },
+  { id: "git", name: "Git", logo: Git },
+  { id: "github", name: "GitHub", logo: GitHub },
+];
+
+export function BrandSlider() {
+  const settings = {
+    infinite: true,
+    speed: 4000,
+    autoplay: true,
+    autoplaySpeed: 0,
+    cssEase: "linear",
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    arrows: false,
+    dots: false,
+    pauseOnHover: false,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: { slidesToShow: 3 },
       },
-      "(min-width: 641px) and (max-width: 1024px)": {
-        slides: { perView: 3 },
+      {
+        breakpoint: 640,
+        settings: { slidesToShow: 2 },
       },
-      "(min-width: 1025px) and (max-width: 1280px)": {
-        slides: { perView: 4 },
-      },
-    },
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      instanceRef.current?.next();
-    }, 700);
-
-    return () => clearInterval(interval);
-  }, [instanceRef]);
+    ],
+  };
 
   return (
-    <div className="overflow-none">
-      <div className="keen-slider" ref={sliderRef}>
-        {trustedDevs.map((dev) => (
-          <div
-            key={dev.id}
-            className="keen-slider__slide flex h-[100px] w-[120px] flex-none items-center justify-center"
-          >
-            <Image
-              src={dev.image}
-              alt={`Trusted Dev ${dev.id}`}
-              width={80}
-              height={80}
-              className="object-contain"
+    <Slider {...settings} className="w-full">
+      {companies.map(({ id, name, logo: Logo }) => (
+        <div key={id} className="flex items-center justify-center px-4 py-2">
+          <div className="flex items-center gap-2">
+            <Logo
+              className="h-8 w-auto opacity-80 grayscale transition-all duration-300 hover:opacity-100"
+              aria-label={name}
             />
+            <p className="text-sm font-semibold text-white">{name}</p>
           </div>
-        ))}
-      </div>
-    </div>
+        </div>
+      ))}
+    </Slider>
   );
 }

@@ -6,6 +6,7 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import MobileSidebar from "./mobile-sidebar";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +41,7 @@ export default function Navbar() {
   // Define navigation links in one place for reuse
   const navigationLinks = [
     {
-      href: "#features",
+      href: "/features",
       label: "Features",
     },
 
@@ -51,8 +52,8 @@ export default function Navbar() {
     },
 
     {
-      href: "/dashboard",
-      label: "Dashboard",
+      href: "/support",
+      label: "Support",
     },
 
     {
@@ -62,103 +63,62 @@ export default function Navbar() {
     },
   ];
 
+  const isPathname = usePathname();
+
   return (
-    <nav className="relative z-50 flex items-center justify-between px-4 py-4">
-      <motion.div
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        transition={{ duration: 0.2 }}
-      >
+    <nav className="mx-auto max-w-[825px] rounded-2xl border-white/30 px-5 py-[10px] text-white lg:border">
+      <div className="flex items-center justify-between">
         <Link href="/">
           <Image
-            src="/images/marine_logo.png"
-            alt="logo"
+            src="/images/mtbox-logo.png"
             width={40}
-            height={0}
+            height={40}
+            alt="mothrbox-logo"
           />
         </Link>
-      </motion.div>
 
-      {/* Desktop nav */}
-      <div className="hidden items-center space-x-8 lg:flex">
-        {navigationLinks.map((link, index) => {
-          const NavLink = link.isExternal ? (
-            <a
-              key={index}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-black transition hover:text-purple-600"
-            >
-              {link.label}
-            </a>
-          ) : (
-            <Link
-              key={index}
-              href={link.href}
-              className="text-sm text-black transition hover:text-purple-600"
-            >
-              {link.label}
-            </Link>
-          );
+        <div className="hidden items-center space-x-13 lg:flex">
+          {navigationLinks.map((link, idx) => {
+            const NavLink = link.isExternal ? (
+              <a
+                key={idx}
+                href={link.href}
+                target="_blank"
+                referrerPolicy="no-referrer"
+                className="text-sm transition hover:text-[#9E5ED6]"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={idx}
+                href={link.href}
+                className={`text-sm transition ${isPathname === link.href ? "rounded-xl bg-gradient-to-b from-[#9E5ED6] to-[#000000] px-5 py-2" : "hover:text-[#9E5ED6]"}`}
+              >
+                {link.label}
+              </Link>
+            );
 
-          return (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 * index }}
-              whileHover={{ y: -3 }}
-            >
-              {NavLink}
-            </motion.div>
-          );
-        })}
+            return <React.Fragment key={idx}>{NavLink}</React.Fragment>;
+          })}
+        </div>
+
+        <div className="hidden items-center space-x-4 lg:flex">
+          <Link
+            href="/auth/login"
+            className="rounded-xl border border-[#9E5ED6]/50 px-7 py-3 text-sm font-bold transition-all hover:bg-[#9E5ED6]/20"
+          >
+            Login
+          </Link>
+
+          <Link
+            href="/auth/register"
+            className="shadow-inner-glow rounded-xl border border-[#9E5ED6]/50 px-7 py-3 text-sm font-bold transition-all"
+          >
+            Sign Up
+          </Link>
+        </div>
       </div>
-
-      <div className="hidden items-center space-x-4 lg:flex">
-        {/* <ModeToggle /> */}
-
-        <Link
-          href="/auth/login"
-          className="rounded-xl border border-purple-500 px-7 py-3 text-sm font-bold text-black transition hover:bg-gray-100"
-        >
-          Login
-        </Link>
-
-        <Link
-          href="/auth/register"
-          className="rounded-xl border border-purple-300 bg-black px-7 py-3 text-sm font-bold text-white shadow-[inset_0_0_25px_#6366f1] transition"
-        >
-          Sign Up
-        </Link>
-      </div>
-
-      {/* Mobile menu button */}
-      <motion.button
-        className="flex cursor-pointer items-center justify-center p-2 lg:hidden"
-        onClick={toggleMenu}
-        aria-expanded={isOpen}
-        aria-controls="mobile-menu"
-        aria-label={isOpen ? "Close menu" : "Open menu"}
-        whileTap={{ scale: 0.9 }}
-      >
-        <Menu size={30} />
-      </motion.button>
-
-      {/* Backdrop */}
-      <div
-        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
-          isOpen ? "visible opacity-100" : "invisible opacity-0"
-        } lg:hidden`}
-      />
-
-      {/* Mobile sidebar */}
-      <MobileSidebar
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        links={navigationLinks}
-      />
     </nav>
   );
 }
