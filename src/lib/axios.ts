@@ -1,4 +1,7 @@
 import axios, { type AxiosError } from "axios";
+import { getCookieValue } from "./helpers";
+
+const token = getCookieValue("accessToken");
 
 export const api = axios.create({
   baseURL:
@@ -6,6 +9,7 @@ export const api = axios.create({
     "https://ambitious-garnet-mothrbox-backend-bdd516c0.koyeb.app",
   headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
   },
   withCredentials: true,
 });

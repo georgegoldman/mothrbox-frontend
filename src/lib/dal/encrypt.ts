@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { useMutation } from "@tanstack/react-query";
 import { encryptFile } from "@/lib/api/encrypt";
 import type { EncryptPayload } from "@/lib/types";

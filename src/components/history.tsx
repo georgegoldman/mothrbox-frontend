@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
@@ -35,14 +32,14 @@ export default function HistoryPage() {
     );
   }
 
-  if (data.docs.length === 0) {
-    return (
-      <div className="text-muted-foreground p-6 text-sm">No history yet 😴</div>
-    );
-  }
+  // if (data.docs.length === 0) {
+  //   return (
+  //     <div className="text-muted-foreground p-6 text-sm">No history yet 😴</div>
+  //   );
+  // }
 
   return (
-    <div className="p-6">
+    <div>
       <DataTable columns={columns} data={data.docs} />
     </div>
   );

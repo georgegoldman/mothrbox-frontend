@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import {
@@ -75,14 +70,14 @@ export function DataTable<TData extends object>({
   return (
     <div className="space-y-4">
       <div className="w-full overflow-x-auto rounded-md border">
-        <Table className="min-w-[800px]">
+        <Table className="w-full table-auto">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="px-4 text-left whitespace-nowrap"
+                    className="px-4 text-left whitespace-nowrap text-white"
                   >
                     {header.isPlaceholder
                       ? null

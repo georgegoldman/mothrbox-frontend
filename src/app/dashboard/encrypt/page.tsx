@@ -1,17 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import { uploadFile } from "@/app/actions/auth";
 import { Header } from "@/components/header";
 import HistoryPage from "@/components/history";
-import { StatusBadge } from "@/components/status-badge";
 import { extractApiError } from "@/lib/axios";
 import { useEncryptFile } from "@/lib/dal/encrypt";
 import { getCookieValue } from "@/lib/helpers";
-import type { StatusType } from "@/lib/types";
-import { ChevronDown, Copy, File, Upload } from "lucide-react";
+import { ChevronDown, File, Upload } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -268,7 +262,7 @@ export default function EncryptPage() {
           <h2 className="mb-4 text-base font-medium md:text-lg">
             Recent History
           </h2>
-          <div className="overflow-x-auto">
+          <div>
             <HistoryPage />
             {/* <table className="w-full">
               <thead>

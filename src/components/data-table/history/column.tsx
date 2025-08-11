@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import type { ColumnDef } from "@tanstack/react-table";
 import type { HistoryItem } from "@/lib/types";
 import { formatDistanceToNow } from "date-fns";
@@ -8,23 +5,23 @@ import { formatDistanceToNow } from "date-fns";
 export const columns: ColumnDef<HistoryItem>[] = [
   {
     accessorKey: "filename",
-    header: "Filename",
+    header: "File",
   },
-  {
-    accessorKey: "filesize",
-    header: "Size",
-  },
+  // {
+  //   accessorKey: "filesize",
+  //   header: "Size",
+  // },
   {
     accessorKey: "type",
     header: "Algorithm",
   },
-  {
-    accessorKey: "operation",
-    header: "Operation",
-    cell: ({ row }) => (
-      <span className="capitalize">{row.original.operation}</span>
-    ),
-  },
+  // {
+  //   accessorKey: "operation",
+  //   header: "Operation",
+  //   cell: ({ row }) => (
+  //     <span className="capitalize">{row.original.operation}</span>
+  //   ),
+  // },
   {
     accessorKey: "status",
     header: "Status",

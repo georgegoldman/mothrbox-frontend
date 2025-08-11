@@ -1,5 +1,5 @@
-import { Linkedin, Twitter } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export default function Footer() {
@@ -51,6 +51,15 @@ export default function Footer() {
         <div>
           <h3 className="mb-4 text-xl font-bold">Links</h3>
           <ul className="space-y-5">
+            <li>
+              <Link
+                href="/we-said-no"
+                className="transition hover:text-purple-600"
+              >
+                We Said No
+              </Link>
+            </li>
+
             <li>
               <a
                 href="https://docs.mothrbox.xyz/"
@@ -121,7 +130,7 @@ export default function Footer() {
             />
             <button
               type="submit"
-              className="w-full rounded-md bg-black px-4 py-2 text-white transition hover:bg-gray-800"
+              className="w-full rounded-full bg-[#9E5ED6] px-4 py-2 text-white transition"
             >
               Subscribe
             </button>
