@@ -19,7 +19,7 @@ import {
   X,
 } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
-import { logout } from "@/app/actions/auth";
+// import { logout } from "@/app/actions/auth";
 import Image from "next/image";
 import { toast } from "sonner";
 import { useLogout } from "@/lib/dal/auth";

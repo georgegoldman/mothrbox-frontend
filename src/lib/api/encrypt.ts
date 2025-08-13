@@ -33,6 +33,8 @@ export const encryptFile = async (
 
     return [];
   } catch (err) {
+    console.error(err);
+
     throw new Error("Encryption failed. Please try again.");
   }
 };
