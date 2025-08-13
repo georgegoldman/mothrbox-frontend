@@ -1,11 +1,10 @@
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
 import StructuredData from "@/components/structured-data";
 import "@/styles/globals.css";
 
 import { type Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { Toaster } from "sonner";
+import { QueryProvider } from "./utils/query-provider";
 
 export const metadata: Metadata = {
   title: "Mothrbox",
@@ -76,34 +75,26 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      className={`${montserrat.className}`}
-      suppressHydrationWarning
-    >
-      <head>
-        <StructuredData />
-      </head>
+    <QueryProvider>
+      <html
+        lang="en"
+        className={`${montserrat.className}`}
+        suppressHydrationWarning
+      >
+        <head>
+          <StructuredData />
+        </head>
 
-      <body>
-        <div className="block lg:hidden">
-          <Toaster richColors position="top-center" closeButton />
-        </div>
-        <div className="hidden lg:block">
-          <Toaster richColors position="top-right" closeButton />
-        </div>
-
-        <main className="flex flex-col bg-[#000000] text-white">
-          <div className="mb-5 pt-5 md:mb-10">
-            <Navbar />
+        <body>
+          <div className="block lg:hidden">
+            <Toaster richColors position="top-center" closeButton />
           </div>
-
-          <div className="min-h-screen flex-1">{children}</div>
-          <div className="mt-5 md:mt-10">
-            <Footer />
+          <div className="hidden lg:block">
+            <Toaster richColors position="top-right" closeButton />
           </div>
-        </main>
-      </body>
-    </html>
+          {children}
+        </body>
+      </html>
+    </QueryProvider>
   );
 }
