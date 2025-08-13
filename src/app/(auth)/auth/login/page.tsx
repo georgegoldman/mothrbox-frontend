@@ -31,17 +31,20 @@ export default function LoginPage() {
     try {
       toast.promise(
         login(data).then((result) => {
-          // Set cookies if needed
-          if (result?.accessToken) {
-            document.cookie = `accessToken=${result?.accessToken}; path=/; max-age=86400; secure; samesite=lax`;
+          // Set cookies if we're in the browser
+          if (typeof document !== "undefined" && result?.accessToken) {
+            document.cookie = `accessToken=${result.accessToken}; path=/; max-age=86400; secure; samesite=lax`;
           }
 
-          if (result?._id) {
-            document.cookie = `userId=${result?._id}; path=/; max-age=86400; secure; samesite=lax`;
+          if (typeof document !== "undefined" && result?._id) {
+            document.cookie = `userId=${result._id}; path=/; max-age=86400; secure; samesite=lax`;
           }
 
-          // Navigate to dashboard
-          window.location.href = "/dashboard";
+          // Navigate to dashboard only in the browser
+          if (typeof window !== "undefined") {
+            window.location.href = "/dashboard";
+          }
+
           return "Login successful!";
         }),
         {
