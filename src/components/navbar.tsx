@@ -175,8 +175,8 @@ export default function Navbar() {
                       href={link.href}
                       className={`text-sm transition ${
                         isPathname === link.href
-                          ? "rounded-xl bg-gradient-to-b from-[#9E5ED6] to-[#000000] px-5 py-2"
-                          : "hover:text-[#9E5ED6]"
+                          ? "font-bold text-[#9E5ED6]"
+                          : "hover:text-[#9E5ED6]/50"
                       }`}
                       onClick={() => setIsOpen(false)}
                     >

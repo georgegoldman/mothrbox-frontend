@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="border-t border-white/30 p-5 text-white lg:p-15">
       <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
         <div className="space-y-20">
-          <div className="mb-5 flex items-center gap-x-2">
+          <Link href="/" className="mb-5 flex items-center gap-x-2">
             <Image
               src="/images/mtbox-logo.png"
               alt="logo"
@@ -15,12 +15,12 @@ export default function Footer() {
               height={40}
             />
             <h3 className="text-[24px] font-bold">Mothrbox</h3>
-          </div>
-          <p className="mb-6 max-w-[339px]">
+          </Link>
+          <p className="mb-6 max-w-[339px] text-sm md:text-base">
             Preserving and protecting what is human at the end
           </p>
 
-          <div className="text-sm">
+          <div className="text-sm md:text-base">
             © {new Date().getFullYear()} Mothrbox. All rights reserved.
           </div>
           {/* <div className="flex space-x-4">
@@ -49,12 +49,12 @@ export default function Footer() {
         </div>
 
         <div>
-          <h3 className="mb-4 text-xl font-bold">Links</h3>
-          <ul className="space-y-5">
+          <h3 className="mb-4 text-base font-bold md:text-xl">Links</h3>
+          <ul className="space-y-2 md:space-y-5">
             <li>
               <Link
                 href="/we-said-no"
-                className="transition hover:text-purple-600"
+                className="text-sm transition hover:text-purple-600 md:text-base"
               >
                 We Said No
               </Link>
@@ -65,7 +65,7 @@ export default function Footer() {
                 href="https://docs.mothrbox.xyz/"
                 target="_blank"
                 referrerPolicy="no-referrer"
-                className="transition hover:text-purple-600"
+                className="text-sm transition hover:text-purple-600 md:text-base"
               >
                 Docs
               </a>
@@ -76,7 +76,7 @@ export default function Footer() {
                 href="mailto:mothrbox.gold@gmail.com"
                 referrerPolicy="no-referrer"
                 target="_blank"
-                className="transition hover:text-purple-600"
+                className="text-sm transition hover:text-purple-600 md:text-base"
               >
                 mothrbox.gold@gmail.com
               </a>
@@ -87,7 +87,7 @@ export default function Footer() {
                 href="https://github.com/georgegoldman/mothrbox"
                 referrerPolicy="no-referrer"
                 target="_blank"
-                className="transition hover:text-purple-600"
+                className="text-sm transition hover:text-purple-600 md:text-base"
               >
                 Our GitHub
               </a>
@@ -98,7 +98,7 @@ export default function Footer() {
                 href="/docs/mothrbox_privacy_policy.pdf"
                 target="_blank"
                 referrerPolicy="no-referrer"
-                className="transition hover:text-purple-600"
+                className="text-sm transition hover:text-purple-600 md:text-base"
               >
                 Privacy
               </a>
@@ -109,7 +109,7 @@ export default function Footer() {
                 href="/docs/mothrbox_terms_of_service.pdf"
                 target="_blank"
                 referrerPolicy="no-referrer"
-                className="transition hover:text-purple-600"
+                className="text-sm transition hover:text-purple-600 md:text-base"
               >
                 Terms
               </a>
@@ -118,8 +118,8 @@ export default function Footer() {
         </div>
 
         <div>
-          <h3 className="mb-4 text-xl font-bold">Newsletter</h3>
-          <p className="mb-4">
+          <h3 className="mb-4 text-base font-bold md:text-xl">Newsletter</h3>
+          <p className="mb-4 text-sm md:text-base">
             Stay updated with everything related to Mothrbox
           </p>
           <form className="space-y-3">

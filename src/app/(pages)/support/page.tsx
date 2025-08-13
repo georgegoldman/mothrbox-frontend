@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React from "react";
 
 const support = [
@@ -8,7 +9,7 @@ const support = [
     title: `"How To" Guide And Docs`,
     description:
       "Read tutorials set up guides and everything you need to get started.",
-    link: "#",
+    link: "https://docs.mothrbox.xyz/",
     linkText: "Browse Docs",
   },
 
@@ -17,7 +18,7 @@ const support = [
     title: "Frequently Ask Questions",
     description:
       "Quick answers to common questions, about encryption, security and settings.",
-    link: "#",
+    link: "/we-said-no",
     linkText: "View FAQs",
   },
 
@@ -25,8 +26,8 @@ const support = [
     id: 3,
     title: "API Help & Developers Tools",
     description:
-      "Having issues with integration? Find answers and  example requests.",
-    link: "#",
+      "Having issues with integration? Find answers and example requests.",
+    link: "https://docs.mothrbox.xyz/",
     linkText: "See Dev Tools",
   },
 
@@ -35,10 +36,15 @@ const support = [
     title: "Still Need Support?",
     description:
       "Reach out to our support team at support@mothrbox.xyz or open a ticket.",
-    link: "#",
+    link: "mailto:mothrbox.gold@gmail.com",
     linkText: "Contact Us",
   },
 ];
+
+// helper to detect if a link is external
+function isExternalLink(url: string) {
+  return /^https?:\/\//.test(url) || url.startsWith("mailto:");
+}
 
 export default function SupportPage() {
   return (
@@ -48,34 +54,48 @@ export default function SupportPage() {
           Need Help? We’re Here.
         </h1>
         <p className="text-sm font-medium md:text-xl">
-          Explore our knowledge base, our contact or support team.
+          Explore our knowledge base, or contact our support team.
         </p>
       </div>
 
       <div className="mx-auto max-w-[1000px] space-y-10">
-        {support.map((itm) => (
-          <div
-            key={itm.id}
-            className="w-full rounded-2xl border border-white/10 bg-white/5 px-10 py-15 text-center shadow-lg backdrop-blur-sm"
-          >
-            <h2 className="mb-3 text-xl font-semibold text-white">
-              {itm.title}
-            </h2>
-            <p className="mb-6 text-gray-300">{itm.description}</p>
-            <a
-              href={itm.link}
-              target="_blank"
-              referrerPolicy="no-referrer"
-              className="rounded-full bg-[#9E5ED6] px-5 py-4 text-sm font-bold text-white shadow-[inset_0_12px_20px_rgba(255,255,255,0.5)] transition-all md:px-10"
+        {support.map((itm) => {
+          const external = isExternalLink(itm.link);
+
+          return (
+            <div
+              key={itm.id}
+              className="w-full rounded-2xl border border-white/10 bg-white/5 px-10 py-15 text-center shadow-lg backdrop-blur-sm"
             >
-              {itm.linkText}
-            </a>
-          </div>
-        ))}
+              <h2 className="mb-3 text-xl font-semibold text-white">
+                {itm.title}
+              </h2>
+              <p className="mb-6 text-gray-300">{itm.description}</p>
+
+              {external ? (
+                <a
+                  href={itm.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full bg-[#9E5ED6] px-5 py-4 text-sm font-bold text-white shadow-[inset_0_12px_20px_rgba(255,255,255,0.5)] transition-all md:px-10"
+                >
+                  {itm.linkText}
+                </a>
+              ) : (
+                <Link
+                  href={itm.link}
+                  className="rounded-full bg-[#9E5ED6] px-5 py-4 text-sm font-bold text-white shadow-[inset_0_12px_20px_rgba(255,255,255,0.5)] transition-all md:px-10"
+                >
+                  {itm.linkText}
+                </Link>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       <div className="mx-auto max-w-[1100px]">
-        <h3 className="text-center text-lg font-bold">
+        <h3 className="text-center text-base font-bold md:text-lg">
           We typically respond within 24–48 hours. For urgent issues, include
           your account ID and a detailed description.
         </h3>
