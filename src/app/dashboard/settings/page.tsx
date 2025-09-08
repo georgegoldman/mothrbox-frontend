@@ -3,72 +3,48 @@
 import { useState } from "react";
 import { Header } from "@/components/header";
 import { useUser } from "@/app/contexts/user-context";
-import { deleteAccount } from "@/app/actions/auth";
-import { Modal } from "@/components/modal";
-import { getCookieValue } from "@/lib/helpers";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import { Edit3 } from "lucide-react";
+import EyeIcon from "public/images/eye-icon";
+import Image from "next/image";
 
 export default function SettingsPage() {
   const [usageNotification, setUsageNotification] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [confirmationText, setConfirmationText] = useState("");
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
 
   const { initials, user } = useUser();
 
-  const handleDeleteAccount = async () => {
-    if (!user?._id) return;
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select a valid image file");
+        return;
+      }
 
-    const accessToken = getCookieValue("accessToken");
-    if (!accessToken) return;
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size should be less than 5MB");
+        return;
+      }
 
-    if (confirmationText.trim().toLowerCase() !== "delete my account") {
-      setError(true);
-      return;
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfileImage(e.target?.result as string);
+        toast.success("Profile image updated successfully");
+      };
+      reader.readAsDataURL(file);
     }
+  };
 
-    setLoading(true);
-
-    try {
-      toast.promise(
-        deleteAccount({ accessToken }).then(() => {
-          // Clear cookies
-          document.cookie = "accessToken=; Max-Age=0; path=/;";
-          document.cookie = "userId=; Max-Age=0; path=/;";
-
-          // Remove from localStorage
-          localStorage.removeItem("user");
-
-          // Close modal + reset UI
-          setIsModalOpen(false);
-          setConfirmationText("");
-          setError(false);
-
-          // Redirect
-          window.location.href = "/";
-
-          return "Account successfully deleted";
-        }),
-        {
-          loading: "Deleting your account...",
-          success: (msg) => msg,
-          error: (err: unknown) => {
-            if (err && typeof err === "object" && "message" in err) {
-              return (
-                (err as { message?: string }).message ?? "Deletion failed!"
-              );
-            }
-            return "Deletion failed!";
-          },
-        },
-      );
-    } catch (error) {
-      console.error("Delete error:", error);
-    } finally {
-      setLoading(false);
-    }
+  const handleEditClick = () => {
+    const fileInput = document.getElementById(
+      "profile-image-upload",
+    ) as HTMLInputElement;
+    fileInput?.click();
   };
 
   return (
@@ -78,151 +54,87 @@ export default function SettingsPage() {
       {/* Wrap the main content in a motion.div for a subtle entrance animation */}
       <div className="p-3 sm:p-4 md:p-6">
         {/* Profile Section */}
-        <div className="mb-10">
-          <div className="flex flex-col items-center gap-3 md:flex-row md:items-start md:gap-8">
+        <div className="mb-8">
+          <div className="flex items-start gap-6">
             {/* Profile Image */}
-            <div className="relative md:mb-0">
-              <div className="relative flex size-[128px] items-center justify-center overflow-hidden rounded-full border bg-teal-700 text-6xl font-bold text-white">
-                {initials}
+            <div className="relative">
+              <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-orange-500 text-2xl font-bold text-white sm:h-32 sm:w-32 sm:text-3xl">
+                {profileImage ? (
+                  <Image
+                    src={profileImage}
+                    alt="Profile"
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                ) : (
+                  initials
+                )}
               </div>
-              {/* <button
-                className="absolute right-0 bottom-0 rounded-full bg-purple-600 p-2 text-white shadow-lg hover:bg-purple-700"
+              <button
+                onClick={handleEditClick}
+                className="absolute -right-1 -bottom-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#7D78FF] text-white shadow-lg hover:bg-[#6B66E5] sm:h-10 sm:w-10"
                 aria-label="Edit profile picture"
               >
-                <Pencil className="h-4 w-4" />
-              </button> */}
+                <Edit3 className="h-4 w-4 sm:h-5 sm:w-5" />
+              </button>
+              {/* Hidden file input */}
+              <input
+                id="profile-image-upload"
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
             </div>
 
             {/* Profile Info */}
-            <div className="text-center md:text-left">
-              <h2 className="mb-1 text-2xl font-bold text-white">
-                {user?.username}
+            <div className="flex-1">
+              <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl">
+                {user?.username ?? "Michael John"}
               </h2>
-              <p className="mb-4 text-gray-400">{user?.email}</p>
-
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="inline-flex items-center rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-500 transition-colors hover:bg-red-500/20"
-              >
-                Delete Account
-              </button>
-
-              {/* Delete Account Modal */}
-              <Modal
-                isOpen={isModalOpen}
-                onClose={() => {
-                  setIsModalOpen(false);
-                  setConfirmationText("");
-                  setError(false);
-                }}
-                title="Confirm Account Deletion"
-                footer={
-                  <div className="flex justify-end space-x-3">
-                    <button
-                      onClick={() => {
-                        setIsModalOpen(false);
-                        setConfirmationText("");
-                        setError(false);
-                      }}
-                      className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-700"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={handleDeleteAccount}
-                      disabled={loading}
-                      className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                      {loading ? (
-                        <div className="flex items-center">
-                          <svg
-                            className="mr-2 h-4 w-4 animate-spin text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                            ></path>
-                          </svg>
-                          <span>Deleting...</span>
-                        </div>
-                      ) : (
-                        "Delete Account"
-                      )}
-                    </button>
-                  </div>
-                }
-              >
-                <div className="space-y-4">
-                  <p className="text-sm text-gray-300">
-                    This action cannot be undone. Please type{" "}
-                    <span className="font-medium text-red-400">
-                      &quot;delete my account&quot;
-                    </span>{" "}
-                    to confirm.
-                  </p>
-
-                  <div>
-                    <input
-                      type="text"
-                      className={`w-full rounded-lg border ${
-                        error ? "border-red-500" : "border-gray-700"
-                      } bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none`}
-                      value={confirmationText}
-                      onChange={(e) => {
-                        setConfirmationText(e.target.value);
-                        if (error) setError(false); // Reset error on change
-                      }}
-                      placeholder='Type "delete my account"'
-                    />
-                    {error && (
-                      <p className="mt-2 text-xs text-red-400">
-                        Please type the exact phrase to confirm deletion
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </Modal>
+              <p className="text-sm text-white sm:text-base">
+                {user?.email ?? "Michealjohn@gmail.com"}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Notification Settings */}
+        {/* Reset Password Button */}
         <div className="mb-8">
-          <h3 className="mb-4 text-lg font-medium text-white">Notifications</h3>
+          <button
+            className="flex h-[20px] items-center justify-center gap-2 rounded-lg border border-[#7D78FFB2] px-6 py-2 text-sm font-medium text-[#7D78FF] transition hover:opacity-90 sm:px-8 sm:py-4 sm:text-base"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(125, 120, 255, 0.1) 0%, rgba(210, 0, 253, 0.1) 100%)",
+            }}
+          >
+            <EyeIcon />
+            Reset Password
+          </button>
+        </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center">
-              <label className="relative inline-flex cursor-pointer items-center">
-                <input
-                  type="checkbox"
-                  className="peer sr-only"
-                  checked={usageNotification}
-                  onChange={() => setUsageNotification(!usageNotification)}
-                />
-                <Switch className="data-[state=checked]:bg-purple-500 data-[state=unchecked]:bg-gray-500" />
-                <span className="ml-3 text-sm text-gray-300">
-                  Email me when my usage exceeds 80% of quota
-                </span>
-              </label>
-            </div>
+        {/* Email Notification Toggle */}
+        <div className="mb-8">
+          <div className="flex items-center gap-4">
+            <label className="relative inline-flex cursor-pointer items-center">
+              <input
+                type="checkbox"
+                className="peer sr-only"
+                checked={usageNotification}
+                onChange={() => setUsageNotification(!usageNotification)}
+              />
+              <Switch className="data-[state=checked]:bg-[#7D78FF] data-[state=unchecked]:bg-gray-500" />
+            </label>
+            <span className="text-sm text-white sm:text-base">
+              Email me when my usage exceeds 80% of quota
+            </span>
           </div>
         </div>
 
         {/* Save Button */}
         <div className="mt-8">
-          <button className="w-full rounded-md bg-purple-600 py-3 text-center font-medium text-white hover:bg-purple-700 md:max-w-md">
+          <button className="w-full rounded-lg bg-[#7D78FF] py-3 text-center font-medium text-white transition hover:bg-[#6B66E5] sm:py-4">
             Save changes
           </button>
         </div>
