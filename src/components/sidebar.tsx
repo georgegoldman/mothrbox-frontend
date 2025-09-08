@@ -311,7 +311,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                             : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
                         }`}
                       >
-                        Auth
+                        Authentication
                       </Link>
 
                       <Link
