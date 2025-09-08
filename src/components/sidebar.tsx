@@ -17,6 +17,7 @@ import {
   ChevronDown,
   ChevronRight,
   X,
+  Wallet,
 } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
 // import { logout } from "@/app/actions/auth";
@@ -152,6 +153,23 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
               >
                 <BarChart2 className="h-4 w-4 flex-shrink-0" />
                 {isOpen && <span className="truncate">Overview</span>}
+              </Link>
+
+              <Link
+                href="/dashboard/wallet"
+                onClick={() => {
+                  if (isMobile) {
+                    closeSidebar();
+                  }
+                }}
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                  isActive("/dashboard/wallet")
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
+                }`}
+              >
+                <Wallet className="h-4 w-4 flex-shrink-0" />
+                {isOpen && <span className="truncate">Wallet</span>}
               </Link>
 
               <Link
@@ -293,7 +311,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                             : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
                         }`}
                       >
-                        Auth
+                        Authentication
                       </Link>
 
                       <Link
