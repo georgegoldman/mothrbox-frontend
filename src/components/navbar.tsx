@@ -6,6 +6,8 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { usePathname } from "next/navigation";
+import { ConnectButton } from "@mysten/dapp-kit";
+
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -100,13 +102,8 @@ export default function Navbar() {
             >
               Login
             </Link>
-
-            <Link
-              href="/auth/register"
-              className="shadow-inner-glow rounded-xl border border-[#9E5ED6]/50 px-7 py-3 text-sm font-bold transition-all"
-            >
-              Sign Up
-            </Link>
+            
+            <ConnectButton className="!bg-[#9E5ED6] !text-white !rounded-xl !px-5 !py-3 !text-sm !font-bold hover:!opacity-80 transition-all" />
           </div>
 
           {/* Mobile Menu Button */}
@@ -188,19 +185,15 @@ export default function Navbar() {
                 <hr className="my-4 border-white/20" />
 
                 {/* Auth Links */}
+                <div className="mb-4">
+                  <ConnectButton className="!w-full !justify-center !bg-[#9E5ED6] !text-white !rounded-xl !px-5 !py-3 !text-sm !font-bold" />
+                </div>
                 <Link
                   href="/auth/login"
                   onClick={() => setIsOpen(false)}
                   className="rounded-xl border border-[#9E5ED6]/50 px-7 py-3 text-sm font-bold transition-all hover:bg-[#9E5ED6]/20"
                 >
                   Login
-                </Link>
-                <Link
-                  href="/auth/register"
-                  onClick={() => setIsOpen(false)}
-                  className="shadow-inner-glow rounded-xl border border-[#9E5ED6]/50 px-7 py-3 text-sm font-bold transition-all"
-                >
-                  Sign Up
                 </Link>
               </nav>
             </motion.div>

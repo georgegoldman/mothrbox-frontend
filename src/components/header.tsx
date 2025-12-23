@@ -3,6 +3,9 @@
 import { Bell, LoaderCircle, PanelLeft } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useUser } from "@/app/contexts/user-context";
+import { useCurrentAccount } from "@mysten/dapp-kit";
+import { formatAddress } from "@mysten/sui/utils";
+
 
 interface HeaderProps {
   title: string;
@@ -13,6 +16,8 @@ export function Header({ title, subtitle }: HeaderProps) {
   const { toggleSidebar } = useSidebar();
 
   const { user, initials, loading } = useUser();
+  const currentAccount = useCurrentAccount();
+
 
   return (
     <header className="flex h-[72.67px] border-b border-gray-800 p-2 md:flex-row md:items-center md:justify-between md:p-4">
@@ -74,14 +79,29 @@ export function Header({ title, subtitle }: HeaderProps) {
           </div>
         ) : (
           // Optional: handle case when user is null and not loading
-          <div className="flex items-center gap-2">
-            <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border bg-gray-200 font-bold text-white">
-              {/* Placeholder for no user */}?
+          // If no user but wallet is connected, show wallet info
+          currentAccount ? (
+            <div className="flex min-w-[200px] items-center gap-3 rounded-full border border-gray-200 px-2 py-1">
+              <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border bg-purple-700 font-bold text-white">
+                W
+              </div>
+              <div className="hidden md:block">
+                <p className="text-sm font-medium">
+                  {formatAddress(currentAccount.address)}
+                </p>
+                <p className="text-xs text-gray-400">Connected Wallet</p>
+              </div>
             </div>
-            <div className="hidden md:block">
-              <p className="text-sm font-medium">No user data</p>
+          ) : (
+            <div className="flex items-center gap-2">
+              <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border bg-gray-200 font-bold text-white">
+                {/* Placeholder for no user */}?
+              </div>
+              <div className="hidden md:block">
+                <p className="text-sm font-medium">No user data</p>
+              </div>
             </div>
-          </div>
+          )
         )}
       </div>
     </header>

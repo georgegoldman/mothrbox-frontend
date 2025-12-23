@@ -28,7 +28,9 @@ export async function middleware(request: NextRequest) {
 
   // 🛡️ un-authenticated users can't route to /dashboard
   if (pathname.startsWith("/dashboard")) {
-    if (!accessToken) {
+    const walletConnected = (await cookieStore).get("wallet-connected")?.value;
+    
+    if (!accessToken && !walletConnected) {
       console.log("No token found, redirecting...");
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
@@ -40,8 +42,10 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/auth/login") ||
     pathname.startsWith("/auth/register")
   ) {
-    if (accessToken) {
-      console.log(`Token (${accessToken}) found, redirecting...`);
+    const walletConnected = (await cookieStore).get("wallet-connected")?.value;
+
+    if (accessToken || walletConnected) {
+      console.log(`Token or Wallet found, redirecting...`);
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }
