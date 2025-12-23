@@ -1,7 +1,15 @@
 @import "tailwindcss";
+
 @import "tw-animate-css";
 
+@layer utilities {
+  [data-radix-popper-content-wrapper] {
+    z-index: 9999 !important;
+  }
+}
+
 @custom-variant dark (&:is(.dark *));
+
 
 @theme {
   --font-sans:

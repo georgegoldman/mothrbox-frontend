@@ -18,8 +18,11 @@ import {
   ChevronRight,
   X,
   Wallet,
+  CreditCard,
 } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
+import { useDisconnectWallet } from "@mysten/dapp-kit";
+
 // import { logout } from "@/app/actions/auth";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -30,9 +33,17 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
   const [apiDocsOpen, setApiDocsOpen] = useState(false);
   const { isOpen, toggleSidebar, isMobile, closeSidebar } = useSidebar();
   const { mutateAsync: logoutUser } = useLogout();
+  const { mutate: disconnect } = useDisconnectWallet();
+
 
   const handleLogout = async () => {
     try {
+      // Disconnect wallet first
+      disconnect();
+
+      // Clear the wallet-connected cookie client-side
+      document.cookie = "wallet-connected=; path=/; max-age=0";
+
       toast.promise(logoutUser(), {
         loading: "Logging out...",
         success: "Logged out successfully",
@@ -372,6 +383,23 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
               </Link>
 
               <Link
+                href="/dashboard/subscription"
+                onClick={() => {
+                  if (isMobile) {
+                    closeSidebar();
+                  }
+                }}
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                  isActive("/dashboard/subscription")
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
+                }`}
+              >
+                <CreditCard className="h-4 w-4 flex-shrink-0" />
+                {isOpen && <span className="truncate">Subscription</span>}
+              </Link>
+
+              <Link
                 href="/dashboard/settings"
                 onClick={() => {
                   if (isMobile) {
@@ -436,6 +464,17 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
           >
             <Unlock className="h-5 w-5" />
             <span className="text-xs">Decrypt</span>
+          </Link>
+          <Link
+            href="/dashboard/subscription"
+            className={`flex flex-col items-center p-2 ${
+              isActive("/dashboard/subscription")
+                ? "text-purple-500"
+                : "text-gray-400"
+            }`}
+          >
+            <CreditCard className="h-5 w-5" />
+            <span className="text-xs">Plans</span>
           </Link>
           <Link
             href="/dashboard/settings"
