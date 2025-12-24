@@ -4,6 +4,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BrandSlider } from "@/components/carousel";
+import { PricingSection } from "@/components/pricing-section";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -66,6 +67,10 @@ export default function HomePage() {
           height={650}
           className="absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
         />
+      </section>
+
+      <section className="relative z-10 mx-auto my-20 max-w-[1250px] bg-black">
+        <PricingSection />
       </section>
 
       <section className="mx-auto my-10 max-w-[1250px]">
