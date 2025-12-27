@@ -8,9 +8,10 @@ import "@mysten/dapp-kit/dist/index.css";
 import { Toaster } from "sonner";
 import { QueryProvider } from "./utils/query-provider";
 import { SuiProvider } from "./utils/sui-provider";
+
+
+
 import { WalletAuthListener } from "@/components/wallet-auth-listener";
-
-
 
 export const metadata: Metadata = {
   title: "Mothrbox",

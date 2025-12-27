@@ -5,25 +5,28 @@ import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 export function WalletAuthListener() {
-  const account = useCurrentAccount();
+  const currentAccount = useCurrentAccount();
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    if (account) {
-      // Set a cookie to indicate wallet is connected
-      // determining domain/path to ensure it works for middleware
-      document.cookie = "wallet-connected=true; path=/; max-age=86400; samesite=lax";
+    if (currentAccount) {
+      // Set a cookie so middleware knows we're logged in
+      document.cookie = "wallet-connected=true; path=/; max-age=86400"; // 1 day
 
-      // Redirect logic
-      if (pathname === "/" || pathname.startsWith("/auth")) {
+      // Redirect if on login/signup pages
+      if (
+        pathname === "/auth" ||
+        pathname.startsWith("/auth/login") ||
+        pathname.startsWith("/auth/signup")
+      ) {
         router.push("/dashboard");
       }
     } else {
-        // Optional: clear cookie if disconnected?
-        // document.cookie = "wallet-connected=; path=/; max-age=0";
+      // Clear cookie if disconnected
+      document.cookie = "wallet-connected=; path=/; max-age=0";
     }
-  }, [account, pathname, router]);
+  }, [currentAccount, router, pathname]);
 
   return null;
 }
