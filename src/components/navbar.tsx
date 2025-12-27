@@ -96,13 +96,6 @@ export default function Navbar() {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden items-center space-x-4 lg:flex">
-            <Link
-              href="/auth/login"
-              className="rounded-xl border border-[#9E5ED6]/50 px-7 py-3 text-sm font-bold transition-all hover:bg-[#9E5ED6]/20"
-            >
-              Login
-            </Link>
-            
             <ConnectButton className="!bg-[#9E5ED6] !text-white !rounded-xl !px-5 !py-3 !text-sm !font-bold hover:!opacity-80 transition-all" />
           </div>
 
@@ -188,13 +181,6 @@ export default function Navbar() {
                 <div className="mb-4">
                   <ConnectButton className="!w-full !justify-center !bg-[#9E5ED6] !text-white !rounded-xl !px-5 !py-3 !text-sm !font-bold" />
                 </div>
-                <Link
-                  href="/auth/login"
-                  onClick={() => setIsOpen(false)}
-                  className="rounded-xl border border-[#9E5ED6]/50 px-7 py-3 text-sm font-bold transition-all hover:bg-[#9E5ED6]/20"
-                >
-                  Login
-                </Link>
               </nav>
             </motion.div>
           </>

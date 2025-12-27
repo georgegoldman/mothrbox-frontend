@@ -73,9 +73,9 @@ export default function HomePage() {
         <PricingSection />
       </section>
 
-      <section className="mx-auto my-10 max-w-[1250px]">
+      {/* <section className="mx-auto my-10 max-w-[1250px]">
         <BrandSlider />
-      </section>
+      </section> */}
     </div>
   );
 }

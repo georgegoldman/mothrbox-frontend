@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useCurrentAccount, ConnectButton } from "@mysten/dapp-kit";
 import {
   ChevronDown,
   Copy,
@@ -16,6 +17,7 @@ import {
   Key,
   Eye as EyeIcon,
   X,
+  Wallet,
 } from "lucide-react";
 import { Header } from "@/components/header";
 import { HistoryLog } from "@/components/history-log";
@@ -23,6 +25,7 @@ import Link from "next/link";
 import { useHistoryData } from "@/hooks/use-history-data";
 
 const WalletPage = () => {
+  const currentAccount = useCurrentAccount();
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -50,6 +53,26 @@ const WalletPage = () => {
   const handleCloseNewAccount = () => {
     setIsCreatingNewAccount(false);
   };
+
+  if (!currentAccount) {
+    return (
+      <div className="min-h-screen bg-black text-white">
+        <Header title="Wallet" subtitle="Manage your wallet" />
+        <div className="flex h-[80vh] flex-col items-center justify-center p-4">
+          <div className="mb-8 text-center">
+             <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-purple-900/30">
+                <Wallet className="h-10 w-10 text-purple-400" />
+             </div>
+             <h2 className="mb-2 text-2xl font-bold">Connect Your Wallet</h2>
+             <p className="max-w-md text-gray-400">
+               Connect your Sui wallet to view your balance, manage assets, and track your transaction history.
+             </p>
+          </div>
+          <ConnectButton className="!bg-[#7D78FF] !text-white !rounded-xl !px-8 !py-4 !text-base !font-bold hover:!opacity-90 transition-all" />
+        </div>
+      </div>
+    );
+  }
 
   // New Account Creation Component
   const NewAccountCreation = () => (

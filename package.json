@@ -20,6 +20,7 @@
     "@hookform/resolvers": "^5.0.1",
     "@mysten/dapp-kit": "^0.19.11",
     "@mysten/sui": "^1.45.2",
+    "@pythnetwork/hermes-client": "^2.1.0",
     "@radix-ui/react-dropdown-menu": "^2.1.14",
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-slot": "^1.2.2",

@@ -31,7 +31,7 @@ export async function middleware(request: NextRequest) {
     const walletConnected = (await cookieStore).get("wallet-connected")?.value;
     
     if (!accessToken && !walletConnected) {
-      console.log("No token found, redirecting...");
+      console.log("No token or wallet found, redirecting...");
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
   }
