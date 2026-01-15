@@ -52,7 +52,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
 
       // Optional: Add a small delay for UX smoothness
       setTimeout(() => {
-        window.location.href = "/auth/login";
+        window.location.href = "/";
       }, 300);
     } catch (error) {
       console.error("Logout failed", error);
