@@ -1,5 +1,10 @@
-export function Particles() {
-  const dots = Array.from({ length: 100 });
+interface ParticlesProps {
+  className?: string;
+  quantity?: number;
+}
+
+export function Particles({ className, quantity = 100 }: ParticlesProps) {
+  const dots = Array.from({ length: quantity });
 
   return (
     <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">

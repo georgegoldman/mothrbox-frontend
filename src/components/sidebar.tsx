@@ -3,7 +3,6 @@
 import type React from "react";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import {
   BarChart2,
@@ -11,53 +10,24 @@ import {
   FileText,
   Key,
   Lock,
-  LogOut,
+
   Settings,
   Unlock,
-  ChevronDown,
-  ChevronRight,
   X,
   Wallet,
-  CreditCard,
 } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
-import { useDisconnectWallet } from "@mysten/dapp-kit";
+
 
 // import { logout } from "@/app/actions/auth";
 import Image from "next/image";
 import { toast } from "sonner";
-import { useLogout } from "@/lib/dal/auth";
+
 
 export function Sidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [apiDocsOpen, setApiDocsOpen] = useState(false);
   const { isOpen, toggleSidebar, isMobile, closeSidebar } = useSidebar();
-  const { mutateAsync: logoutUser } = useLogout();
-  const { mutate: disconnect } = useDisconnectWallet();
 
-
-  const handleLogout = async () => {
-    try {
-      // Disconnect wallet first
-      disconnect();
-
-      // Clear the wallet-connected cookie client-side
-      document.cookie = "wallet-connected=; path=/; max-age=0";
-
-      toast.promise(logoutUser(), {
-        loading: "Logging out...",
-        success: "Logged out successfully",
-        error: "Error during logout",
-      });
-
-      // Optional: Add a small delay for UX smoothness
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 300);
-    } catch (error) {
-      console.error("Logout failed", error);
-    }
-  };
 
   // const handleLogout = async () => {
   //   await logout();
@@ -66,14 +36,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
   // };
 
   // Check if the current path is under API docs
-  const isApiDocsPath = pathname.startsWith("/dashboard/api-docs");
 
-  // Auto-expand the dropdown when navigating to an API docs page
-  useEffect(() => {
-    if (isApiDocsPath) {
-      setApiDocsOpen(true);
-    }
-  }, [isApiDocsPath]);
 
   const isActive = (path: string, exact = false) => {
     if (exact) {
@@ -167,23 +130,6 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
               </Link>
 
               <Link
-                href="/dashboard/wallet"
-                onClick={() => {
-                  if (isMobile) {
-                    closeSidebar();
-                  }
-                }}
-                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                  isActive("/dashboard/wallet")
-                    ? "bg-purple-600 text-white"
-                    : "text-gray-300 hover:bg-gray-800"
-                }`}
-              >
-                <Wallet className="h-4 w-4 flex-shrink-0" />
-                {isOpen && <span className="truncate">Wallet</span>}
-              </Link>
-
-              <Link
                 href="/dashboard/encrypt"
                 onClick={() => {
                   if (isMobile) {
@@ -197,7 +143,41 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                 }`}
               >
                 <Lock className="h-4 w-4 flex-shrink-0" />
-                {isOpen && <span className="truncate">Encrypt File</span>}
+                {isOpen && <span className="truncate">Upload Files</span>}
+              </Link>
+
+              <Link
+                href="/dashboard/files"
+                onClick={() => {
+                  if (isMobile) {
+                    closeSidebar();
+                  }
+                }}
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                  isActive("/dashboard/files")
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
+                }`}
+              >
+                <File className="h-4 w-4 flex-shrink-0" />
+                {isOpen && <span className="truncate">My Files</span>}
+              </Link>
+
+              <Link
+                href="/dashboard/keys"
+                onClick={() => {
+                  if (isMobile) {
+                    closeSidebar();
+                  }
+                }}
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                  isActive("/dashboard/keys")
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
+                }`}
+              >
+                <Key className="h-4 w-4 flex-shrink-0" />
+                {isOpen && <span className="truncate">NFT Keys</span>}
               </Link>
 
               <Link
@@ -244,122 +224,20 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
               </Link>
 
               {/* API Documentation with dropdown */}
-              <div className="relative">
-                <button
-                  onClick={() => isOpen && setApiDocsOpen(!apiDocsOpen)}
-                  className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm ${
-                    isApiDocsPath
-                      ? "bg-purple-600 text-white"
-                      : "text-gray-300 hover:bg-gray-800"
-                  }`}
-                >
-                  <div className="flex items-center gap-2 overflow-hidden">
-                    <FileText className="h-4 w-4 flex-shrink-0" />
-                    {isOpen && (
-                      <span className="truncate">API Documentation</span>
-                    )}
-                  </div>
-                  {isOpen &&
-                    (apiDocsOpen ? (
-                      <ChevronDown className="h-4 w-4 transition-transform duration-200" />
-                    ) : (
-                      <ChevronRight className="h-4 w-4 transition-transform duration-200" />
-                    ))}
-                </button>
-
-                {/* Dropdown menu */}
-                {isOpen && (
-                  <div
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      apiDocsOpen
-                        ? "max-h-[200px] opacity-100"
-                        : "max-h-0 opacity-0"
-                    }`}
-                  >
-                    <div className="mt-1 ml-4 space-y-1 border-l border-gray-700 pb-3 pl-4">
-                      <Link
-                        href="/dashboard/api-docs/encrypt"
-                        onClick={() => {
-                          if (isMobile) {
-                            closeSidebar();
-                          }
-                        }}
-                        className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                          isActive("/dashboard/api-docs/encrypt")
-                            ? "bg-gray-800 text-white"
-                            : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
-                        }`}
-                      >
-                        Encrypt
-                      </Link>
-
-                      <Link
-                        href="/dashboard/api-docs/decrypt"
-                        onClick={() => {
-                          if (isMobile) {
-                            closeSidebar();
-                          }
-                        }}
-                        className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                          isActive("/dashboard/api-docs/decrypt")
-                            ? "bg-gray-800 text-white"
-                            : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
-                        }`}
-                      >
-                        Decrypt
-                      </Link>
-
-                      <Link
-                        href="/dashboard/api-docs/auth"
-                        onClick={() => {
-                          if (isMobile) {
-                            closeSidebar();
-                          }
-                        }}
-                        className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                          isActive("/dashboard/api-docs/auth")
-                            ? "bg-gray-800 text-white"
-                            : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
-                        }`}
-                      >
-                        Authentication
-                      </Link>
-
-                      <Link
-                        href="/dashboard/api-docs/errors"
-                        onClick={() => {
-                          if (isMobile) {
-                            closeSidebar();
-                          }
-                        }}
-                        className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                          isActive("/dashboard/api-docs/errors")
-                            ? "bg-gray-800 text-white"
-                            : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
-                        }`}
-                      >
-                        Errors
-                      </Link>
-
-                      <Link
-                        href="/dashboard/api-docs/rate-limit"
-                        onClick={() => {
-                          if (isMobile) {
-                            closeSidebar();
-                          }
-                        }}
-                        className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                          isActive("/dashboard/api-docs/rate-limit")
-                            ? "bg-gray-800 text-white"
-                            : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-300"
-                        }`}
-                      >
-                        Rate Limit
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <Link
+                href="https://docs.mothrbox.xyz/"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => {
+                  if (isMobile) {
+                    closeSidebar();
+                  }
+                }}
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-gray-800"
+              >
+                <FileText className="h-4 w-4 flex-shrink-0" />
+                {isOpen && <span className="truncate">API Documentation</span>}
+              </Link>
             </nav>
           </div>
 
@@ -382,22 +260,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                 {isOpen && <span className="truncate">Logs & Usage</span>}
               </Link>
 
-              <Link
-                href="/dashboard/subscription"
-                onClick={() => {
-                  if (isMobile) {
-                    closeSidebar();
-                  }
-                }}
-                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                  isActive("/dashboard/subscription")
-                    ? "bg-purple-600 text-white"
-                    : "text-gray-300 hover:bg-gray-800"
-                }`}
-              >
-                <CreditCard className="h-4 w-4 flex-shrink-0" />
-                {isOpen && <span className="truncate">Subscription</span>}
-              </Link>
+
 
               <Link
                 href="/dashboard/settings"
@@ -419,16 +282,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        {/* Fixed Logout Button */}
-        <div className="border-t border-gray-800 p-4">
-          <button
-            onClick={handleLogout}
-            className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-300"
-          >
-            <LogOut className="h-4 w-4 flex-shrink-0" />
-            {isOpen && <span className="truncate">Logout</span>}
-          </button>
-        </div>
+
       </aside>
 
       {/* Mobile bottom navigation for quick access */}
@@ -465,17 +319,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
             <Unlock className="h-5 w-5" />
             <span className="text-xs">Decrypt</span>
           </Link>
-          <Link
-            href="/dashboard/subscription"
-            className={`flex flex-col items-center p-2 ${
-              isActive("/dashboard/subscription")
-                ? "text-purple-500"
-                : "text-gray-400"
-            }`}
-          >
-            <CreditCard className="h-5 w-5" />
-            <span className="text-xs">Plans</span>
-          </Link>
+
           <Link
             href="/dashboard/settings"
             className={`flex flex-col items-center p-2 ${

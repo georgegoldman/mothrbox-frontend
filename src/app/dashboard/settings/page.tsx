@@ -1,142 +1,98 @@
 "use client";
 
-import { useState } from "react";
 import { Header } from "@/components/header";
-import { useUser } from "@/app/contexts/user-context";
-import { Switch } from "@/components/ui/switch";
-import { toast } from "sonner";
-import { Edit3 } from "lucide-react";
-import EyeIcon from "public/images/eye-icon";
-import Image from "next/image";
+import { SettingsSidebar, SettingsTabs } from "@/components/settings/settings-sidebar";
+import { WalletNetworkSettings } from "@/components/settings/sections/wallet-network-settings";
+import { StorageSettings } from "@/components/settings/sections/storage-settings";
+import { SecuritySettings } from "@/components/settings/sections/security-settings";
+import { APISettings } from "@/components/settings/sections/api-settings";
+import { DisplaySettings } from "@/components/settings/sections/display-settings";
+import { NotificationSettings } from "@/components/settings/sections/notification-settings";
+import { AdvancedSettings } from "@/components/settings/sections/advanced-settings";
+import { SettingsCard } from "@/components/settings/ui/settings-card";
+import { Button } from "@/components/ui/button";
+import { Github, Twitter, Mail } from "lucide-react";
 
 export default function SettingsPage() {
-  const [usageNotification, setUsageNotification] = useState(true);
-  const [profileImage, setProfileImage] = useState<string | null>(null);
-
-  const { initials, user } = useUser();
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      // Validate file type
-      if (!file.type.startsWith("image/")) {
-        toast.error("Please select a valid image file");
-        return;
-      }
-
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("Image size should be less than 5MB");
-        return;
-      }
-
-      // Create preview URL
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setProfileImage(e.target?.result as string);
-        toast.success("Profile image updated successfully");
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleEditClick = () => {
-    const fileInput = document.getElementById(
-      "profile-image-upload",
-    ) as HTMLInputElement;
-    fileInput?.click();
-  };
-
   return (
-    <div>
-      <Header title="Settings" />
+    <div className="flex flex-col min-h-screen">
+      <Header 
+        title="Settings" 
+        subtitle="Manage your account, preferences, and security settings" 
+      />
 
-      {/* Wrap the main content in a motion.div for a subtle entrance animation */}
-      <div className="p-3 sm:p-4 md:p-6">
-        {/* Profile Section */}
-        <div className="mb-8">
-          <div className="flex items-start gap-6">
-            {/* Profile Image */}
-            <div className="relative">
-              <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-orange-500 text-2xl font-bold text-white sm:h-32 sm:w-32 sm:text-3xl">
-                {profileImage ? (
-                  <Image
-                    src={profileImage}
-                    alt="Profile"
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                ) : (
-                  initials
-                )}
-              </div>
-              <button
-                onClick={handleEditClick}
-                className="absolute -right-1 -bottom-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#7D78FF] text-white shadow-lg hover:bg-[#6B66E5] sm:h-10 sm:w-10"
-                aria-label="Edit profile picture"
-              >
-                <Edit3 className="h-4 w-4 sm:h-5 sm:w-5" />
-              </button>
-              {/* Hidden file input */}
-              <input
-                id="profile-image-upload"
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
-            </div>
+      <div className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8">
+        <div className="flex flex-col lg:flex-row gap-8 relative">
+          {/* Desktop Sidebar (Sticky) */}
+          <SettingsSidebar />
+          
+          {/* Mobile Tabs (Sticky) */}
+          <SettingsTabs />
 
-            {/* Profile Info */}
-            <div className="flex-1">
-              <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl">
-                {user?.username ?? "Michael John"}
-              </h2>
-              <p className="text-sm text-white sm:text-base">
-                {user?.email ?? "Michealjohn@gmail.com"}
-              </p>
-            </div>
+          {/* Main Content Area */}
+          <div className="flex-1 space-y-12 pb-20">
+            
+            <WalletNetworkSettings id="wallet" />
+            
+            <div className="border-t border-white/5" />
+            
+            <StorageSettings id="storage" />
+            
+            <div className="border-t border-white/5" />
+            
+            <SecuritySettings id="security" />
+            
+            <div className="border-t border-white/5" />
+            
+            <APISettings id="api" />
+            
+            <div className="border-t border-white/5" />
+            
+            <DisplaySettings id="display" />
+            
+            <div className="border-t border-white/5" />
+            
+            <NotificationSettings id="notifications" />
+            
+            <div className="border-t border-white/5" />
+            
+            <AdvancedSettings id="advanced" />
+
+            <div className="border-t border-white/5" />
+
+            <section id="about" className="space-y-6">
+                <div className="mb-4">
+                    <h2 className="text-xl font-semibold text-white">About & Support</h2>
+                </div>
+                <SettingsCard>
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div>
+                            <h3 className="text-lg font-medium text-white">Mothrbox v2.0.1</h3>
+                            <p className="text-sm text-gray-500">Build: 2026.01.16.001</p>
+                        </div>
+                        <div className="flex gap-4">
+                            <Button variant="outline" size="sm" className="border-white/10 hover:bg-white/5 text-gray-300">
+                                <Github className="mr-2 h-4 w-4" /> GitHub
+                            </Button>
+                            <Button variant="outline" size="sm" className="border-white/10 hover:bg-white/5 text-gray-300">
+                                <Twitter className="mr-2 h-4 w-4" /> Twitter
+                            </Button>
+                            <Button variant="outline" size="sm" className="border-white/10 hover:bg-white/5 text-gray-300">
+                                <Mail className="mr-2 h-4 w-4" /> Support
+                            </Button>
+                        </div>
+                    </div>
+                    <div className="mt-6 flex flex-wrap gap-4 text-xs text-gray-500 justify-center md:justify-start">
+                        <a href="#" className="hover:text-gray-300 underline">Terms of Service</a>
+                        <span>•</span>
+                        <a href="#" className="hover:text-gray-300 underline">Privacy Policy</a>
+                        <span>•</span>
+                        <a href="#" className="hover:text-gray-300 underline">Open Source License</a>
+                    </div>
+                </SettingsCard>
+            </section>
+
           </div>
-        </div>
-
-        {/* Reset Password Button */}
-        <div className="mb-8">
-          <button
-            className="flex h-[20px] items-center justify-center gap-2 rounded-lg border border-[#7D78FFB2] px-6 py-2 text-sm font-medium text-[#7D78FF] transition hover:opacity-90 sm:px-8 sm:py-4 sm:text-base"
-            style={{
-              background:
-                "linear-gradient(90deg, rgba(125, 120, 255, 0.1) 0%, rgba(210, 0, 253, 0.1) 100%)",
-            }}
-          >
-            <EyeIcon />
-            Reset Password
-          </button>
-        </div>
-
-        {/* Email Notification Toggle */}
-        <div className="mb-8">
-          <div className="flex items-center gap-4">
-            <label className="relative inline-flex cursor-pointer items-center">
-              <input
-                type="checkbox"
-                className="peer sr-only"
-                checked={usageNotification}
-                onChange={() => setUsageNotification(!usageNotification)}
-              />
-              <Switch className="data-[state=checked]:bg-[#7D78FF] data-[state=unchecked]:bg-gray-500" />
-            </label>
-            <span className="text-sm text-white sm:text-base">
-              Email me when my usage exceeds 80% of quota
-            </span>
-          </div>
-        </div>
-
-        {/* Save Button */}
-        <div className="mt-8">
-          <button className="w-full rounded-lg bg-[#7D78FF] py-3 text-center font-medium text-white transition hover:bg-[#6B66E5] sm:py-4">
-            Save changes
-          </button>
         </div>
       </div>
     </div>

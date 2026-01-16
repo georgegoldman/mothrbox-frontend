@@ -1,8 +1,14 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname === "/") return null;
+
   return (
     <footer className="border-t border-white/30 p-5 text-white lg:p-15">
       <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
