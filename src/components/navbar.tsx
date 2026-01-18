@@ -14,6 +14,9 @@ export default function Navbar() {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const isPathname = usePathname();
 
+  // Hide global navbar on home page as it has its own
+  if (isPathname === "/") return null;
+
   const toggleMenu = () => setIsOpen((prev) => !prev);
 
   // Close menu when clicking outside
