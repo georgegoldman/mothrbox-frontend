@@ -15,7 +15,6 @@ export const encryptFile = async (
   try {
     const response = await api.post<Blob>("/file-upload/encrypt", formData, {
       headers: {
-        Authorization: `Bearer ${getCookieValue("accessToken")}`,
         "Content-Type": "multipart/form-data",
       },
       responseType: "blob", // Only needed if you're receiving a file back

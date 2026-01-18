@@ -5,12 +5,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { BrandSlider } from "@/components/carousel";
 import { PricingSection } from "@/components/pricing-section";
+import { useCurrentAccount, ConnectButton } from "@mysten/dapp-kit";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Particles } from "@/components/particles";
 
 export default function HomePage() {
+  const currentAccount = useCurrentAccount();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (currentAccount) {
+      router.push("/dashboard");
+    }
+  }, [currentAccount, router]);
+
   return (
     <div className="relative overflow-hidden">
       {/* 💬 Your actual content */}
@@ -35,12 +47,10 @@ export default function HomePage() {
             View Docs
           </a>
 
-          <Link
-            href="/dashboard/encrypt"
-            className="shadow-inner-glow rounded-full border border-[#9E5ED6]/50 px-5 py-4 text-sm font-bold transition-all md:px-10"
-          >
-            Start Encryption
-          </Link>
+          <ConnectButton
+            connectText="Start Encryption"
+            className="!bg-transparent !shadow-[0_0_10px_rgba(158,94,214,0.3),inset_0_0_15px_rgba(158,94,214,1)] !rounded-full !border !border-[#9E5ED6]/50 !px-5 !py-4 !text-sm !font-bold !text-white !transition-all md:!px-10 hover:!bg-[#9E5ED6]/10"
+          />
         </div>
       </section>
 
