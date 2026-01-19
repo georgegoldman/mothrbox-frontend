@@ -9,6 +9,7 @@ import type { ReactNode } from "react";
 const { networkConfig } = createNetworkConfig({
 	localnet: { url: getFullnodeUrl("localnet") },
 	mainnet: { url: getFullnodeUrl("mainnet") },
+	testnet: { url: getFullnodeUrl("testnet") },
 });
 
 

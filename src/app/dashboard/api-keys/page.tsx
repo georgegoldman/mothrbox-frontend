@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function ApiKeysPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-black text-white">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       {/* Header follows the full-width layout pattern */}
       <Header title="API Key Management" subtitle="Developer Tools" />
 

@@ -94,7 +94,7 @@ export default function LogsPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-black text-white">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       <Header title="Usage History" subtitle="Track all your encryption and decryption activities" />
 
       <main className="flex-1 p-4 md:p-8 space-y-6">

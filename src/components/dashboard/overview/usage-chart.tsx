@@ -96,7 +96,7 @@ export function UsageChart() {
   }, [period]);
 
   return (
-    <Card className="h-full border-purple-500/20 bg-black/40 backdrop-blur-sm">
+    <Card className="h-full border-purple-500/20 bg-black/40 backdrop-blur-sm overflow-hidden min-w-0">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-lg font-medium text-white">Data Usage Trends</CardTitle>
         <DropdownMenu>

@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import type { SettingsState, NetworkType, ThemeType, NotificationPreferences, WalletState } from "@/components/settings/types";
 import { toast } from "sonner";
-import { useCurrentAccount } from "@mysten/dapp-kit";
+import { useCurrentAccount, useSuiClientContext } from "@mysten/dapp-kit";
 import { formatAddress } from "@mysten/sui/utils";
 
 interface SettingsContextType extends SettingsState {
@@ -38,13 +38,14 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = useState<SettingsState>(defaultSettings);
   const currentAccount = useCurrentAccount();
+  const { network, selectNetwork: selectSuiNetwork } = useSuiClientContext();
   
   // Wallet state separate from persisted settings
   const [wallet, setWallet] = useState<WalletState>({
     address: null,
     isConnected: false,
     balance: 0,
-    network: 'testnet',
+    network: 'mainnet',
   });
 
   // Sync with real wallet
@@ -54,17 +55,19 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         ...prev,
         address: currentAccount.address,
         isConnected: true,
-        // Keep existing mock balance for now or fetch real one later
-        balance: prev.balance === 0 ? 45.2341 : prev.balance 
+        // Sync network from dApp kit context
+        network: (network as NetworkType) || 'mainnet',
       }));
     } else {
       setWallet(prev => ({
         ...prev,
         address: null,
-        isConnected: false
+        isConnected: false,
+        balance: 0,
+        network: (network as NetworkType) || 'mainnet', 
       }));
     }
-  }, [currentAccount]);
+  }, [currentAccount, network]);
 
   // Load from local storage
   useEffect(() => {
@@ -83,25 +86,28 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('mothrbox-settings', JSON.stringify(settings));
   }, [settings]);
 
+  // Apply theme to document
+  useEffect(() => {
+    const root = window.document.documentElement;
+    root.classList.remove("light", "dark");
+    root.classList.add(settings.theme);
+  }, [settings.theme]);
+
   const updateTheme = (theme: ThemeType) => {
     setSettings(prev => ({ ...prev, theme }));
-    // Ideally update document class here
   };
 
   const switchNetwork = async (targetNetwork: NetworkType) => {
-    if (wallet.network === targetNetwork) return;
-
-    // Simulate network switch
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        setWallet(prev => ({
-          ...prev,
-          network: targetNetwork,
-          balance: targetNetwork === 'mainnet' ? 124.50 : 45.2341 // Mock balance change
-        }));
-        resolve();
-      }, 1500);
-    });
+    // If user requests a switch via our UI, we tell dApp kit to switch.
+    if (network !== targetNetwork) {
+        selectSuiNetwork(targetNetwork);
+    }
+    
+    // We update local state to reflect immediately, though useEffect will also catch it.
+    setWallet(prev => ({
+      ...prev,
+      network: targetNetwork
+    }));
   };
 
   const updateNotifications = (prefs: Partial<NotificationPreferences>) => {

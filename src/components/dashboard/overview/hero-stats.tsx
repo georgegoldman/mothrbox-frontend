@@ -12,7 +12,7 @@ import { Database, Unlock, Key, Activity } from "lucide-react";
 
 function StorageOverviewCard() {
   return (
-    <Card className="relative overflow-hidden border-purple-500/20 bg-black/40 backdrop-blur-sm transition-all hover:border-purple-500/40 hover:shadow-[0_0_20px_rgba(126,75,171,0.1)]">
+    <Card className="relative overflow-hidden border-purple-500/20 bg-black/40 backdrop-blur-sm transition-all hover:border-purple-500/40 hover:shadow-[0_0_20px_rgba(126,75,171,0.1)] min-w-0">
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 to-transparent" />
       <CardContent className="relative p-6">
         <div className="flex items-start justify-between">
@@ -73,7 +73,7 @@ function DecryptedOverviewCard() {
 
 function NFTKeysCard() {
     return (
-      <Card className="relative overflow-hidden border-purple-500/20 bg-black/40 backdrop-blur-sm transition-all hover:border-purple-500/40 hover:shadow-[0_0_20px_rgba(126,75,171,0.1)]">
+      <Card className="relative overflow-hidden border-purple-500/20 bg-black/40 backdrop-blur-sm transition-all hover:border-purple-500/40 hover:shadow-[0_0_20px_rgba(126,75,171,0.1)] min-w-0">
          <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-purple-500/10 blur-xl" />
         <CardContent className="relative p-6">
           <div className="flex items-start justify-between">
@@ -105,7 +105,7 @@ function NFTKeysCard() {
 
 function ActivityCard() {
     return (
-      <Card className="relative overflow-hidden border-purple-500/20 bg-black/40 backdrop-blur-sm transition-all hover:border-purple-500/40 hover:shadow-[0_0_20px_rgba(126,75,171,0.1)]">
+      <Card className="relative overflow-hidden border-purple-500/20 bg-black/40 backdrop-blur-sm transition-all hover:border-purple-500/40 hover:shadow-[0_0_20px_rgba(126,75,171,0.1)] min-w-0">
         <CardContent className="relative p-6">
           <div className="flex items-start justify-between">
               <div className="rounded-lg bg-orange-500/20 p-2 text-orange-400">
@@ -133,7 +133,7 @@ function ActivityCard() {
 
 export function HeroStats() {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 w-full max-w-full overflow-hidden">
       <StorageOverviewCard />
       <DecryptedOverviewCard />
       <NFTKeysCard />

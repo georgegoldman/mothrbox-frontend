@@ -15,11 +15,8 @@ export function WalletAuthListener() {
       document.cookie = "wallet-connected=true; path=/; max-age=86400"; // 1 day
 
       // Redirect if on login/signup pages
-      if (
-        pathname === "/auth" ||
-        pathname.startsWith("/auth/login") ||
-        pathname.startsWith("/auth/signup")
-      ) {
+      // Redirect if on login/signup pages - CLEANUP: Login page removed
+      if (pathname.startsWith("/auth")) {
         router.push("/dashboard");
       }
     } else {

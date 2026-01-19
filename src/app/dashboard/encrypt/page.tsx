@@ -51,7 +51,7 @@ export default function EncryptPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-black">
+    <div className="flex flex-col min-h-screen bg-background">
       <Header title="Encrypt Data" subtitle="Secure your files with military-grade encryption" />
 
       <div className="flex-1 space-y-8 p-4 md:p-8">
@@ -93,15 +93,22 @@ export default function EncryptPage() {
                 <CardContent className="space-y-4">
                    <div className="flex justify-between items-center text-sm">
                       <span className="text-muted-foreground">Storage Cost</span>
-                      <span className="font-mono">{estimatedCost.toFixed(4)} SUI</span>
+                      <span className="font-mono">{estimatedCost.toFixed(4)} WAL</span>
                    </div>
                    <div className="flex justify-between items-center text-sm">
                       <span className="text-muted-foreground">Network Fee</span>
                       <span className="font-mono">~0.002 SUI</span>
                    </div>
+                   <div className="flex justify-between items-center text-sm">
+                      <span className="text-muted-foreground">Encryption Fee</span>
+                      <span className="font-mono">0.010 SUI</span>
+                   </div>
                    <div className="border-t border-border pt-4 flex justify-between items-center font-medium">
                       <span>Total Estimated</span>
-                      <span className="text-primary">{(estimatedCost + 0.002).toFixed(4)} SUI</span>
+                      <div className="flex flex-col items-end">
+                          <span className="text-primary">{estimatedCost.toFixed(4)} WAL</span>
+                          <span className="text-xs text-muted-foreground">+ 0.012 SUI</span>
+                      </div>
                    </div>
 
                    <div className="bg-primary/10 rounded-lg p-3 text-xs text-primary flex gap-2">
