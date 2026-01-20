@@ -6,27 +6,34 @@ import { NFTCard } from "@/components/dashboard/nft-card";
 import { Button } from "@/components/ui/button";
 import { Plus, Loader2 } from "lucide-react";
 
-// 1. Imports for Blockchain & Encryption
-import { useMothrbox } from "@/hooks/useMothrbox";
+// --- FIX 1: Use Relative Import for the Hook ---
+// The '@' alias was failing, so we use the direct path:
+import { useMothrbox } from "../../../hooks/useMothrbox";
+
 import {
   useSignAndExecuteTransaction,
   useCurrentAccount,
 } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import { SealClient, EncryptionPolicy } from "@mysten/seal";
+import { SuiClient, getFullnodeUrl } from "@mysten/sui/client"; // Required for Seal
 
-// 2. Configuration (Replace with your actual IDs)
+// --- CONFIGURATION ---
 const SEAL_API = "https://api.testnet.seal.mystenlabs.com/v1";
-const PACKAGE_ID = "0xYOUR_PACKAGE_ID_HERE";
+const PACKAGE_ID = "0xYOUR_PACKAGE_ID_HERE"; // ⚠️ REPLACE THIS
 const MODULE_NAME = "mothrbox_move";
 
+// --- FIX 2: Define Key Servers to prevent the 'map' crash ---
+const SEAL_TESTNET_SERVERS = [
+  "0x73d05d62c18d9374e3ea529e8e0ed6161da1a141a94d3f76ae3fe4e99356db75",
+  "0xf5d14a81a982144ae441cd7d64b09027f116a468bd36e7eca494f750591623c8",
+];
+
 export default function KeysPage() {
-  // 3. Hooks
   const { isReady, ecc_generate_key } = useMothrbox();
   const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
   const account = useCurrentAccount();
 
-  // 4. State
   const [isMinting, setIsMinting] = useState(false);
   const [keys, setKeys] = useState([
     {
@@ -46,17 +53,14 @@ export default function KeysPage() {
   const [newKeyAlias, setNewKeyAlias] = useState("");
   const [newKeyAlgorithm, setNewKeyAlgorithm] = useState("ECC");
 
-  // --- THE CORE FUNCTION ---
   const handleGenerateKey = async () => {
     if (!newKeyAlias) return;
 
-    // Check 1: Is Wallet Connected?
     if (!account) {
       alert("Please connect your Sui Wallet first!");
       return;
     }
 
-    // Check 2: Is WASM Loaded?
     if (newKeyAlgorithm === "ECC" && !isReady) {
       alert("Secure Module is still loading. Please wait...");
       return;
@@ -73,14 +77,21 @@ export default function KeysPage() {
 
         // --- STEP B: Seal Private Key (Seal SDK) ---
         console.log("🛡️ Encrypting with Seal...");
+
+        // Initialize Sui Client
+        const suiClient = new SuiClient({ url: getFullnodeUrl("testnet") });
+
+        // Initialize Seal with the Required Servers (Fixes the crash)
         const seal = new SealClient({
-          apiEndpoint: SEAL_API,
-          systemObjectId: "0x...", // Lookup Seal System Object ID for Testnet
+          suiClient,
+          serverConfigs: SEAL_TESTNET_SERVERS.map((id) => ({
+            objectId: id,
+            weight: 1,
+          })),
+          verifyKeyServers: true,
         });
 
-        // Create a unique scope ID (e.g., random string)
         const scopeId = `scope-${Date.now()}`;
-
         const policy: EncryptionPolicy = {
           packageId: PACKAGE_ID,
           module: MODULE_NAME,
@@ -98,27 +109,24 @@ export default function KeysPage() {
         tx.moveCall({
           target: `${PACKAGE_ID}::${MODULE_NAME}::mint`,
           arguments: [
-            tx.pure.string(newKeyAlias), // Name
-            tx.pure.vector("u8", encryptedBytes), // Sealed Key
-            tx.pure.string("Seal_IBE_ECC"), // Algorithm
+            tx.pure.string(newKeyAlias),
+            tx.pure.vector("u8", encryptedBytes),
+            tx.pure.string("Seal_IBE_ECC"),
           ],
         });
 
-        // Execute Transaction
         const result = await signAndExecute({ transaction: tx });
-
         console.log("✅ Minted! Digest:", result.digest);
 
-        // Add to UI List (Optimistic Update)
         const newKey = {
-          id: result.digest.slice(0, 10) + "...", // Use Tx Digest as ID
+          id: result.digest.slice(0, 10) + "...",
           alias: newKeyAlias,
           algorithm: "ECC (Sealed)",
         };
         setKeys([newKey, ...keys]);
       } else {
-        // Fallback for non-blockchain keys (AES/ChaCha purely local)
-        console.log("ℹ️ Generating Local Key (Not Sealed)");
+        // Fallback for non-blockchain keys
+        console.log("ℹ️ Generating Local Key");
         const newKey = {
           id: `0x${Math.random().toString(16).slice(2, 10).toUpperCase()}`,
           alias: newKeyAlias,
@@ -127,7 +135,6 @@ export default function KeysPage() {
         setKeys([newKey, ...keys]);
       }
 
-      // Cleanup
       setIsModalOpen(false);
       setNewKeyAlias("");
       setNewKeyAlgorithm("ECC");
@@ -161,7 +168,7 @@ export default function KeysPage() {
           </div>
         ) : (
           <div className="flex h-[50vh] flex-col items-center justify-center space-y-4 text-center">
-            {/* Empty State */}
+            <h3 className="text-xl font-bold">No Keys Found</h3>
           </div>
         )}
       </div>
