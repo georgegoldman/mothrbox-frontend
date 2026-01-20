@@ -14,6 +14,9 @@ importers:
       '@mysten/dapp-kit':
         specifier: ^0.19.11
         version: 0.19.11(@tanstack/react-query@5.83.0(react@19.1.0))(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
+      '@mysten/seal':
+        specifier: ^0.9.6
+        version: 0.9.6(typescript@5.8.3)
       '@mysten/sui':
         specifier: ^1.45.2
         version: 1.45.2(typescript@5.8.3)
@@ -71,6 +74,9 @@ importers:
       lucide-react:
         specifier: ^0.503.0
         version: 0.503.0(react@19.1.0)
+      mothrbox-wasm:
+        specifier: file:vendor/mothrbox-wasm-0.1.0.tgz
+        version: file:vendor/mothrbox-wasm-0.1.0.tgz
       motion:
         specifier: ^12.9.7
         version: 12.9.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -549,6 +555,9 @@ packages:
     peerDependencies:
       '@tanstack/react-query': ^5.0.0
       react: '*'
+
+  '@mysten/seal@0.9.6':
+    resolution: {integrity: sha512-qw4JiEL8NibuAASWTbYC9xbtMMIAgbfNNopZomiCZqIgJFA/q6lWCzBqVhzU5POB7UCwLZjskwZJ+kME80wsCg==}
 
   '@mysten/slush-wallet@0.2.12':
     resolution: {integrity: sha512-OVIQbADqUVZCTps3MGvVI90nczTbwepAb75x+jZuH2W2p8lXoYIuvuuP4KlwwalR9QgpqOqptdpYFVAKi8ncLQ==}
@@ -2766,6 +2775,10 @@ packages:
   modern-ahocorasick@1.1.0:
     resolution: {integrity: sha512-sEKPVl2rM+MNVkGQt3ChdmD8YsigmXdn5NifZn6jiwn9LRJpWm8F3guhaqrJT/JOat6pwpbXEk6kv+b9DMIjsQ==}
 
+  mothrbox-wasm@file:vendor/mothrbox-wasm-0.1.0.tgz:
+    resolution: {integrity: sha512-yjYcsPifd8ygL3BjrL/i1uIpZQLnK5GV4GIgk/9xlssNEA8HBej8YRoHinVKNzxGckyIxM8sLO8lf3B/ipDujw==, tarball: file:vendor/mothrbox-wasm-0.1.0.tgz}
+    version: 0.1.0
+
   motion-dom@12.9.6:
     resolution: {integrity: sha512-IK9pm5zU8BIp3FCoUGF3T7AHVLVOlXxlwco/bIbcnpBtyYb2gDQhdOzUh2KSDJVjYl1MZ9vdq8tnFTTahX2lfg==}
 
@@ -3829,6 +3842,17 @@ snapshots:
       - babel-plugin-macros
       - immer
       - react-dom
+      - typescript
+
+  '@mysten/seal@0.9.6(typescript@5.8.3)':
+    dependencies:
+      '@mysten/bcs': 1.9.2
+      '@mysten/sui': 1.45.2(typescript@5.8.3)
+      '@noble/curves': 1.9.4
+      '@noble/hashes': 1.8.0
+    transitivePeerDependencies:
+      - '@gql.tada/svelte-support'
+      - '@gql.tada/vue-support'
       - typescript
 
   '@mysten/slush-wallet@0.2.12(typescript@5.8.3)':
@@ -6275,6 +6299,8 @@ snapshots:
   mitt@3.0.1: {}
 
   modern-ahocorasick@1.1.0: {}
+
+  mothrbox-wasm@file:vendor/mothrbox-wasm-0.1.0.tgz: {}
 
   motion-dom@12.9.6:
     dependencies:
