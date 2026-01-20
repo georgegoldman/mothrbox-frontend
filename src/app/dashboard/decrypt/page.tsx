@@ -1,16 +1,14 @@
 "use client";
 
 import { Header } from "@/components/header";
-import { FileUploadZone } from "@/components/dashboard/file-upload-zone";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Key, Unlock } from "lucide-react";
+import { FileText, Key, Unlock, Database } from "lucide-react";
 
 export default function DecryptPage() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [blobId, setBlobId] = useState("");
   const [passphrase, setPassphrase] = useState("");
-  const [algorithm, setAlgorithm] = useState("aes-256-gcm"); // For UI consistency only in this view
   const [isDecrypting, setIsDecrypting] = useState(false);
 
   const handleDecrypt = async () => {
@@ -23,7 +21,7 @@ export default function DecryptPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-black">
+    <div className="flex flex-col min-h-screen bg-background">
       <Header title="Decrypt Data" subtitle="Restore your encrypted files" />
 
       <div className="flex-1 space-y-8 p-4 md:p-8">
@@ -32,17 +30,23 @@ export default function DecryptPage() {
           <div className="lg:col-span-2 space-y-6">
             <Card className="bg-black border-border shadow-none">
               <CardHeader>
-                <CardTitle>File Source</CardTitle>
-                <CardDescription>Upload the encrypted file you wish to restore.</CardDescription>
+                <CardTitle>Data Source</CardTitle>
+                <CardDescription>Enter the Blob ID of the encrypted data you wish to restore.</CardDescription>
               </CardHeader>
               <CardContent>
-                <FileUploadZone
-                  selectedFile={selectedFile}
-                  onFileSelect={setSelectedFile}
-                  onClear={() => setSelectedFile(null)}
-                  algorithm={algorithm}
-                  setAlgorithm={setAlgorithm} 
-                />
+                 <div className="space-y-2">
+                    <label className="text-sm font-medium text-muted-foreground block">Blob ID</label>
+                    <div className="relative">
+                       <Database className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                       <input 
+                          type="text"
+                          className="flex h-10 w-full rounded-md border border-input bg-transparent pl-10 pr-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          placeholder="Enter Blob ID"
+                          value={blobId}
+                          onChange={(e) => setBlobId(e.target.value)}
+                       />
+                    </div>
+                 </div>
               </CardContent>
             </Card>
 
@@ -93,11 +97,11 @@ export default function DecryptPage() {
                       className="w-full bg-primary hover:bg-primary/90" 
                       size="lg"
                       onClick={handleDecrypt}
-                      disabled={!selectedFile || !passphrase && false} // Logic check
+                      disabled={!blobId || !passphrase} 
                    >
                       {isDecrypting ? "Unlocking..." : (
                           <span className="flex items-center gap-2">
-                              <Unlock className="h-4 w-4" /> Decrypt File
+                              <Unlock className="h-4 w-4" /> Decrypt Data
                           </span>
                       )}
                    </Button>

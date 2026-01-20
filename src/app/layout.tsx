@@ -12,6 +12,7 @@ import { SuiProvider } from "./utils/sui-provider";
 
 
 import { WalletAuthListener } from "@/components/wallet-auth-listener";
+import { SettingsProvider } from "@/context/settings-context";
 
 export const metadata: Metadata = {
   title: "Mothrbox",
@@ -76,6 +77,8 @@ export const metadata: Metadata = {
 const montserrat = Montserrat({
   subsets: ["latin"],
   weight: "400",
+  display: 'swap',
+  adjustFontFallback: false,
 });
 
 export default function RootLayout({
@@ -84,6 +87,7 @@ export default function RootLayout({
   return (
     <QueryProvider>
       <SuiProvider>
+        <SettingsProvider>
         <WalletAuthListener />
         <html
         lang="en"
@@ -103,7 +107,8 @@ export default function RootLayout({
           </div>
           {children}
         </body>
-      </html>
+       </html>
+       </SettingsProvider>
       </SuiProvider>
     </QueryProvider>
   );

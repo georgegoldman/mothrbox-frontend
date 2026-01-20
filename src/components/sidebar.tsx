@@ -24,6 +24,9 @@ import Image from "next/image";
 import { toast } from "sonner";
 
 
+import { WalletConnectButton } from "@/components/wallet-connect-button";
+import { NetworkIndicator } from "@/components/dashboard/network-indicator";
+
 export function Sidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { isOpen, toggleSidebar, isMobile, closeSidebar } = useSidebar();
@@ -282,63 +285,21 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
+        {/* Mobile-only Footer with Wallet & Network */}
+        <div className="border-t border-gray-800 p-4 md:hidden">
+            <div className="flex flex-col gap-4">
+                <NetworkIndicator />
+                <WalletConnectButton />
+            </div>
+        </div>
 
       </aside>
-
-      {/* Mobile bottom navigation for quick access */}
-      {isMobile && (
-        <div className="fixed right-0 bottom-0 left-0 z-20 flex items-center justify-around border-t border-gray-800 bg-black py-2">
-          <Link
-            href="/dashboard"
-            className={`flex flex-col items-center p-2 ${
-              isActive("/dashboard", true) ? "text-purple-500" : "text-gray-400"
-            }`}
-          >
-            <BarChart2 className="h-5 w-5" />
-            <span className="text-xs">Overview</span>
-          </Link>
-          <Link
-            href="/dashboard/encrypt"
-            className={`flex flex-col items-center p-2 ${
-              isActive("/dashboard/encrypt")
-                ? "text-purple-500"
-                : "text-gray-400"
-            }`}
-          >
-            <Lock className="h-5 w-5" />
-            <span className="text-xs">Encrypt</span>
-          </Link>
-          <Link
-            href="/dashboard/decrypt"
-            className={`flex flex-col items-center p-2 ${
-              isActive("/dashboard/decrypt")
-                ? "text-purple-500"
-                : "text-gray-400"
-            }`}
-          >
-            <Unlock className="h-5 w-5" />
-            <span className="text-xs">Decrypt</span>
-          </Link>
-
-          <Link
-            href="/dashboard/settings"
-            className={`flex flex-col items-center p-2 ${
-              isActive("/dashboard/settings")
-                ? "text-purple-500"
-                : "text-gray-400"
-            }`}
-          >
-            <Settings className="h-5 w-5" />
-            <span className="text-xs">Settings</span>
-          </Link>
-        </div>
-      )}
 
       {/* Main content */}
       <div
         className={`flex-1 transition-all duration-300 ease-in-out ${
           isOpen ? "lg:ml-[250px]" : isMobile ? "ml-0" : "lg:ml-[70px]"
-        } ${isMobile ? "pb-16" : ""} relative z-10`}
+        } ${isMobile ? "pb-4" : ""} relative z-10`}
       >
         {children}
       </div>

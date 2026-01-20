@@ -5,7 +5,7 @@ import { Zap, CheckCircle, Server, Activity } from "lucide-react";
 
 export function PerformanceStats() {
   return (
-    <Card className="border-purple-500/20 bg-black/40 backdrop-blur-sm">
+    <Card className="border-purple-500/20 bg-black/40 backdrop-blur-sm min-w-0">
       <CardHeader>
         <CardTitle className="text-lg font-medium text-white">System Performance</CardTitle>
       </CardHeader>

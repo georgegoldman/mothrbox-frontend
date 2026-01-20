@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export function QuickActions() {
   return (
-    <div className="relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-r from-purple-900/20 to-black p-6 md:p-8">
+    <div className="relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-r from-purple-900/20 to-black p-6 md:p-8 min-w-0 max-w-full">
       {/* Background decoration */}
       <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-purple-500/10 blur-3xl pointer-events-none" />
       

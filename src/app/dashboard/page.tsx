@@ -18,7 +18,7 @@ export default function OverviewPage() {
         subtitle={`Welcome back, ${user?.username || 'User'}`}
       />
 
-      <div className="flex-1 space-y-8 p-6 md:p-8">
+      <div className="flex-1 space-y-8 p-4 md:p-8">
         {/* 1. Hero Stats Section */}
         <section>
              <HeroStats />

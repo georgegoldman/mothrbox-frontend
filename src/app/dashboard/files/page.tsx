@@ -16,7 +16,7 @@ const MOCK_FILES = [
 
 export default function FilesPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-black">
+    <div className="flex flex-col min-h-screen bg-background">
       <Header title="My Files" subtitle="Manage your encrypted storage" />
 
       <div className="flex-1 space-y-8 p-4 md:p-8">

@@ -56,7 +56,7 @@ const WalletPage = () => {
 
   if (!currentAccount) {
     return (
-      <div className="min-h-screen bg-black text-white">
+      <div className="min-h-screen bg-background text-foreground">
         <Header title="Wallet" subtitle="Manage your wallet" />
         <div className="flex h-[80vh] flex-col items-center justify-center p-4">
           <div className="mb-8 text-center">
@@ -76,7 +76,7 @@ const WalletPage = () => {
 
   // New Account Creation Component
   const NewAccountCreation = () => (
-    <div className="flex min-h-screen flex-col justify-between bg-black p-4 sm:p-6">
+    <div className="flex min-h-screen flex-col justify-between bg-background p-4 sm:p-6">
       <div className="mx-auto w-full max-w-md">
         {/* Header with close button */}
         <div className="mb-6 flex items-center justify-between sm:mb-8">
@@ -200,7 +200,7 @@ const WalletPage = () => {
 
   // Dropdown component
   const AccountDropdown = () => (
-    <div className="flex min-h-screen flex-col gap-4 bg-black p-4 sm:gap-6 sm:p-6">
+    <div className="flex min-h-screen flex-col gap-4 bg-background p-4 sm:gap-6 sm:p-6">
       <div className="flex items-center justify-between">
         <h4 className="text-xl font-semibold text-white sm:text-2xl">
           Your Account
@@ -274,7 +274,7 @@ const WalletPage = () => {
 
   // Main wallet component
   const WalletContent = () => (
-    <div className="min-h-screen bg-black p-4 sm:p-6">
+    <div className="min-h-screen bg-background p-4 sm:p-6">
       <div className="flex max-w-full flex-col items-center justify-center">
         {/* Header Section */}
         <div className="mb-6 sm:mb-8">

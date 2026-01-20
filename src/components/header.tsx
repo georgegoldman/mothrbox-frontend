@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, LoaderCircle, PanelLeft } from "lucide-react";
+import { LoaderCircle, PanelLeft } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useUser } from "@/app/contexts/user-context";
 import { useCurrentAccount } from "@mysten/dapp-kit";
@@ -12,9 +12,10 @@ import { NetworkIndicator } from "@/components/dashboard/network-indicator";
 interface HeaderProps {
   title: string;
   subtitle?: string;
+  children?: React.ReactNode;
 }
 
-export function Header({ title, subtitle }: HeaderProps) {
+export function Header({ title, subtitle, children }: HeaderProps) {
   const { toggleSidebar } = useSidebar();
 
   const { user, initials, loading } = useUser();
@@ -22,7 +23,7 @@ export function Header({ title, subtitle }: HeaderProps) {
 
 
   return (
-    <header className="flex h-[72.67px] border-b border-gray-800 p-2 md:flex-row md:items-center md:justify-between md:p-4">
+    <header className="flex h-[72.67px] border-b border-gray-800 p-2 md:flex-row md:items-center md:justify-between md:p-4 w-full max-w-[100vw] overflow-hidden">
       <div className="mx-auto flex w-full items-center justify-between">
         <div className="flex items-center gap-2">
           <button
@@ -42,20 +43,14 @@ export function Header({ title, subtitle }: HeaderProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 md:hidden">
-          <button className="relative rounded-full p-2 hover:bg-gray-800">
-            <Bell className="h-5 w-5" />
-            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-purple-500"></span>
-          </button>
-        </div>
+
       </div>
 
-      <div className="hidden items-center gap-4 md:flex">
-        <button className="relative rounded-full p-2 hover:bg-gray-800">
-          <Bell className="h-5 w-5" />
-          <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-purple-500"></span>
-        </button>
 
+
+
+      <div className="hidden items-center gap-4 md:flex">
+        {children}
         <NetworkIndicator />
         <WalletConnectButton />
       </div>

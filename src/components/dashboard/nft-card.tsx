@@ -7,12 +7,12 @@ import Image from "next/image";
 
 interface NFTKeyProps {
     id: string;
-    name: string;
-    fileRef: string;
+    alias: string;
+    algorithm: string;
     image?: string;
 }
 
-export function NFTCard({ id, name, fileRef, image }: NFTKeyProps) {
+export function NFTCard({ id, alias, algorithm, image }: NFTKeyProps) {
     return (
         <Card className="overflow-hidden border-border bg-black group transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
             <div className="relative aspect-square w-full bg-gradient-to-br from-gray-900 to-black p-8 flex items-center justify-center overflow-hidden">
@@ -26,12 +26,10 @@ export function NFTCard({ id, name, fileRef, image }: NFTKeyProps) {
             </div>
 
             <CardContent className="p-4">
-                <h3 className="font-bold text-lg text-white truncate">{name}</h3>
-                <p className="text-xs text-muted-foreground mt-1 truncate">
-                    Ref: {fileRef}
-                </p>
-                <div className="mt-4 flex gap-2">
-                    <div className="text-[10px] font-mono bg-secondary px-2 py-1 rounded text-secondary-foreground truncate max-w-full">
+                <h3 className="font-bold text-lg text-white truncate">{alias}</h3>
+                <div className="mt-2 flex flex-col gap-1">
+                     <span className="text-xs text-muted-foreground">Algorithm: <span className="text-primary">{algorithm}</span></span>
+                     <div className="text-[10px] font-mono bg-secondary px-2 py-1 rounded text-secondary-foreground truncate max-w-full">
                         ID: {id}
                     </div>
                 </div>
