@@ -6,6 +6,15 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  // --- FIX: Prevent "Call retries were exceeded" / Worker Crashes ---
+  experimental: {
+    workerThreads: false,
+    cpus: 1,
+  },
+
+  // --- FIX: Silence Turbopack warning ---
+  turbopack: {},
+
   // --- 1. Enable WebAssembly Support ---
   webpack: (config) => {
     config.experiments = {
@@ -34,7 +43,6 @@ const config = {
 export default config;
 
 // Export the middleware matcher configuration
-// (Note: Usually this goes in middleware.js, but if your app uses it from here, keep it!)
 export const middlewareMatcher = {
   // This tells Next.js to run middleware on all routes under /dashboard
   matcher: ["/dashboard/:path*"],
