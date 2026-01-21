@@ -10,7 +10,6 @@ import {
   FileText,
   Key,
   Lock,
-
   Settings,
   Unlock,
   X,
@@ -18,11 +17,9 @@ import {
 } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
 
-
 // import { logout } from "@/app/actions/auth";
 import Image from "next/image";
 import { toast } from "sonner";
-
 
 import { WalletConnectButton } from "@/components/wallet-connect-button";
 import { NetworkIndicator } from "@/components/dashboard/network-indicator";
@@ -31,7 +28,6 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { isOpen, toggleSidebar, isMobile, closeSidebar } = useSidebar();
 
-
   // const handleLogout = async () => {
   //   await logout();
   //   toast.success("Logged out successfully");
@@ -39,7 +35,6 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
   // };
 
   // Check if the current path is under API docs
-
 
   const isActive = (path: string, exact = false) => {
     if (exact) {
@@ -146,7 +141,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                 }`}
               >
                 <Lock className="h-4 w-4 flex-shrink-0" />
-                {isOpen && <span className="truncate">Upload Files</span>}
+                {isOpen && <span className="truncate">Encrypt Files</span>}
               </Link>
 
               <Link
@@ -263,8 +258,6 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                 {isOpen && <span className="truncate">Logs & Usage</span>}
               </Link>
 
-
-
               <Link
                 href="/dashboard/settings"
                 onClick={() => {
@@ -287,12 +280,11 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
 
         {/* Mobile-only Footer with Wallet & Network */}
         <div className="border-t border-gray-800 p-4 md:hidden">
-            <div className="flex flex-col gap-4">
-                <NetworkIndicator />
-                <WalletConnectButton />
-            </div>
+          <div className="flex flex-col gap-4">
+            <NetworkIndicator />
+            <WalletConnectButton />
+          </div>
         </div>
-
       </aside>
 
       {/* Main content */}
