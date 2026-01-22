@@ -133,27 +133,27 @@ export default function EncryptPage() {
       });
   }, [suiObjects, algorithm]);
 
-  // --- HELPER: UPLOAD TO BACKEND (Deno) ---
+  // --- HELPER: UPLOAD TO BACKEND (STREAMING) ---
   const uploadToBackend = async (
     encryptedBytes: Uint8Array,
     fileName: string,
     ownerAddress: string,
     algoLabel: string, // Added algo param
   ) => {
-    // Convert Uint8Array to Blob for FormData
-    const blob = new Blob([encryptedBytes], {
-      type: "application/octet-stream",
+    // 1. Send Metadata in URL (Avoids Body Parsing Memory Issues)
+    const params = new URLSearchParams({
+      fileName: fileName,
+      userAddress: ownerAddress,
+      algorithm: algoLabel,
     });
 
-    const formData = new FormData();
-    formData.append("file", blob, fileName);
-    formData.append("userAddress", ownerAddress);
-    // 👇 Added this line to ensure MongoDB gets the correct algorithm
-    formData.append("algorithm", algoLabel);
-
-    const response = await fetch(`${BACKEND_URL}/upload`, {
+    // 2. Send Raw Bytes in Body (Streaming)
+    const response = await fetch(`${BACKEND_URL}/upload?${params.toString()}`, {
       method: "POST",
-      body: formData,
+      headers: {
+        "Content-Type": "application/octet-stream",
+      },
+      body: encryptedBytes,
     });
 
     if (!response.ok) {
