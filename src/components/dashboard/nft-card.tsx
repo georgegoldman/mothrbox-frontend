@@ -4,14 +4,14 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Key, Send, ExternalLink, Trash2 } from "lucide-react";
 
-interface NFTKeyProps {
+// 👇 UPDATE THIS INTERFACE
+export interface NFTKeyProps {
   id?: string;
   alias: string;
   algorithm: string;
-  image?: string;
-  // Actions passed from the parent page
-  onTransfer?: () => void;
+  type?: string; // <--- ADD THIS LINE
   onBurn?: () => void;
+  onTransfer?: () => void;
 }
 
 export function NFTCard({
