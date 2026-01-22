@@ -41,7 +41,7 @@ const KEY_SERVER_OBJECT_IDS = [
 ];
 
 // Your deployed Deno Backend URL
-const BACKEND_URL = "https://quarrelsome-denise-mothrbox-774fd236.koyeb.app/";
+const BACKEND_URL = "https://quarrelsome-denise-mothrbox-774fd236.koyeb.app";
 
 // Helper Types
 type AvailableKey = {
